@@ -20,8 +20,8 @@ Sports Rivelry is a headless sports publishing starter built with Next.js App Ro
 
 ## Core environment variables
 
-- `NEXT_PUBLIC_SITE_URL`: canonical public origin, for example `https://sportsrivelry.com`
-- `NEXT_PUBLIC_WORDPRESS_URL`: WordPress base URL, for example `https://cms.sportsrivelry.com`
+- `NEXT_PUBLIC_SITE_URL`: canonical public origin, for example `https://thesportsrivalry.com`
+- `NEXT_PUBLIC_WORDPRESS_URL`: WordPress base URL, for example `https://cms.thesportsrivalry.com`
 - `WORDPRESS_PREVIEW_SECRET`: shared secret used by the preview route
 - `REVALIDATE_SECRET`: shared secret used by the revalidate webhook
 - `WORDPRESS_REVALIDATE_ENDPOINT`: frontend webhook URL stored on the WordPress side
@@ -48,5 +48,6 @@ The mu-plugin starter lives at [wordpress/wp-content/mu-plugins/sr-headless-core
 Additional implementation notes live in:
 
 - [docs/architecture.md](/Users/kameshkhatri/Desktop/sports%20website/docs/architecture.md)
+- [docs/hostinger-deployment.md](/Users/kameshkhatri/Desktop/sports%20website/docs/hostinger-deployment.md)
 - [docs/wordpress-setup.md](/Users/kameshkhatri/Desktop/sports%20website/docs/wordpress-setup.md)
 - [docs/seo-launch-checklist.md](/Users/kameshkhatri/Desktop/sports%20website/docs/seo-launch-checklist.md)

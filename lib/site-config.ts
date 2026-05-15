@@ -3,7 +3,7 @@ export const SITE_TAGLINE = "India-first sports news, analysis, and rivalries th
 export const SITE_DESCRIPTION =
   "Sports Rivelry is a headless sports newsroom built for fast-moving coverage, rivalry-driven storytelling, and search-ready editorial publishing.";
 export const SITE_DOMAIN =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://sportsrivelry.com";
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://thesportsrivalry.com";
 
 export const SPORTS_NAV = [
   { slug: "cricket", label: "Cricket" },

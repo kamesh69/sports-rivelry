@@ -1,0 +1,8 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#2B1307"/>
+  <rect x="90" y="90" width="1420" height="720" rx="40" fill="#C2410C"/>
+  <rect x="352" y="238" width="896" height="420" rx="24" stroke="#FFEDD5" stroke-width="18"/>
+  <path d="M520 560C650 520 764 474 886 390C972 330 1060 300 1168 282" stroke="#FFF7ED" stroke-width="18" stroke-linecap="round"/>
+  <text x="168" y="196" fill="#FFF7ED" font-family="Arial, sans-serif" font-size="90" font-weight="700">Kabaddi Patience</text>
+  <text x="168" y="742" fill="#FED7AA" font-family="Arial, sans-serif" font-size="42">Using tempo and waiting as pressure</text>
+</svg>

@@ -1,0 +1,8 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#2A130D"/>
+  <rect x="80" y="80" width="1440" height="740" rx="40" fill="#7F1016"/>
+  <circle cx="1190" cy="280" r="220" stroke="#FAD2D2" stroke-width="18" stroke-dasharray="18 18"/>
+  <path d="M220 690C380 590 530 548 700 548C900 548 1058 612 1260 722" stroke="#FFF6EA" stroke-width="16" stroke-linecap="round"/>
+  <text x="180" y="220" fill="#FFFDF8" font-family="Arial, sans-serif" font-size="92" font-weight="700">Cricket Control</text>
+  <text x="180" y="740" fill="#FBE9EA" font-family="Arial, sans-serif" font-size="42">Composure at the death and tactical batting shape</text>
+</svg>

@@ -1,0 +1,15 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#201208"/>
+  <rect x="72" y="72" width="1456" height="756" rx="44" fill="url(#paint0_linear)"/>
+  <circle cx="1280" cy="180" r="120" fill="#F7A7A7" fill-opacity="0.22"/>
+  <path d="M190 610C320 500 470 442 640 436C826 430 970 490 1120 598" stroke="#FFF6EA" stroke-width="18" stroke-linecap="round"/>
+  <path d="M320 290L492 214L608 288L434 370L320 290Z" fill="#FFF6EA" fill-opacity="0.88"/>
+  <text x="168" y="196" fill="#FFFDF8" font-family="Arial, sans-serif" font-size="96" font-weight="700">Cricket Pulse</text>
+  <text x="170" y="736" fill="#F8D8D9" font-family="Arial, sans-serif" font-size="44">IPL strategy, pressure, and middle-overs control</text>
+  <defs>
+    <linearGradient id="paint0_linear" x1="72" y1="72" x2="1528" y2="828" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A91D23"/>
+      <stop offset="1" stop-color="#36110F"/>
+    </linearGradient>
+  </defs>
+</svg>

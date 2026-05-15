@@ -1,0 +1,8 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#281245"/>
+  <rect x="84" y="84" width="1432" height="732" rx="40" fill="#6D28D9"/>
+  <path d="M350 660L558 500L788 600L1054 366" stroke="#FDE68A" stroke-width="18" stroke-linecap="round"/>
+  <path d="M1054 366L1108 314L1160 362L1124 418L1054 366Z" fill="#FFFDF8"/>
+  <text x="170" y="196" fill="#F5F3FF" font-family="Arial, sans-serif" font-size="92" font-weight="700">Match Control</text>
+  <text x="170" y="744" fill="#E9D5FF" font-family="Arial, sans-serif" font-size="42">Extending high-level patches across a full tournament</text>
+</svg>

@@ -1,0 +1,14 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#0D1F15"/>
+  <rect x="94" y="94" width="1412" height="712" rx="40" fill="url(#paint0_linear)"/>
+  <path d="M310 624C454 506 592 454 760 454C912 454 1040 510 1194 620" stroke="#ECFDF5" stroke-width="18" stroke-linecap="round"/>
+  <path d="M412 300H694L770 378L694 456H412L338 378L412 300Z" fill="#ECFDF5" fill-opacity="0.9"/>
+  <text x="168" y="190" fill="#F0FDF4" font-family="Arial, sans-serif" font-size="92" font-weight="700">Football Identity</text>
+  <text x="170" y="742" fill="#D1FAE5" font-family="Arial, sans-serif" font-size="42">Projects, coaching ideas, and clubs with a point of view</text>
+  <defs>
+    <linearGradient id="paint0_linear" x1="94" y1="94" x2="1506" y2="806" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#065F46"/>
+      <stop offset="1" stop-color="#022C22"/>
+    </linearGradient>
+  </defs>
+</svg>

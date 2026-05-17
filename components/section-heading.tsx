@@ -17,7 +17,7 @@ export function SectionHeading({
 }: SectionHeadingProps) {
   return (
     <div className="section-heading">
-      <div>
+      <div className="section-heading__copy">
         {eyebrow ? <span className="eyebrow">{eyebrow}</span> : null}
         <h2>{title}</h2>
         {description ? <p>{description}</p> : null}

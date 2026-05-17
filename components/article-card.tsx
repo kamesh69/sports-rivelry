@@ -5,10 +5,13 @@ import { formatDate } from "@/lib/utils";
 
 interface ArticleCardProps {
   article: Article;
-  variant?: "hero" | "feature" | "compact";
+  variant?: "hero" | "feature" | "compact" | "tile";
 }
 
 export function ArticleCard({ article, variant = "feature" }: ArticleCardProps) {
+  const summary =
+    variant === "compact" || variant === "tile" ? article.excerpt : article.deck;
+
   return (
     <article className={`story-card story-card--${variant}`}>
       <Link href={`/${article.sport.slug}/${article.slug}`} className="story-card__image-link">
@@ -30,7 +33,7 @@ export function ArticleCard({ article, variant = "feature" }: ArticleCardProps) 
         <h3>
           <Link href={`/${article.sport.slug}/${article.slug}`}>{article.title}</Link>
         </h3>
-        <p>{variant === "compact" ? article.excerpt : article.deck}</p>
+        <p>{summary}</p>
         <div className="story-card__footer">
           <span>{article.authors.map((author) => author.name).join(", ")}</span>
           <span>{article.readTime} min read</span>

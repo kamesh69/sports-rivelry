@@ -2,7 +2,6 @@ import Link from "next/link";
 import { getHomePageData } from "@/lib/cms";
 import { ArticleCard } from "@/components/article-card";
 import { AuthorSpotlight } from "@/components/author-spotlight";
-import { AdSlot } from "@/components/ad-slot";
 import { HomeHero } from "@/components/home-hero";
 import { NewsletterBand } from "@/components/newsletter-band";
 import { SectionHeading } from "@/components/section-heading";
@@ -17,7 +16,7 @@ export default async function HomePage() {
       <section className="homepage-intro">
         <div>
           <span className="eyebrow">India-first sports newsroom</span>
-          <h1>Fast editorial coverage shaped like a premium sports media home page.</h1>
+          <h1>Fast editorial coverage with a sharper hero and tighter news grid.</h1>
         </div>
         <p>
           Sports Rivelry blends EssentiallySports-style narrative density with ESPN-inspired
@@ -25,37 +24,29 @@ export default async function HomePage() {
         </p>
       </section>
 
-      <HomeHero
-        heroArticle={homeData.heroArticle}
-        secondaryArticles={homeData.heroSecondary}
-      />
+      <HomeHero slides={[homeData.heroArticle, ...homeData.heroSecondary]} />
 
-      <div className="homepage-columns">
-        <section>
-          <SectionHeading
-            eyebrow="Latest"
-            title="The news river"
-            description="Fresh stories rendered as crawlable HTML, ready for search and social distribution."
-          />
-          <div className="story-grid story-grid--two">
-            {homeData.latestArticles.slice(0, 6).map((article) => (
-              <ArticleCard key={article.id} article={article} />
-            ))}
-          </div>
-        </section>
+      <section className="module-block">
+        <SectionHeading
+          eyebrow="Latest"
+          title="The news river"
+          description="Fresh stories rendered as crawlable HTML, now organized into faster-scanning square tiles."
+        />
+        <div className="story-grid story-grid--tiles">
+          {homeData.latestArticles.slice(0, 8).map((article) => (
+            <ArticleCard key={article.id} article={article} variant="tile" />
+          ))}
+        </div>
+      </section>
 
-        <aside className="sidebar-stack">
-          <div className="sidebar-panel">
-            <SectionHeading eyebrow="Trending" title="What readers are chasing" />
-            <div className="story-stack">
-              {homeData.trendingArticles.slice(0, 4).map((article) => (
-                <ArticleCard key={article.id} article={article} variant="compact" />
-              ))}
-            </div>
-          </div>
-          <AdSlot label="Top right rail ad slot" />
-        </aside>
-      </div>
+      <section className="module-block">
+        <SectionHeading eyebrow="Trending" title="What readers are chasing" />
+        <div className="story-grid story-grid--tiles">
+          {homeData.trendingArticles.slice(0, 4).map((article) => (
+            <ArticleCard key={article.id} article={article} variant="tile" />
+          ))}
+        </div>
+      </section>
 
       {homeData.sportRails.map((rail) => (
         <section key={rail.sport.slug} className="module-block">
@@ -65,9 +56,9 @@ export default async function HomePage() {
             href={`/${rail.sport.slug}`}
             description={rail.sport.description}
           />
-          <div className="story-grid story-grid--four">
+          <div className="story-grid story-grid--tiles">
             {rail.articles.map((article) => (
-              <ArticleCard key={article.id} article={article} />
+              <ArticleCard key={article.id} article={article} variant="tile" />
             ))}
           </div>
         </section>
@@ -75,9 +66,9 @@ export default async function HomePage() {
 
       <section className="module-block">
         <SectionHeading eyebrow="Editors" title="Editor’s picks" />
-        <div className="story-grid story-grid--four">
+        <div className="story-grid story-grid--tiles">
           {homeData.editorsPicks.map((article) => (
-            <ArticleCard key={article.id} article={article} />
+            <ArticleCard key={article.id} article={article} variant="tile" />
           ))}
         </div>
       </section>

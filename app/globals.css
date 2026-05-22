@@ -432,12 +432,23 @@ img {
 }
 
 .story-card--headline {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   border-radius: 16px;
   background: rgba(255, 253, 249, 0.98);
 }
 
+.story-card--headline .story-card__image {
+  aspect-ratio: 1 / 1;
+}
+
 .story-card--headline .story-card__body {
-  padding: 0.95rem 1rem 1.05rem;
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 0.5rem;
+  flex: 1;
+  padding: 0.85rem 0.9rem 0.95rem;
 }
 
 .story-card--headline .story-card__meta {

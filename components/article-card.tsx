@@ -20,18 +20,16 @@ export function ArticleCard({ article, variant = "feature" }: ArticleCardProps) 
 
   return (
     <article className={`story-card story-card--${variant}`}>
-      {variant !== "headline" ? (
-        <Link href={`/${article.sport.slug}/${article.slug}`} className="story-card__image-link">
-          <Image
-            src={article.featuredImage.src}
-            alt={article.featuredImage.alt}
-            width={article.featuredImage.width}
-            height={article.featuredImage.height}
-            className="story-card__image"
-            priority={variant === "hero"}
-          />
-        </Link>
-      ) : null}
+      <Link href={`/${article.sport.slug}/${article.slug}`} className="story-card__image-link">
+        <Image
+          src={article.featuredImage.src}
+          alt={article.featuredImage.alt}
+          width={article.featuredImage.width}
+          height={article.featuredImage.height}
+          className="story-card__image"
+          priority={variant === "hero"}
+        />
+      </Link>
       <div className="story-card__body">
         <div className="story-card__meta">
           <span className="story-card__sport">{article.sport.name}</span>

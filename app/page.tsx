@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getHomePageData } from "@/lib/cms";
 import { ArticleCard } from "@/components/article-card";
 import { AuthorSpotlight } from "@/components/author-spotlight";
+import { HomeHero } from "@/components/home-hero";
 import { NewsletterBand } from "@/components/newsletter-band";
 import { QuickHits } from "@/components/quick-hits";
 import { SectionHeading } from "@/components/section-heading";
@@ -13,6 +14,8 @@ export default async function HomePage() {
 
   return (
     <div className="page-shell page-shell--home">
+      <HomeHero slides={[homeData.heroArticle, ...homeData.heroSecondary]} />
+
       <section className="module-block">
         <SectionHeading title="Latest News" />
         <div className="story-grid story-grid--latest">

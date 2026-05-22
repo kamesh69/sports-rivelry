@@ -9,9 +9,13 @@ interface HomeHeroProps {
   slides: Article[];
 }
 
+const SLIDE_WIDTH = 72;
+const SLIDE_GAP = 1.5;
+
 export function HomeHero({ slides }: HomeHeroProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const slideCount = slides.length;
+  const slideOffset = (100 - SLIDE_WIDTH) / 2;
 
   useEffect(() => {
     if (slideCount < 2) {
@@ -39,23 +43,12 @@ export function HomeHero({ slides }: HomeHeroProps) {
 
   return (
     <section className="hero-carousel" aria-label="Featured stories">
-      <div className="hero-carousel__frame">
-        {slideCount > 1 ? (
-          <button
-            type="button"
-            className="hero-carousel__nav hero-carousel__nav--prev"
-            onClick={() => goToSlide(activeIndex - 1)}
-            aria-label="Show previous slide"
-          >
-            <span aria-hidden="true">‹</span>
-          </button>
-        ) : null}
-
+      <div className="hero-carousel__stage">
         <div className="hero-carousel__viewport">
           <div
             className="hero-carousel__track"
             style={{
-              transform: `translateX(calc(10% - ${activeIndex} * (80% + 1.25rem)))`,
+              transform: `translateX(calc(${slideOffset}% - ${activeIndex} * (${SLIDE_WIDTH}% + ${SLIDE_GAP}rem)))`,
             }}
           >
             {slides.map((article, index) => {
@@ -80,7 +73,7 @@ export function HomeHero({ slides }: HomeHeroProps) {
                       height={article.featuredImage.height}
                       className="hero-carousel__image"
                       priority={index === 0}
-                      sizes="(max-width: 720px) 100vw, 78vw"
+                      sizes="(max-width: 720px) 100vw, 72vw"
                     />
                     <div className="hero-carousel__overlay" />
                     <div className="hero-carousel__content">
@@ -105,14 +98,24 @@ export function HomeHero({ slides }: HomeHeroProps) {
         </div>
 
         {slideCount > 1 ? (
-          <button
-            type="button"
-            className="hero-carousel__nav hero-carousel__nav--next"
-            onClick={() => goToSlide(activeIndex + 1)}
-            aria-label="Show next slide"
-          >
-            <span aria-hidden="true">›</span>
-          </button>
+          <>
+            <button
+              type="button"
+              className="hero-carousel__nav hero-carousel__nav--prev"
+              onClick={() => goToSlide(activeIndex - 1)}
+              aria-label="Show previous slide"
+            >
+              <span aria-hidden="true">‹</span>
+            </button>
+            <button
+              type="button"
+              className="hero-carousel__nav hero-carousel__nav--next"
+              onClick={() => goToSlide(activeIndex + 1)}
+              aria-label="Show next slide"
+            >
+              <span aria-hidden="true">›</span>
+            </button>
+          </>
         ) : null}
       </div>
 

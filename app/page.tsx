@@ -13,9 +13,12 @@ export default async function HomePage() {
   const homeData = await getHomePageData();
 
   return (
-    <div className="page-shell page-shell--home">
-      <HomeHero slides={[homeData.heroArticle, ...homeData.heroSecondary]} />
+    <>
+      <div className="home-hero-bleed">
+        <HomeHero slides={[homeData.heroArticle, ...homeData.heroSecondary]} />
+      </div>
 
+      <div className="page-shell page-shell--home">
       <section className="module-block">
         <SectionHeading title="Latest News" />
         <div className="story-grid story-grid--latest">
@@ -94,6 +97,7 @@ export default async function HomePage() {
           <Link href="/contact">Contact the newsroom</Link>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 }

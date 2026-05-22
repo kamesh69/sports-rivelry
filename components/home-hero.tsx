@@ -110,22 +110,6 @@ export function HomeHero({ slides }: HomeHeroProps) {
           </div>
         </>
       ) : null}
-
-      <div className="hero-carousel__summary">
-        {slides.map((article, index) => (
-          <button
-            key={`${article.id}-summary`}
-            type="button"
-            className={`hero-carousel__summary-item${
-              index === activeIndex ? " hero-carousel__summary-item--active" : ""
-            }`}
-            onClick={() => goToSlide(index)}
-          >
-            <span>{article.sport.name}</span>
-            <strong>{article.title}</strong>
-          </button>
-        ))}
-      </div>
     </section>
   );
 }

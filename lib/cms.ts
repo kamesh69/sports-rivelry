@@ -1,4 +1,5 @@
 import { DEFAULT_REVALIDATE_SECONDS } from "@/lib/site-config";
+import { MEDIA_STANDARDS } from "@/lib/media";
 import {
   articles,
   authors,
@@ -116,8 +117,8 @@ function normalizeWordPressArticle(node: any): Article | null {
     featuredImage: {
       src: node.featuredImage?.node?.sourceUrl || "/images/articles/cricket-pulse.svg",
       alt: node.featuredImage?.node?.altText || node.title,
-      width: node.featuredImage?.node?.mediaDetails?.width || 1600,
-      height: node.featuredImage?.node?.mediaDetails?.height || 900,
+      width: node.featuredImage?.node?.mediaDetails?.width || MEDIA_STANDARDS.articleFeatured.width,
+      height: node.featuredImage?.node?.mediaDetails?.height || MEDIA_STANDARDS.articleFeatured.height,
     },
     sport,
     league: league

@@ -19,6 +19,10 @@ Sports Rivalry is a headless sports publishing starter built with Next.js App Ro
 5. Run `npm install`.
 6. Run `npm run dev`.
 
+## Image standards
+
+Upload featured images at **1600×900 (16:9)**. See [docs/image-upload-standards.md](docs/image-upload-standards.md).
+
 ## Deploy on Vercel
 
 See [docs/vercel-deployment.md](docs/vercel-deployment.md) for environment variables and domain setup.

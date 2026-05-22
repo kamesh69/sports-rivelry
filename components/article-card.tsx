@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { normalizeFeaturedImage } from "@/lib/media";
 import type { Article } from "@/lib/types";
 import { formatDate, formatRelativeTime } from "@/lib/utils";
 
@@ -17,17 +18,27 @@ export function ArticleCard({ article, variant = "feature" }: ArticleCardProps) 
     variant === "headline" || variant === "tile"
       ? formatRelativeTime(article.publishedAt)
       : formatDate(article.publishedAt);
+  const imageTarget =
+    variant === "hero" ? "articleHero" : variant === "headline" || variant === "tile" ? "articleCard" : "articleFeatured";
+  const image = normalizeFeaturedImage(article.featuredImage, imageTarget);
 
   return (
     <article className={`story-card story-card--${variant}`}>
       <Link href={`/${article.sport.slug}/${article.slug}`} className="story-card__image-link">
         <Image
-          src={article.featuredImage.src}
-          alt={article.featuredImage.alt}
-          width={article.featuredImage.width}
-          height={article.featuredImage.height}
+          src={image.src}
+          alt={image.alt}
+          width={image.width}
+          height={image.height}
           className="story-card__image"
           priority={variant === "hero"}
+          sizes={
+            variant === "headline"
+              ? "(max-width: 720px) 100vw, 16vw"
+              : variant === "hero"
+                ? "100vw"
+                : "(max-width: 720px) 100vw, 33vw"
+          }
         />
       </Link>
       <div className="story-card__body">

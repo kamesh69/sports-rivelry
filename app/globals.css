@@ -12,6 +12,10 @@
   --shadow: 0 24px 80px rgba(32, 18, 8, 0.08);
   --radius: 24px;
   --max-width: 1280px;
+  --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-headline: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-score: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --card-image-ratio: 16 / 9;
 }
 
 * {
@@ -30,7 +34,8 @@ body {
     radial-gradient(circle at top right, rgba(15, 118, 110, 0.08), transparent 18%),
     linear-gradient(180deg, #f8f2e8 0%, var(--background) 100%);
   color: var(--text);
-  font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  font-family: var(--font-body);
+  font-weight: 400;
   line-height: 1.6;
 }
 
@@ -180,8 +185,25 @@ img {
 .story-card h3,
 .article-header h1,
 .prose-panel h1,
-.author-profile h1 {
-  font-family: Baskerville, "Times New Roman", serif;
+.author-profile h1,
+.quick-hits__title,
+.quick-hits__featured-body h3,
+.quick-hits__secondary-body h4,
+.hero-carousel__content h2 {
+  font-family: var(--font-headline);
+  font-weight: 700;
+  font-stretch: condensed;
+  letter-spacing: -0.02em;
+}
+
+.ticker-label,
+.eyebrow,
+.story-card__sport,
+.hero-carousel__tag,
+.font-score {
+  font-family: var(--font-score);
+  font-weight: 800;
+  letter-spacing: 0.04em;
 }
 
 .brand-copy strong {
@@ -341,12 +363,17 @@ img {
 
 .story-card__image-link {
   display: block;
+  overflow: hidden;
+  aspect-ratio: var(--card-image-ratio);
+  background: #120f0c;
 }
 
 .story-card__image {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 100%;
+  aspect-ratio: unset;
   object-fit: cover;
+  object-position: center;
   display: block;
 }
 
@@ -449,8 +476,9 @@ img {
   background: rgba(255, 253, 249, 0.98);
 }
 
-.story-card--headline .story-card__image {
-  aspect-ratio: 1 / 1;
+.story-card--headline .story-card__image-link {
+  aspect-ratio: var(--card-image-ratio);
+  border-radius: 16px 16px 0 0;
 }
 
 .story-card--headline .story-card__body {
@@ -475,8 +503,10 @@ img {
 
 .story-card--headline h3 {
   margin: 0.45rem 0 0;
-  font-size: 1.02rem;
-  line-height: 1.2;
+  font-size: 0.95rem;
+  line-height: 1.18;
+  font-weight: 700;
+  font-stretch: condensed;
 }
 
 .story-card--headline h3 a {
@@ -493,7 +523,6 @@ img {
 
 .quick-hits__title {
   margin: 0;
-  font-family: Baskerville, "Times New Roman", serif;
   font-size: clamp(1.6rem, 2.4vw, 2.35rem);
   line-height: 1.05;
 }
@@ -551,7 +580,6 @@ img {
 .quick-hits__featured-body h3,
 .quick-hits__secondary-body h4 {
   margin: 0.75rem 0 0.55rem;
-  font-family: Baskerville, "Times New Roman", serif;
   font-size: clamp(1.35rem, 2vw, 1.9rem);
   line-height: 1.12;
 }
@@ -964,9 +992,7 @@ img {
 .hero-carousel__content h2 {
   margin: 0;
   max-width: min(52rem, 92%);
-  font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif;
   font-size: clamp(1.45rem, 2.4vw, 2.35rem);
-  font-weight: 800;
   line-height: 1.14;
   text-wrap: balance;
 }

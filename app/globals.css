@@ -885,6 +885,10 @@ img {
   will-change: transform;
 }
 
+.hero-carousel__track--instant {
+  transition: none;
+}
+
 .hero-carousel__slide {
   position: relative;
   flex: 0 0 72%;
@@ -1009,11 +1013,14 @@ img {
 }
 
 .hero-carousel__nav--prev {
-  left: clamp(0.75rem, 12vw, 10rem);
+  left: calc(14% + 0.35rem);
+  transform: translate(-50%, -50%);
 }
 
 .hero-carousel__nav--next {
-  right: clamp(0.75rem, 12vw, 10rem);
+  left: calc(86% - 0.35rem);
+  right: auto;
+  transform: translate(-50%, -50%);
 }
 
 .hero-carousel__nav:hover {

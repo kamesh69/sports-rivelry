@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Article } from "@/lib/types";
 
 interface HomeHeroProps {
@@ -11,33 +11,127 @@ interface HomeHeroProps {
 
 const SLIDE_WIDTH = 72;
 const SLIDE_GAP = 1.5;
+const SLIDE_OFFSET = (100 - SLIDE_WIDTH) / 2;
+
+type CarouselSlide = Article & {
+  carouselKey: string;
+  realIndex: number;
+  isClone?: boolean;
+};
 
 export function HomeHero({ slides }: HomeHeroProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
   const slideCount = slides.length;
-  const slideOffset = (100 - SLIDE_WIDTH) / 2;
+  const loopEnabled = slideCount > 1;
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const extendedSlides = useMemo<CarouselSlide[]>(() => {
+    if (!loopEnabled) {
+      return slides.map((article, index) => ({
+        ...article,
+        carouselKey: article.id,
+        realIndex: index,
+      }));
+    }
+
+    const last = slides[slideCount - 1];
+    const first = slides[0];
+
+    return [
+      { ...last, carouselKey: `${last.id}-clone-start`, realIndex: slideCount - 1, isClone: true },
+      ...slides.map((article, index) => ({
+        ...article,
+        carouselKey: article.id,
+        realIndex: index,
+      })),
+      { ...first, carouselKey: `${first.id}-clone-end`, realIndex: 0, isClone: true },
+    ];
+  }, [loopEnabled, slideCount, slides]);
+
+  const [trackIndex, setTrackIndex] = useState(loopEnabled ? 1 : 0);
+  const [transitionEnabled, setTransitionEnabled] = useState(true);
+
+  const activeIndex = loopEnabled
+    ? trackIndex === 0
+      ? slideCount - 1
+      : trackIndex === slideCount + 1
+        ? 0
+        : trackIndex - 1
+    : 0;
+
+  const settleLoop = useCallback(() => {
+    if (!loopEnabled || !transitionEnabled) {
+      return;
+    }
+
+    if (trackIndex === 0) {
+      setTransitionEnabled(false);
+      setTrackIndex(slideCount);
+      return;
+    }
+
+    if (trackIndex === slideCount + 1) {
+      setTransitionEnabled(false);
+      setTrackIndex(1);
+    }
+  }, [loopEnabled, slideCount, trackIndex, transitionEnabled]);
 
   useEffect(() => {
-    if (slideCount < 2) {
+    if (transitionEnabled) {
       return undefined;
     }
 
-    const timerId = window.setInterval(() => {
-      setActiveIndex((currentIndex) => (currentIndex + 1) % slideCount);
-    }, 6000);
+    const frameId = window.requestAnimationFrame(() => {
+      setTransitionEnabled(true);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [transitionEnabled, trackIndex]);
+
+  const goToTrackIndex = useCallback(
+    (nextIndex: number) => {
+      if (!loopEnabled) {
+        setTrackIndex(Math.max(0, Math.min(nextIndex, slideCount - 1)));
+        return;
+      }
+
+      setTransitionEnabled(true);
+      setTrackIndex(nextIndex);
+    },
+    [loopEnabled, slideCount],
+  );
+
+  const goToRealIndex = useCallback(
+    (realIndex: number) => {
+      goToTrackIndex(realIndex + 1);
+    },
+    [goToTrackIndex],
+  );
+
+  const goNext = useCallback(() => {
+    goToTrackIndex(trackIndex + 1);
+  }, [goToTrackIndex, trackIndex]);
+
+  const goPrev = useCallback(() => {
+    goToTrackIndex(trackIndex - 1);
+  }, [goToTrackIndex, trackIndex]);
+
+  useEffect(() => {
+    if (!loopEnabled) {
+      return undefined;
+    }
+
+    const timerId = window.setInterval(goNext, 6000);
 
     return () => {
       window.clearInterval(timerId);
     };
-  }, [slideCount]);
+  }, [goNext, loopEnabled]);
 
   if (!slides.length) {
     return null;
   }
-
-  const goToSlide = (nextIndex: number) => {
-    setActiveIndex((nextIndex + slideCount) % slideCount);
-  };
 
   const primaryAuthor = (article: Article) => article.authors[0];
 
@@ -46,25 +140,27 @@ export function HomeHero({ slides }: HomeHeroProps) {
       <div className="hero-carousel__stage">
         <div className="hero-carousel__viewport">
           <div
-            className="hero-carousel__track"
+            ref={trackRef}
+            className={`hero-carousel__track${transitionEnabled ? "" : " hero-carousel__track--instant"}`}
             style={{
-              transform: `translateX(calc(${slideOffset}% - ${activeIndex} * (${SLIDE_WIDTH}% + ${SLIDE_GAP}rem)))`,
+              transform: `translateX(calc(${SLIDE_OFFSET}% - ${trackIndex} * (${SLIDE_WIDTH}% + ${SLIDE_GAP}rem)))`,
             }}
+            onTransitionEnd={settleLoop}
           >
-            {slides.map((article, index) => {
+            {extendedSlides.map((article, index) => {
               const author = primaryAuthor(article);
-              const isActive = index === activeIndex;
+              const isActive = index === trackIndex;
 
               return (
                 <article
-                  key={article.id}
+                  key={article.carouselKey}
                   className={`hero-carousel__slide${isActive ? " hero-carousel__slide--active" : ""}`}
                   aria-hidden={!isActive}
                 >
                   <Link
                     href={`/${article.sport.slug}/${article.slug}`}
                     className="hero-carousel__link"
-                    tabIndex={isActive ? 0 : -1}
+                    tabIndex={isActive && !article.isClone ? 0 : -1}
                   >
                     <Image
                       src={article.featuredImage.src}
@@ -72,7 +168,7 @@ export function HomeHero({ slides }: HomeHeroProps) {
                       width={article.featuredImage.width}
                       height={article.featuredImage.height}
                       className="hero-carousel__image"
-                      priority={index === 0}
+                      priority={article.realIndex === 0 && !article.isClone}
                       sizes="(max-width: 720px) 100vw, 72vw"
                     />
                     <div className="hero-carousel__overlay" />
@@ -97,12 +193,12 @@ export function HomeHero({ slides }: HomeHeroProps) {
           </div>
         </div>
 
-        {slideCount > 1 ? (
+        {loopEnabled ? (
           <>
             <button
               type="button"
               className="hero-carousel__nav hero-carousel__nav--prev"
-              onClick={() => goToSlide(activeIndex - 1)}
+              onClick={goPrev}
               aria-label="Show previous slide"
             >
               <span aria-hidden="true">‹</span>
@@ -110,7 +206,7 @@ export function HomeHero({ slides }: HomeHeroProps) {
             <button
               type="button"
               className="hero-carousel__nav hero-carousel__nav--next"
-              onClick={() => goToSlide(activeIndex + 1)}
+              onClick={goNext}
               aria-label="Show next slide"
             >
               <span aria-hidden="true">›</span>
@@ -119,7 +215,7 @@ export function HomeHero({ slides }: HomeHeroProps) {
         ) : null}
       </div>
 
-      {slideCount > 1 ? (
+      {loopEnabled ? (
         <div className="hero-carousel__dots" role="tablist" aria-label="Carousel navigation">
           {slides.map((article, index) => (
             <button
@@ -128,7 +224,7 @@ export function HomeHero({ slides }: HomeHeroProps) {
               className={`hero-carousel__dot${
                 index === activeIndex ? " hero-carousel__dot--active" : ""
               }`}
-              onClick={() => goToSlide(index)}
+              onClick={() => goToRealIndex(index)}
               aria-label={`Show slide ${index + 1}: ${article.title}`}
               aria-current={index === activeIndex}
             />

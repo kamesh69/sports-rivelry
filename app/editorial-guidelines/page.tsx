@@ -5,7 +5,7 @@ export default function EditorialGuidelinesPage() {
         <span className="eyebrow">Editorial</span>
         <h1>Editorial Guidelines</h1>
         <p>
-          Sports Rivelry prioritizes sourced reporting, transparent updates, and clear separation
+          Sports Rivalry prioritizes sourced reporting, transparent updates, and clear separation
           between analysis, opinion, and sponsored content.
         </p>
         <p>

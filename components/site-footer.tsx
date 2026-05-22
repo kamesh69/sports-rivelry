@@ -6,7 +6,7 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div className="page-shell footer-grid">
         <div className="footer-brand">
-          <h2>Sports Rivelry</h2>
+          <h2>Sports Rivalry</h2>
           <p>
             Built for search, speed, and the stories that make sports feel bigger than
             scorelines.

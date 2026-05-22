@@ -1,7 +1,7 @@
-export const SITE_NAME = "Sports Rivelry";
+export const SITE_NAME = "Sports Rivalry";
 export const SITE_TAGLINE = "India-first sports news, analysis, and rivalries that travel.";
 export const SITE_DESCRIPTION =
-  "Sports Rivelry is a headless sports newsroom built for fast-moving coverage, rivalry-driven storytelling, and search-ready editorial publishing.";
+  "Sports Rivalry is a headless sports newsroom built for fast-moving coverage, rivalry-driven storytelling, and search-ready editorial publishing.";
 export const SITE_DOMAIN =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://thesportsrivalry.com";
 

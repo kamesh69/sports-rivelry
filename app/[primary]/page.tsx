@@ -41,7 +41,7 @@ export async function generateMetadata({
   }
 
   return buildMetadata({
-    title: "Not found | Sports Rivelry",
+    title: "Not found | Sports Rivalry",
     description: "The requested page could not be found.",
     canonicalPath: `/${primary}`,
     noIndex: true,

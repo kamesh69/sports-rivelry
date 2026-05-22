@@ -125,11 +125,32 @@ export interface LandingPage {
   seo: SeoMeta;
 }
 
+export type QuickHitsSelectionMode = "manual" | "author_date" | "sport_date";
+
+export interface QuickHitsConfig {
+  enabled: boolean;
+  title: string;
+  selectionMode: QuickHitsSelectionMode;
+  featuredArticleSlug?: string;
+  secondaryArticleSlugs?: string[];
+  authorSlug?: string;
+  sportSlug?: string;
+  publishedDate?: string;
+  secondaryCount?: number;
+}
+
+export interface QuickHitsBlock {
+  config: QuickHitsConfig;
+  featured: Article;
+  secondary: Article[];
+}
+
 export interface HomePageData {
   breakingNews: Article[];
   heroArticle: Article;
   heroSecondary: Article[];
   latestArticles: Article[];
+  quickHits: QuickHitsBlock | null;
   sportRails: Array<{
     sport: SportSummary;
     articles: Article[];

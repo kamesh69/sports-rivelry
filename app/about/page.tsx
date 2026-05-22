@@ -3,9 +3,9 @@ export default function AboutPage() {
     <div className="page-shell page-shell--detail">
       <section className="prose-panel">
         <span className="eyebrow">About</span>
-        <h1>About Sports Rivelry</h1>
+        <h1>About Sports Rivalry</h1>
         <p>
-          Sports Rivelry is built as an editorial-first sports publication for high-speed news,
+          Sports Rivalry is built as an editorial-first sports publication for high-speed news,
           fandom-fueled analysis, and India-first discovery. The platform is structured to pair a
           premium front-end experience with WordPress-powered newsroom operations.
         </p>

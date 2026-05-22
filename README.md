@@ -1,10 +1,10 @@
-# Sports Rivelry
+# Sports Rivalry
 
-Sports Rivelry is a headless sports publishing starter built with Next.js App Router on the frontend and WordPress as the editorial CMS. The codebase is shaped for an India-first, editorial-first launch modeled on the rhythm of EssentiallySports, with clear room for ESPN-style utility layers later.
+Sports Rivalry is a headless sports publishing starter built with Next.js App Router on the frontend and WordPress as the editorial CMS. The codebase is shaped for an India-first, editorial-first launch modeled on the rhythm of EssentiallySports, with clear room for ESPN-style utility layers later.
 
 ## What is included
 
-- A responsive homepage with hero, news river, sport rails, trending, authors, trust pages, and newsletter CTA modules
+- A responsive homepage with latest news, quick hits, sport rails, trending, authors, trust pages, and newsletter CTA modules
 - Clean dynamic routes for sport hubs, league hubs, articles, author pages, topic pages, newsletters, and event landing pages
 - Metadata, JSON-LD, XML sitemap, news sitemap, robots.txt, and preview/revalidation endpoints
 - A WordPress mu-plugin starter for post types, taxonomies, ACF options, preview links, and frontend revalidation
@@ -13,10 +13,15 @@ Sports Rivelry is a headless sports publishing starter built with Next.js App Ro
 ## Getting started
 
 1. Copy `.env.example` to `.env.local`.
-2. Set `NEXT_PUBLIC_SITE_URL` to your production domain.
+2. Set `NEXT_PUBLIC_SITE_URL` to your production domain (or `http://localhost:3000` locally).
 3. Set `NEXT_PUBLIC_WORDPRESS_URL` to your WordPress origin when the CMS is ready.
-4. Run `npm install`.
-5. Run `npm run dev`.
+4. Generate secrets: `openssl rand -base64 32` for `REVALIDATE_SECRET` and `WORDPRESS_PREVIEW_SECRET`.
+5. Run `npm install`.
+6. Run `npm run dev`.
+
+## Deploy on Vercel
+
+See [docs/vercel-deployment.md](docs/vercel-deployment.md) for environment variables and domain setup.
 
 ## Core environment variables
 
@@ -48,6 +53,8 @@ The mu-plugin starter lives at [wordpress/wp-content/mu-plugins/sr-headless-core
 Additional implementation notes live in:
 
 - [docs/architecture.md](/Users/kameshkhatri/Desktop/sports%20website/docs/architecture.md)
+- [docs/vercel-deployment.md](/Users/kameshkhatri/Desktop/sports%20website/docs/vercel-deployment.md)
 - [docs/hostinger-deployment.md](/Users/kameshkhatri/Desktop/sports%20website/docs/hostinger-deployment.md)
+- [docs/quick-hits-config.md](/Users/kameshkhatri/Desktop/sports%20website/docs/quick-hits-config.md)
 - [docs/wordpress-setup.md](/Users/kameshkhatri/Desktop/sports%20website/docs/wordpress-setup.md)
 - [docs/seo-launch-checklist.md](/Users/kameshkhatri/Desktop/sports%20website/docs/seo-launch-checklist.md)

@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: Sports Rivelry Headless Core
- * Description: Registers Sports Rivelry content models, exposes them to WPGraphQL, and notifies the Next.js frontend to revalidate pages after editorial changes.
- * Author: Sports Rivelry
+ * Plugin Name: Sports Rivalry Headless Core
+ * Description: Registers Sports Rivalry content models, exposes them to WPGraphQL, and notifies the Next.js frontend to revalidate pages after editorial changes.
+ * Author: Sports Rivalry
  * Version: 0.1.0
  */
 
@@ -131,9 +131,9 @@ function sr_register_acf_option_pages() {
     }
 
     acf_add_options_page([
-        'page_title' => 'Sports Rivelry Layout Settings',
+        'page_title' => 'Sports Rivalry Layout Settings',
         'menu_title' => 'SR Layout',
-        'menu_slug' => 'sports-rivelry-layout',
+        'menu_slug' => 'sports-rivalry-layout',
         'capability' => 'edit_posts',
         'redirect' => false,
     ]);
@@ -141,6 +141,7 @@ function sr_register_acf_option_pages() {
     $sub_pages = [
         ['page_title' => 'Homepage Layout', 'menu_title' => 'Homepage', 'menu_slug' => 'sr-home-layout'],
         ['page_title' => 'Hero Slots', 'menu_title' => 'Hero Slots', 'menu_slug' => 'sr-hero-slots'],
+        ['page_title' => 'Quick Hits', 'menu_title' => 'Quick Hits', 'menu_slug' => 'sr-quick-hits'],
         ['page_title' => 'Newsletter Slots', 'menu_title' => 'Newsletters', 'menu_slug' => 'sr-newsletter-slots'],
         ['page_title' => 'Trending Config', 'menu_title' => 'Trending', 'menu_slug' => 'sr-trending-config'],
         ['page_title' => 'Sponsor and Ad Placements', 'menu_title' => 'Ad Placements', 'menu_slug' => 'sr-ad-placements'],
@@ -148,7 +149,7 @@ function sr_register_acf_option_pages() {
 
     foreach ($sub_pages as $sub_page) {
         acf_add_options_sub_page(array_merge($sub_page, [
-            'parent_slug' => 'sports-rivelry-layout',
+            'parent_slug' => 'sports-rivalry-layout',
         ]));
     }
 }

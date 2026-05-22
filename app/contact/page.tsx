@@ -5,11 +5,11 @@ export default function ContactPage() {
         <span className="eyebrow">Contact</span>
         <h1>Contact the newsroom</h1>
         <p>
-          Editorial inquiries: <a href="mailto:editor@sportsrivelry.com">editor@sportsrivelry.com</a>
+          Editorial inquiries: <a href="mailto:editor@sportsrivalry.com">editor@sportsrivalry.com</a>
         </p>
         <p>
           Partnerships and commercial:{" "}
-          <a href="mailto:partners@sportsrivelry.com">partners@sportsrivelry.com</a>
+          <a href="mailto:partners@sportsrivalry.com">partners@sportsrivalry.com</a>
         </p>
         <p>
           This page exists both for readers and for publisher trust signals expected by Google

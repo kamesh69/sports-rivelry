@@ -16,9 +16,9 @@
 2. In `wp-config.php`, define:
 
 ```php
-define('SR_FRONTEND_URL', 'https://sportsrivelry.com');
+define('SR_FRONTEND_URL', 'https://sportsrivalry.com');
 define('SR_PREVIEW_SECRET', 'replace-me');
-define('SR_REVALIDATE_ENDPOINT', 'https://sportsrivelry.com/api/revalidate');
+define('SR_REVALIDATE_ENDPOINT', 'https://sportsrivalry.com/api/revalidate');
 define('SR_REVALIDATE_SECRET', 'replace-me');
 ```
 

@@ -6,6 +6,8 @@ import type {
   LeagueHub,
   LeagueSummary,
   NewsletterIssue,
+  QuickHitsBlock,
+  QuickHitsConfig,
   SearchResult,
   SportHub,
   SportSummary,
@@ -120,7 +122,7 @@ export const authors: AuthorProfile[] = [
     ],
     seo: {
       title: `Anay Mehra | ${SITE_NAME}`,
-      description: "Senior Cricket Writer at Sports Rivelry.",
+      description: "Senior Cricket Writer at Sports Rivalry.",
       canonicalPath: "/authors/anay-mehra",
     },
   },
@@ -142,7 +144,7 @@ export const authors: AuthorProfile[] = [
     socials: [{ platform: "X", label: "@sanaq", url: "https://x.com/sanaq" }],
     seo: {
       title: `Sana Qureshi | ${SITE_NAME}`,
-      description: "Football Features Editor at Sports Rivelry.",
+      description: "Football Features Editor at Sports Rivalry.",
       canonicalPath: "/authors/sana-qureshi",
     },
   },
@@ -164,7 +166,7 @@ export const authors: AuthorProfile[] = [
     socials: [{ platform: "X", label: "@riyanarayan", url: "https://x.com/riyanarayan" }],
     seo: {
       title: `Riya Narayan | ${SITE_NAME}`,
-      description: "Olympics & Badminton Correspondent at Sports Rivelry.",
+      description: "Olympics & Badminton Correspondent at Sports Rivalry.",
       canonicalPath: "/authors/riya-narayan",
     },
   },
@@ -186,7 +188,7 @@ export const authors: AuthorProfile[] = [
     socials: [{ platform: "X", label: "@veerreports", url: "https://x.com/veerreports" }],
     seo: {
       title: `Veer Chaudhary | ${SITE_NAME}`,
-      description: "Combat & Kabaddi Reporter at Sports Rivelry.",
+      description: "Combat & Kabaddi Reporter at Sports Rivalry.",
       canonicalPath: "/authors/veer-chaudhary",
     },
   },
@@ -669,7 +671,7 @@ export const newsletters: NewsletterIssue[] = [
     title: "The Morning Huddle",
     description: "A quick-hit briefing on what changed overnight and what matters next across Indian and global sport.",
     heroCopy:
-      "Every morning, Sports Rivelry lines up the biggest rivalry, sharpest turn, and smartest context before the day gets noisy.",
+      "Every morning, Sports Rivalry lines up the biggest rivalry, sharpest turn, and smartest context before the day gets noisy.",
     schedule: "Delivered Monday to Saturday at 8:00 AM IST",
     ctaLabel: "Join the list",
     highlightedArticleSlugs: [
@@ -679,7 +681,7 @@ export const newsletters: NewsletterIssue[] = [
     ],
     seo: {
       title: `The Morning Huddle | ${SITE_NAME}`,
-      description: "Sports Rivelry’s flagship newsletter for fast, sharp sports context.",
+      description: "Sports Rivalry’s flagship newsletter for fast, sharp sports context.",
       canonicalPath: "/newsletters/the-morning-huddle",
     },
   },
@@ -780,6 +782,74 @@ export function getTrendingArticles(limit = 6) {
   return [...articles].sort((left, right) => right.trendingScore - left.trendingScore).slice(0, limit);
 }
 
+export const quickHitsConfig: QuickHitsConfig = {
+  enabled: true,
+  title: "IPL middle-overs week: Anay Mehra’s quick hits",
+  selectionMode: "author_date",
+  authorSlug: "anay-mehra",
+  publishedDate: new Date(hoursAgo(2)).toISOString().slice(0, 10),
+  secondaryCount: 2,
+};
+
+function sameCalendarDay(left: string, right: string) {
+  return left.slice(0, 10) === right.slice(0, 10);
+}
+
+export function resolveQuickHits(config: QuickHitsConfig): QuickHitsBlock | null {
+  if (!config.enabled) {
+    return null;
+  }
+
+  let selected: Article[] = [];
+
+  if (config.selectionMode === "manual") {
+    const slugs = [
+      config.featuredArticleSlug,
+      ...(config.secondaryArticleSlugs || []),
+    ].filter((slug): slug is string => Boolean(slug));
+    selected = getArticlesBySlugs(slugs);
+  }
+
+  if (config.selectionMode === "author_date") {
+    selected = sortByPublishedAt(
+      articles.filter(
+        (article) =>
+          article.authors.some((author) => author.slug === config.authorSlug) &&
+          (!config.publishedDate || sameCalendarDay(article.publishedAt, config.publishedDate)),
+      ),
+    );
+  }
+
+  if (config.selectionMode === "sport_date") {
+    selected = sortByPublishedAt(
+      articles.filter(
+        (article) =>
+          article.sport.slug === config.sportSlug &&
+          (!config.publishedDate || sameCalendarDay(article.publishedAt, config.publishedDate)),
+      ),
+    );
+  }
+
+  if (!selected.length) {
+    return null;
+  }
+
+  const featured =
+    (config.featuredArticleSlug
+      ? selected.find((article) => article.slug === config.featuredArticleSlug)
+      : null) || selected[0];
+  const secondaryLimit = config.secondaryCount ?? 2;
+  const secondary = selected
+    .filter((article) => article.id !== featured.id)
+    .slice(0, secondaryLimit);
+
+  return {
+    config,
+    featured,
+    secondary,
+  };
+}
+
 export function getHomePageData(): HomePageData {
   const latestArticles = getLatestArticles(12);
   const breakingNews = latestArticles.filter((article) => article.isBreaking).slice(0, 4);
@@ -796,6 +866,7 @@ export function getHomePageData(): HomePageData {
     heroArticle,
     heroSecondary,
     latestArticles,
+    quickHits: resolveQuickHits(quickHitsConfig),
     sportRails,
     trendingArticles: getTrendingArticles(),
     editorsPicks,

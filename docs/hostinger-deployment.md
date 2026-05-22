@@ -16,7 +16,7 @@ In hPanel:
 3. Choose `Node.js`.
 4. Choose `Import Git Repository`.
 5. Connect the GitHub repo:
-   - `https://github.com/kamesh69/sports-rivelry`
+   - `https://github.com/kamesh69/sports-rivalry`
 6. Use Node `22.x` if Hostinger offers that version.
 7. Add these environment variables:
 

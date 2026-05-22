@@ -8,6 +8,35 @@ export function absoluteUrl(path: string) {
   return `${SITE_DOMAIN}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
+export function formatRelativeTime(dateString: string) {
+  const publishedAt = new Date(dateString).getTime();
+  const elapsedMs = Date.now() - publishedAt;
+
+  if (Number.isNaN(publishedAt) || elapsedMs < 0) {
+    return "just now";
+  }
+
+  const minutes = Math.floor(elapsedMs / 60_000);
+  if (minutes < 1) {
+    return "just now";
+  }
+  if (minutes < 60) {
+    return `${minutes}min${minutes === 1 ? "" : "s"} ago`;
+  }
+
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) {
+    return `${hours} hr${hours === 1 ? "" : "s"} ago`;
+  }
+
+  const days = Math.floor(hours / 24);
+  if (days < 7) {
+    return `${days} day${days === 1 ? "" : "s"} ago`;
+  }
+
+  return formatDate(dateString);
+}
+
 export function formatDate(dateString: string) {
   return new Intl.DateTimeFormat("en-IN", {
     day: "numeric",

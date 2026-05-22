@@ -53,7 +53,7 @@ export async function generateMetadata({
 
   if (!resolved) {
     return buildMetadata({
-      title: "Not found | Sports Rivelry",
+      title: "Not found | Sports Rivalry",
       description: "The requested page could not be found.",
       canonicalPath: `/${primary}/${secondary}`,
       noIndex: true,
@@ -68,7 +68,7 @@ export async function generateMetadata({
 
   if (!article) {
     return buildMetadata({
-      title: "Not found | Sports Rivelry",
+      title: "Not found | Sports Rivalry",
       description: "The requested page could not be found.",
       canonicalPath: `/${primary}/${secondary}`,
       noIndex: true,

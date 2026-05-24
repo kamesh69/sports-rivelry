@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { SPORTS_NAV } from "@/lib/site-config";
+import { SOCIAL_LINKS, SPORTS_NAV } from "@/lib/site-config";
 import type { Article } from "@/lib/types";
 import { Logo } from "@/components/logo";
+import { SocialIcon } from "@/components/social-icon";
 
 interface SiteHeaderProps {
   breakingNews: Article[];
@@ -13,15 +14,33 @@ export function SiteHeader({ breakingNews }: SiteHeaderProps) {
       <div className="page-shell nav-bar">
         <Logo />
         <nav className="primary-nav" aria-label="Primary">
-          {SPORTS_NAV.map((item) => (
-            <Link key={item.slug} href={`/${item.slug}`}>
-              {item.label}
-            </Link>
-          ))}
+          <details className="nav-dropdown">
+            <summary className="nav-dropdown__trigger">Sports</summary>
+            <div className="nav-dropdown__menu" role="menu">
+              {SPORTS_NAV.map((item) => (
+                <Link key={item.slug} href={`/${item.slug}`} role="menuitem">
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </details>
+          <Link href="/topics/rivalries" className="nav-link">
+            Rivalries
+          </Link>
         </nav>
-        <div className="nav-actions">
-          <Link href="/topics/rivalries">Rivalries</Link>
-          <Link href="/search">Search</Link>
+        <div className="nav-actions nav-socials" aria-label="Social media">
+          {SOCIAL_LINKS.map((item) => (
+            <a
+              key={item.platform}
+              href={item.url}
+              className="nav-socials__link"
+              aria-label={item.label}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <SocialIcon platform={item.platform} />
+            </a>
+          ))}
         </div>
       </div>
       <div className="ticker-wrap" aria-label="Breaking stories">

@@ -9,7 +9,7 @@ interface HomeHeroProps {
   slides: Article[];
 }
 
-const SLIDE_WIDTH = 72;
+const SLIDE_WIDTH = 78;
 const SLIDE_GAP = 1.5;
 const SLIDE_OFFSET = (100 - SLIDE_WIDTH) / 2;
 
@@ -169,7 +169,7 @@ export function HomeHero({ slides }: HomeHeroProps) {
                       height={article.featuredImage.height}
                       className="hero-carousel__image"
                       priority={article.realIndex === 0 && !article.isClone}
-                      sizes="(max-width: 720px) 100vw, 72vw"
+                      sizes="(max-width: 720px) 100vw, 78vw"
                     />
                     <div className="hero-carousel__overlay" />
                     <div className="hero-carousel__content">

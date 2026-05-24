@@ -14,6 +14,34 @@ export const SPORTS_NAV = [
   { slug: "olympics", label: "Olympics" },
 ];
 
+export const SOCIAL_LINKS = [
+  {
+    platform: "x",
+    label: "Follow Sports Rivalry on X",
+    url: "https://x.com/sportsrivalry",
+  },
+  {
+    platform: "instagram",
+    label: "Follow Sports Rivalry on Instagram",
+    url: "https://instagram.com/sportsrivalry",
+  },
+  {
+    platform: "youtube",
+    label: "Follow Sports Rivalry on YouTube",
+    url: "https://youtube.com/@sportsrivalry",
+  },
+  {
+    platform: "facebook",
+    label: "Follow Sports Rivalry on Facebook",
+    url: "https://facebook.com/sportsrivalry",
+  },
+  {
+    platform: "linkedin",
+    label: "Follow Sports Rivalry on LinkedIn",
+    url: "https://linkedin.com/company/sportsrivalry",
+  },
+];
+
 export const TRUST_LINKS = [
   { href: "/about", label: "About" },
   { href: "/editorial-guidelines", label: "Editorial Guidelines" },

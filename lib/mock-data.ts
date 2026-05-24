@@ -785,9 +785,12 @@ export function getTrendingArticles(limit = 6) {
 export const quickHitsConfig: QuickHitsConfig = {
   enabled: true,
   title: "IPL middle-overs week: Anay Mehra’s quick hits",
-  selectionMode: "author_date",
-  authorSlug: "anay-mehra",
-  publishedDate: new Date(hoursAgo(2)).toISOString().slice(0, 10),
+  selectionMode: "manual",
+  featuredArticleSlug: "mi-trust-their-middle-overs-machine-as-ipl-pressure-rises",
+  secondaryArticleSlugs: [
+    "rcb-need-a-calmer-finish-to-turn-hype-into-ipl-points",
+    "ipl-2026-title-race-has-already-became-a-battle-of-bench-depth",
+  ],
   secondaryCount: 2,
 };
 
@@ -811,23 +814,29 @@ export function resolveQuickHits(config: QuickHitsConfig): QuickHitsBlock | null
   }
 
   if (config.selectionMode === "author_date") {
-    selected = sortByPublishedAt(
-      articles.filter(
-        (article) =>
-          article.authors.some((author) => author.slug === config.authorSlug) &&
-          (!config.publishedDate || sameCalendarDay(article.publishedAt, config.publishedDate)),
+    const byAuthor = sortByPublishedAt(
+      articles.filter((article) =>
+        article.authors.some((author) => author.slug === config.authorSlug),
       ),
     );
+    const sameDay = config.publishedDate
+      ? byAuthor.filter((article) => sameCalendarDay(article.publishedAt, config.publishedDate!))
+      : byAuthor;
+    const minimumCount = (config.secondaryCount ?? 2) + 1;
+
+    selected = sameDay.length >= minimumCount ? sameDay : byAuthor;
   }
 
   if (config.selectionMode === "sport_date") {
-    selected = sortByPublishedAt(
-      articles.filter(
-        (article) =>
-          article.sport.slug === config.sportSlug &&
-          (!config.publishedDate || sameCalendarDay(article.publishedAt, config.publishedDate)),
-      ),
+    const bySport = sortByPublishedAt(
+      articles.filter((article) => article.sport.slug === config.sportSlug),
     );
+    const sameDay = config.publishedDate
+      ? bySport.filter((article) => sameCalendarDay(article.publishedAt, config.publishedDate!))
+      : bySport;
+    const minimumCount = (config.secondaryCount ?? 2) + 1;
+
+    selected = sameDay.length >= minimumCount ? sameDay : bySport;
   }
 
   if (!selected.length) {

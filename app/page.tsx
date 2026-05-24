@@ -5,6 +5,7 @@ import { AuthorSpotlight } from "@/components/author-spotlight";
 import { HomeHero } from "@/components/home-hero";
 import { NewsletterBand } from "@/components/newsletter-band";
 import { QuickHits } from "@/components/quick-hits";
+import { SportsWeekPanel } from "@/components/sports-week-panel";
 import { SectionHeading } from "@/components/section-heading";
 
 export const revalidate = 60;
@@ -29,8 +30,9 @@ export default async function HomePage() {
       </section>
 
       {homeData.quickHits ? (
-        <section className="module-block module-block--quick-hits">
+        <section className="module-block module-block--editorial-row">
           <QuickHits block={homeData.quickHits} />
+          <SportsWeekPanel />
         </section>
       ) : null}
 

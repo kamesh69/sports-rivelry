@@ -573,17 +573,18 @@ img {
 }
 
 .home-showcase__content,
-.home-showcase__watch {
+.home-showcase__sidebar {
   position: absolute;
   z-index: 1;
 }
 
 .home-showcase__content {
   left: clamp(1.2rem, 3vw, 2rem);
-  right: min(18rem, 20vw);
+  right: clamp(12rem, 18vw, 15rem);
   bottom: clamp(1.2rem, 3vw, 2rem);
   display: grid;
   gap: 0.95rem;
+  max-width: min(44rem, calc(100% - 16rem));
 }
 
 .home-showcase__eyebrow {
@@ -615,12 +616,18 @@ img {
   font-size: clamp(1rem, 1.9vw, 1.2rem);
 }
 
-.home-showcase__watch {
+.home-showcase__sidebar {
   top: clamp(1rem, 2.5vw, 1.8rem);
   right: clamp(1rem, 2.5vw, 1.8rem);
   display: grid;
+  gap: 0.85rem;
+  width: clamp(9rem, 11vw, 11rem);
+}
+
+.home-showcase__watch {
+  display: grid;
   gap: 0.18rem;
-  min-width: 12rem;
+  min-width: 0;
   padding: 0.9rem 1rem;
   border-radius: 22px;
   background: rgba(15, 118, 110, 0.88);
@@ -705,19 +712,15 @@ img {
 }
 
 .home-showcase__rail {
-  position: absolute;
-  top: 6.3rem;
-  right: clamp(1rem, 2.5vw, 1.8rem);
-  z-index: 1;
   display: grid;
   gap: 0.75rem;
-  width: min(11rem, 18vw);
+  width: 100%;
 }
 
 .home-showcase__rail-item {
   display: grid;
   gap: 0.5rem;
-  padding: 0.35rem;
+  padding: 0.3rem;
   border-radius: 18px;
   background: rgba(18, 15, 12, 0.26);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -738,7 +741,7 @@ img {
 .home-showcase__rail-image {
   width: 100%;
   height: auto;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   border-radius: 14px;
   display: block;
@@ -752,7 +755,11 @@ img {
 }
 
 .home-showcase__rail-copy strong {
-  font-size: 0.88rem;
+  font-size: 0.78rem;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }
 
 .story-card,
@@ -1549,11 +1556,7 @@ img {
     grid-template-columns: 1fr;
   }
 
-  .home-showcase__content {
-    right: clamp(1.2rem, 3vw, 2rem);
-  }
-
-  .home-showcase__watch,
+  .home-showcase__sidebar,
   .home-showcase__rail {
     position: static;
   }
@@ -1571,6 +1574,11 @@ img {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     padding: 1rem;
     background: linear-gradient(180deg, rgba(18, 15, 12, 0.96), rgba(18, 15, 12, 0.82));
+  }
+
+  .home-showcase__sidebar {
+    width: auto;
+    padding: 1rem 1rem 0;
   }
 
   .nav-bar {
@@ -1647,6 +1655,7 @@ img {
 
   .home-showcase__content {
     right: 1.2rem;
+    max-width: none;
     gap: 0.8rem;
   }
 
@@ -1655,8 +1664,12 @@ img {
   }
 
   .home-showcase__watch {
-    margin: 1rem 1rem 0;
     min-width: 0;
+  }
+
+  .home-showcase__sidebar {
+    padding: 1rem 1rem 0;
+    gap: 0.75rem;
   }
 
   .home-showcase__rail {

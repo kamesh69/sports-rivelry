@@ -25,11 +25,6 @@ export function HomeShowcase({ featured, sideArticles }: HomeShowcaseProps) {
             sizes="(max-width: 720px) 100vw, 72vw"
           />
           <div className="home-showcase__overlay" />
-          <div className="home-showcase__watch">
-            <span className="home-showcase__watch-label">Editor&apos;s watch</span>
-            <strong>{featured.sport.name}</strong>
-            <span>{featured.league?.name || "Top story"}</span>
-          </div>
           <div className="home-showcase__content">
             <span className="home-showcase__eyebrow">Match reaction</span>
             <h1>{featured.title}</h1>
@@ -53,30 +48,38 @@ export function HomeShowcase({ featured, sideArticles }: HomeShowcaseProps) {
           </div>
         </Link>
 
-        {spotlightArticles.length ? (
-          <aside className="home-showcase__rail" aria-label="More featured stories">
-            {spotlightArticles.map((article, index) => (
-              <Link
-                key={article.id}
-                href={`/${article.sport.slug}/${article.slug}`}
-                className={`home-showcase__rail-item${index === 0 ? " home-showcase__rail-item--active" : ""}`}
-              >
-                <Image
-                  src={article.featuredImage.src}
-                  alt={article.featuredImage.alt}
-                  width={article.featuredImage.width}
-                  height={article.featuredImage.height}
-                  className="home-showcase__rail-image"
-                  sizes="(max-width: 1100px) 30vw, 12vw"
-                />
-                <div className="home-showcase__rail-copy">
-                  <span>{article.sport.name}</span>
-                  <strong>{article.title}</strong>
-                </div>
-              </Link>
-            ))}
-          </aside>
-        ) : null}
+        <aside className="home-showcase__sidebar" aria-label="More featured stories">
+          <div className="home-showcase__watch">
+            <span className="home-showcase__watch-label">Editor&apos;s watch</span>
+            <strong>{featured.sport.name}</strong>
+            <span>{featured.league?.name || "Top story"}</span>
+          </div>
+
+          {spotlightArticles.length ? (
+            <div className="home-showcase__rail">
+              {spotlightArticles.map((article, index) => (
+                <Link
+                  key={article.id}
+                  href={`/${article.sport.slug}/${article.slug}`}
+                  className={`home-showcase__rail-item${index === 0 ? " home-showcase__rail-item--active" : ""}`}
+                >
+                  <Image
+                    src={article.featuredImage.src}
+                    alt={article.featuredImage.alt}
+                    width={article.featuredImage.width}
+                    height={article.featuredImage.height}
+                    className="home-showcase__rail-image"
+                    sizes="(max-width: 1100px) 28vw, 10vw"
+                  />
+                  <div className="home-showcase__rail-copy">
+                    <span>{article.sport.name}</span>
+                    <strong>{article.title}</strong>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : null}
+        </aside>
       </div>
     </section>
   );

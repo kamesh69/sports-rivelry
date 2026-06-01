@@ -23,10 +23,6 @@ export default async function HomePage() {
             sideArticles={homeData.heroSecondary}
           />
         </div>
-
-        <div className="home-hero-bleed">
-          <HomeHero slides={[homeData.heroArticle, ...homeData.heroSecondary]} />
-        </div>
       </div>
 
       <div className="page-shell page-shell--home">
@@ -38,7 +34,13 @@ export default async function HomePage() {
             ))}
           </div>
         </section>
+      </div>
 
+      <div className="home-hero-bleed">
+        <HomeHero slides={[homeData.heroArticle, ...homeData.heroSecondary]} />
+      </div>
+
+      <div className="page-shell page-shell--home">
         {homeData.quickHits ? (
           <section className="module-block module-block--editorial-row">
             <QuickHits block={homeData.quickHits} />

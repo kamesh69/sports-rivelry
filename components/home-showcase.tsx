@@ -9,7 +9,7 @@ interface HomeShowcaseProps {
 
 export function HomeShowcase({ featured, sideArticles }: HomeShowcaseProps) {
   const featuredAuthor = featured.authors[0];
-  const spotlightArticles = sideArticles.slice(0, 4);
+  const spotlightArticles = sideArticles.slice(0, 2); // Limit to 2 to fit within Showcase height nicely
 
   return (
     <section className="home-showcase" aria-label="Top spotlight">

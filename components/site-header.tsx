@@ -18,7 +18,7 @@ export function SiteHeader({ breakingNews }: SiteHeaderProps) {
             <summary className="nav-dropdown__trigger">Sports</summary>
             <div className="nav-dropdown__menu" role="menu">
               {SPORTS_NAV.map((item) => (
-                <Link key={item.slug} href={`/${item.slug}`} role="menuitem">
+                <Link key={item.slug} href={item.href || `/${item.slug}`} role="menuitem">
                   {item.label}
                 </Link>
               ))}

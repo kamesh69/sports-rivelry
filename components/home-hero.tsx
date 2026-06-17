@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { Article } from "@/lib/types";
 
 interface HomeHeroProps {
@@ -13,109 +13,32 @@ const SLIDE_WIDTH = 78;
 const SLIDE_GAP = 1.5;
 const SLIDE_OFFSET = (100 - SLIDE_WIDTH) / 2;
 
-type CarouselSlide = Article & {
-  carouselKey: string;
-  realIndex: number;
-  isClone?: boolean;
-};
-
 export function HomeHero({ slides }: HomeHeroProps) {
   const slideCount = slides.length;
   const loopEnabled = slideCount > 1;
-  const trackRef = useRef<HTMLDivElement>(null);
-
-  const extendedSlides = useMemo<CarouselSlide[]>(() => {
-    if (!loopEnabled) {
-      return slides.map((article, index) => ({
-        ...article,
-        carouselKey: article.id,
-        realIndex: index,
-      }));
-    }
-
-    const last = slides[slideCount - 1];
-    const first = slides[0];
-
-    return [
-      { ...last, carouselKey: `${last.id}-clone-start`, realIndex: slideCount - 1, isClone: true },
-      ...slides.map((article, index) => ({
-        ...article,
-        carouselKey: article.id,
-        realIndex: index,
-      })),
-      { ...first, carouselKey: `${first.id}-clone-end`, realIndex: 0, isClone: true },
-    ];
-  }, [loopEnabled, slideCount, slides]);
-
-  const [trackIndex, setTrackIndex] = useState(loopEnabled ? 1 : 0);
-  const [transitionEnabled, setTransitionEnabled] = useState(true);
-
-  const activeIndex = loopEnabled
-    ? trackIndex === 0
-      ? slideCount - 1
-      : trackIndex === slideCount + 1
-        ? 0
-        : trackIndex - 1
-    : 0;
-
-  const settleLoop = useCallback(() => {
-    if (!loopEnabled || !transitionEnabled) {
-      return;
-    }
-
-    if (trackIndex === 0) {
-      setTransitionEnabled(false);
-      setTrackIndex(slideCount);
-      return;
-    }
-
-    if (trackIndex === slideCount + 1) {
-      setTransitionEnabled(false);
-      setTrackIndex(1);
-    }
-  }, [loopEnabled, slideCount, trackIndex, transitionEnabled]);
-
-  useEffect(() => {
-    if (transitionEnabled) {
-      return undefined;
-    }
-
-    const frameId = window.requestAnimationFrame(() => {
-      setTransitionEnabled(true);
-    });
-
-    return () => {
-      window.cancelAnimationFrame(frameId);
-    };
-  }, [transitionEnabled, trackIndex]);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const goToTrackIndex = useCallback(
     (nextIndex: number) => {
-      if (!loopEnabled) {
-        setTrackIndex(Math.max(0, Math.min(nextIndex, slideCount - 1)));
-        return;
-      }
-
-      setTransitionEnabled(true);
-      setTrackIndex(nextIndex);
+      setActiveIndex(((nextIndex % slideCount) + slideCount) % slideCount);
     },
-    [loopEnabled, slideCount],
+    [slideCount],
   );
 
   const goToRealIndex = useCallback(
     (realIndex: number) => {
-      goToTrackIndex(realIndex + 1);
+      goToTrackIndex(realIndex);
     },
     [goToTrackIndex],
   );
 
   const goNext = useCallback(() => {
-    goToTrackIndex(trackIndex + 1);
-  }, [goToTrackIndex, trackIndex]);
+    goToTrackIndex(activeIndex + 1);
+  }, [activeIndex, goToTrackIndex]);
 
   const goPrev = useCallback(() => {
-    goToTrackIndex(trackIndex - 1);
-  }, [goToTrackIndex, trackIndex]);
+    goToTrackIndex(activeIndex - 1);
+  }, [activeIndex, goToTrackIndex]);
 
   useEffect(() => {
     if (!loopEnabled) {
@@ -140,27 +63,25 @@ export function HomeHero({ slides }: HomeHeroProps) {
       <div className="hero-carousel__stage">
         <div className="hero-carousel__viewport">
           <div
-            ref={trackRef}
-            className={`hero-carousel__track${transitionEnabled ? "" : " hero-carousel__track--instant"}`}
+            className="hero-carousel__track"
             style={{
-              transform: `translateX(calc(${SLIDE_OFFSET}% - ${trackIndex} * (${SLIDE_WIDTH}% + ${SLIDE_GAP}rem)))`,
+              transform: `translateX(calc(${SLIDE_OFFSET}% - ${activeIndex} * (${SLIDE_WIDTH}% + ${SLIDE_GAP}rem)))`,
             }}
-            onTransitionEnd={settleLoop}
           >
-            {extendedSlides.map((article, index) => {
+            {slides.map((article, index) => {
               const author = primaryAuthor(article);
-              const isActive = index === trackIndex;
+              const isActive = index === activeIndex;
 
               return (
                 <article
-                  key={article.carouselKey}
+                  key={article.id}
                   className={`hero-carousel__slide${isActive ? " hero-carousel__slide--active" : ""}`}
                   aria-hidden={!isActive}
                 >
                   <Link
                     href={`/${article.sport.slug}/${article.slug}`}
                     className="hero-carousel__link"
-                    tabIndex={isActive && !article.isClone ? 0 : -1}
+                    tabIndex={isActive ? 0 : -1}
                   >
                     <Image
                       src={article.featuredImage.src}
@@ -168,7 +89,7 @@ export function HomeHero({ slides }: HomeHeroProps) {
                       width={article.featuredImage.width}
                       height={article.featuredImage.height}
                       className="hero-carousel__image"
-                      priority={article.realIndex === 0 && !article.isClone}
+                      priority={index === 0}
                       sizes="(max-width: 720px) 100vw, 78vw"
                     />
                     <div className="hero-carousel__overlay" />

@@ -8,17 +8,17 @@ interface NewsletterBandProps {
 export function NewsletterBand({ issue }: NewsletterBandProps) {
   return (
     <section className="newsletter-band">
-      <div>
-        <span className="eyebrow">Newsletter</span>
-        <h2>{issue.title}</h2>
-        <p>{issue.heroCopy}</p>
-        <small>{issue.schedule}</small>
+      <div className="newsletter-band__visual" aria-hidden="true">
+        <span>Sports Rivalry</span>
+        <strong>Fan Zone</strong>
       </div>
-      <div className="newsletter-actions">
+      <div className="newsletter-band__content">
+        <h2>Join the Fun in Sports Rivalry&apos;s Fan Zone</h2>
+        <p>{issue.heroCopy}</p>
+        <small>Sports Rivalry Staff | {issue.schedule}</small>
         <Link href={`/newsletters/${issue.slug}`} className="button button--primary">
           {issue.ctaLabel}
         </Link>
-        <span>No-code placeholder form. Connect to Mailchimp, Beehiiv, or ConvertKit in v1.</span>
       </div>
     </section>
   );

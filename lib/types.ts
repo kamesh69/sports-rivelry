@@ -5,12 +5,36 @@ export interface MediaAsset {
   alt: string;
   width: number;
   height: number;
+  credit?: string;
 }
 
 export interface SocialLink {
   platform: string;
   label: string;
   url: string;
+}
+
+export interface NavItem {
+  slug: string;
+  label: string;
+  href?: string;
+  disabled?: boolean;
+}
+
+export interface FooterLinkGroup {
+  title: string;
+  links: Array<{
+    href: string;
+    label: string;
+  }>;
+}
+
+export interface TeamIdentity {
+  name: string;
+  shortName: string;
+  primaryColor: string;
+  accentColor: string;
+  textColor?: string;
 }
 
 export interface SeoMeta {
@@ -28,6 +52,7 @@ export interface SportSummary {
   name: string;
   description: string;
   accent: string;
+  featuredTeams?: TeamIdentity[];
 }
 
 export interface LeagueSummary {
@@ -101,6 +126,7 @@ export interface SportHub {
   featuredArticleSlugs: string[];
   editorsPickSlugs: string[];
   leagueSlugs: string[];
+  featuredTeams?: TeamIdentity[];
   seo: SeoMeta;
 }
 
@@ -147,9 +173,11 @@ export interface QuickHitsBlock {
 
 export interface HomePageData {
   breakingNews: Article[];
+  topHeadlines: Article[];
   heroArticle: Article;
   heroSecondary: Article[];
   latestArticles: Article[];
+  categoryStrip: NavItem[];
   quickHits: QuickHitsBlock | null;
   sportRails: Array<{
     sport: SportSummary;

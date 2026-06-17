@@ -23,6 +23,7 @@ import {
   sports,
   topicHubs,
 } from "@/lib/mock-data";
+import { stripHtml } from "@/lib/utils";
 import type {
   Article,
   AuthorProfile,
@@ -119,6 +120,7 @@ function normalizeWordPressArticle(node: any): Article | null {
       alt: node.featuredImage?.node?.altText || node.title,
       width: node.featuredImage?.node?.mediaDetails?.width || MEDIA_STANDARDS.articleFeatured.width,
       height: node.featuredImage?.node?.mediaDetails?.height || MEDIA_STANDARDS.articleFeatured.height,
+      credit: node.featuredImage?.node?.caption ? stripHtml(node.featuredImage.node.caption) : undefined,
     },
     sport,
     league: league
@@ -184,6 +186,7 @@ async function getWordPressArticleByUri(uri: string) {
               node {
                 sourceUrl
                 altText
+                caption
                 mediaDetails {
                   width
                   height

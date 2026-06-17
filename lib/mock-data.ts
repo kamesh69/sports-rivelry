@@ -13,7 +13,7 @@ import type {
   SportSummary,
   TopicHub,
 } from "@/lib/types";
-import { SITE_NAME } from "@/lib/site-config";
+import { HOMEPAGE_CATEGORY_STRIP, SITE_NAME } from "@/lib/site-config";
 import { dedupeByKey, sortByPublishedAt } from "@/lib/utils";
 
 const now = new Date();
@@ -27,6 +27,134 @@ function daysAgo(days: number) {
 }
 
 export const sports: SportSummary[] = [
+  {
+    slug: "mlb",
+    name: "MLB",
+    description: "Franchise heat, clubhouse drama, and division races that turn into grudges.",
+    accent: "#b42318",
+    featuredTeams: [
+      {
+        name: "New York Yankees",
+        shortName: "NYY",
+        primaryColor: "#132448",
+        accentColor: "#e5e7eb",
+      },
+      {
+        name: "Los Angeles Dodgers",
+        shortName: "LAD",
+        primaryColor: "#005a9c",
+        accentColor: "#ffffff",
+      },
+      {
+        name: "New York Mets",
+        shortName: "NYM",
+        primaryColor: "#002d72",
+        accentColor: "#f97316",
+      },
+      {
+        name: "Chicago Cubs",
+        shortName: "CHC",
+        primaryColor: "#0e3386",
+        accentColor: "#cc3433",
+      },
+    ],
+  },
+  {
+    slug: "basketball",
+    name: "Basketball",
+    description: "NBA and WNBA pressure points, star rivalries, and postseason obsession.",
+    accent: "#ea580c",
+    featuredTeams: [
+      {
+        name: "Boston Celtics",
+        shortName: "BOS",
+        primaryColor: "#007a33",
+        accentColor: "#ffffff",
+      },
+      {
+        name: "New York Knicks",
+        shortName: "NYK",
+        primaryColor: "#0f4c81",
+        accentColor: "#f97316",
+      },
+      {
+        name: "Las Vegas Aces",
+        shortName: "LVA",
+        primaryColor: "#111111",
+        accentColor: "#d4af37",
+      },
+      {
+        name: "Indiana Fever",
+        shortName: "IND",
+        primaryColor: "#0e4b8f",
+        accentColor: "#fcb040",
+      },
+    ],
+  },
+  {
+    slug: "golf",
+    name: "Golf",
+    description: "Majors, money lists, and the rivalries that follow every Sunday back nine.",
+    accent: "#166534",
+    featuredTeams: [
+      {
+        name: "PGA Tour",
+        shortName: "PGA",
+        primaryColor: "#0a4a8a",
+        accentColor: "#ffffff",
+      },
+      {
+        name: "LIV Golf",
+        shortName: "LIV",
+        primaryColor: "#335c1e",
+        accentColor: "#d9f99d",
+      },
+      {
+        name: "U.S. Open",
+        shortName: "USO",
+        primaryColor: "#14532d",
+        accentColor: "#ffffff",
+      },
+      {
+        name: "LPGA",
+        shortName: "LPGA",
+        primaryColor: "#7c2d12",
+        accentColor: "#ffedd5",
+      },
+    ],
+  },
+  {
+    slug: "nascar",
+    name: "NASCAR",
+    description: "Cup Series feuds, pit-road gambles, and speedway politics under pressure.",
+    accent: "#111827",
+    featuredTeams: [
+      {
+        name: "Hendrick Motorsports",
+        shortName: "HMS",
+        primaryColor: "#111827",
+        accentColor: "#60a5fa",
+      },
+      {
+        name: "Joe Gibbs Racing",
+        shortName: "JGR",
+        primaryColor: "#991b1b",
+        accentColor: "#ffffff",
+      },
+      {
+        name: "Team Penske",
+        shortName: "PEN",
+        primaryColor: "#1d4ed8",
+        accentColor: "#ffffff",
+      },
+      {
+        name: "23XI Racing",
+        shortName: "23XI",
+        primaryColor: "#111111",
+        accentColor: "#facc15",
+      },
+    ],
+  },
   {
     slug: "cricket",
     name: "Cricket",
@@ -93,6 +221,41 @@ export const leagues: LeagueSummary[] = [
     sportSlug: "kabaddi",
     seasonLabel: "Season 13",
     description: "Franchise raids, defensive systems, and title-defining runs.",
+  },
+  {
+    slug: "mlb",
+    name: "MLB",
+    sportSlug: "mlb",
+    seasonLabel: "2026 Season",
+    description: "Pennant-chase chaos, clubhouse turns, and rivalry heat around the division table.",
+  },
+  {
+    slug: "nba",
+    name: "NBA",
+    sportSlug: "basketball",
+    seasonLabel: "2025-26 Season",
+    description: "Superstar leverage, playoff grudges, and the nightly race for seeding.",
+  },
+  {
+    slug: "wnba",
+    name: "WNBA",
+    sportSlug: "basketball",
+    seasonLabel: "2026 Season",
+    description: "Title pressure, generational stars, and every sharp edge around the contender class.",
+  },
+  {
+    slug: "pga-tour",
+    name: "PGA Tour",
+    sportSlug: "golf",
+    seasonLabel: "2026 Season",
+    description: "Major week pressure, FedExCup momentum, and the leverage of elite Sundays.",
+  },
+  {
+    slug: "cup-series",
+    name: "Cup Series",
+    sportSlug: "nascar",
+    seasonLabel: "2026 Season",
+    description: "Pit strategy, aero chess, and the rivalries that spill from radio to track.",
   },
 ];
 
@@ -192,6 +355,94 @@ export const authors: AuthorProfile[] = [
       canonicalPath: "/authors/veer-chaudhary",
     },
   },
+  {
+    id: "author-5",
+    slug: "miles-donovan",
+    name: "Miles Donovan",
+    role: "MLB Senior Writer",
+    beat: "MLB",
+    bio: "Miles follows pennant-race momentum, roster friction, and the clubs that treat every series like a referendum.",
+    expertise:
+      "Known for translating bullpen usage, lineup tension, and inter-division hate into clean rivalry narratives.",
+    avatar: {
+      src: "/images/authors/anay.svg",
+      alt: "Portrait illustration of Miles Donovan",
+      width: 720,
+      height: 720,
+    },
+    socials: [{ platform: "X", label: "@milesdonovan", url: "https://x.com/milesdonovan" }],
+    seo: {
+      title: `Miles Donovan | ${SITE_NAME}`,
+      description: "MLB Senior Writer at Sports Rivalry.",
+      canonicalPath: "/authors/miles-donovan",
+    },
+  },
+  {
+    id: "author-6",
+    slug: "tessa-cole",
+    name: "Tessa Cole",
+    role: "Basketball Features Editor",
+    beat: "Basketball",
+    bio: "Tessa covers the leverage moments that bind NBA and WNBA fandom: stars, grudges, and playoff pace.",
+    expertise:
+      "Specialises in rivalry framing, star hierarchy, and the emotional math of title windows across both leagues.",
+    avatar: {
+      src: "/images/authors/sana.svg",
+      alt: "Portrait illustration of Tessa Cole",
+      width: 720,
+      height: 720,
+    },
+    socials: [{ platform: "X", label: "@tessacole", url: "https://x.com/tessacole" }],
+    seo: {
+      title: `Tessa Cole | ${SITE_NAME}`,
+      description: "Basketball Features Editor at Sports Rivalry.",
+      canonicalPath: "/authors/tessa-cole",
+    },
+  },
+  {
+    id: "author-7",
+    slug: "reese-mercer",
+    name: "Reese Mercer",
+    role: "Golf Correspondent",
+    beat: "Golf",
+    bio: "Reese tracks how majors are shaped by money, ego, and the last three holes on Sunday.",
+    expertise:
+      "Focuses on tournament psychology, tour politics, and the personalities that turn leaderboards into rivalries.",
+    avatar: {
+      src: "/images/authors/riya.svg",
+      alt: "Portrait illustration of Reese Mercer",
+      width: 720,
+      height: 720,
+    },
+    socials: [{ platform: "X", label: "@reesemercer", url: "https://x.com/reesemercer" }],
+    seo: {
+      title: `Reese Mercer | ${SITE_NAME}`,
+      description: "Golf Correspondent at Sports Rivalry.",
+      canonicalPath: "/authors/reese-mercer",
+    },
+  },
+  {
+    id: "author-8",
+    slug: "chase-holloway",
+    name: "Chase Holloway",
+    role: "Motorsports Reporter",
+    beat: "NASCAR",
+    bio: "Chase writes where pit calls, radio shots, and garage politics turn races into feuds.",
+    expertise:
+      "Covers Cup Series strategy, team identities, and the recurring grudges that keep NASCAR feeling personal.",
+    avatar: {
+      src: "/images/authors/veer.svg",
+      alt: "Portrait illustration of Chase Holloway",
+      width: 720,
+      height: 720,
+    },
+    socials: [{ platform: "X", label: "@chaseholloway", url: "https://x.com/chaseholloway" }],
+    seo: {
+      title: `Chase Holloway | ${SITE_NAME}`,
+      description: "Motorsports Reporter at Sports Rivalry.",
+      canonicalPath: "/authors/chase-holloway",
+    },
+  },
 ];
 
 function sportBySlug(slug: string) {
@@ -227,6 +478,485 @@ function articleSeo(sportSlug: string, slug: string, title: string, description:
 }
 
 const rawArticles = [
+  {
+    id: "article-100",
+    slug: "yankees-red-sox-rivalry-feels-mean-again-because-both-dugouts-need-it",
+    sportSlug: "mlb",
+    leagueSlug: "mlb",
+    authorSlugs: ["miles-donovan"],
+    publishedAt: hoursAgo(0.5),
+    updatedAt: hoursAgo(0.25),
+    readTime: 5,
+    title: "Yankees-Red Sox feels mean again because both dugouts need it",
+    excerpt: "The talent matters, but the tone of the series is what turned this back into required viewing.",
+    deck: "Boston and New York have stopped treating the rivalry like nostalgia and started using it like leverage.",
+    bodyHtml:
+      "<p>The Yankees and Red Sox are interesting again for the right reason: both sides finally have something to prove at the same time. One dugout is trying to protect its authority, the other is trying to steal it.</p><p>That changes how every bullpen call lands and how every star at-bat feels. Rivalry baseball gets louder when both clubs believe the next three days can reshape the month.</p><h2>Why it travels</h2><p>The best version of this feud is not about history alone. It is about pressure living in every inning, from the starter's tempo to the way a manager deploys his final leverage arm.</p>",
+    featuredImage: {
+      src: "/images/articles/mlb-clubhouse.svg",
+      alt: "Abstract baseball diamond with rivalry scoreboards and dugout lighting",
+      width: 1600,
+      height: 900,
+      credit: "Illustration by Sports Rivalry Studio",
+    },
+    topicSlugs: ["rivalries"],
+    tags: ["MLB", "Yankees", "Red Sox"],
+    relatedStorySlugs: [
+      "dodgers-padres-have-found-the-perfect-october-hate-cycle",
+      "mets-braves-keep-punishing-any-team-that-blinks-first",
+    ],
+    trendingScore: 99,
+    isBreaking: true,
+    isEditorsPick: true,
+  },
+  {
+    id: "article-101",
+    slug: "caitlin-clark-vs-liberty-pressure-is-turning-fever-games-into-national-events",
+    sportSlug: "basketball",
+    leagueSlug: "wnba",
+    authorSlugs: ["tessa-cole"],
+    publishedAt: hoursAgo(1),
+    updatedAt: hoursAgo(0.6),
+    readTime: 4,
+    title: "Fever vs Liberty pressure is turning every Caitlin Clark game into an event",
+    excerpt: "Indiana-New York is starting to feel less like a schedule quirk and more like a referendum on the league’s hierarchy.",
+    deck: "The Liberty still own the title pressure, but the Fever now bring the loudest audience and the fastest emotional swings.",
+    bodyHtml:
+      "<p>The Liberty are trying to defend status. The Fever are trying to seize it. That is why this matchup keeps escalating past ordinary regular-season noise.</p><p>Every possession feels like it is doing two jobs at once: deciding a game and measuring whether the league's old order still holds.</p><h2>What makes it sticky</h2><p>Star power alone does not create a rivalry. Shared stakes do, and the Fever now arrive with enough talent and spotlight to make every Liberty meeting feel political.</p>",
+    featuredImage: {
+      src: "/images/articles/basketball-rivals.svg",
+      alt: "Stylized basketball court with orange and navy rivalry graphics",
+      width: 1600,
+      height: 900,
+      credit: "Illustration by Sports Rivalry Studio",
+    },
+    topicSlugs: ["rivalries"],
+    tags: ["WNBA", "Indiana Fever", "New York Liberty"],
+    relatedStorySlugs: [
+      "celtics-knicks-is-becoming-the-east-rivalry-that-actually-travels",
+      "aces-liberty-still-own-the-wnba-ego-war-even-when-the-scoreboard-flips",
+    ],
+    trendingScore: 97,
+    isBreaking: true,
+    isEditorsPick: true,
+  },
+  {
+    id: "article-102",
+    slug: "scheffler-vs-mcilroy-is-now-a-rivalry-about-control-not-just-trophies",
+    sportSlug: "golf",
+    leagueSlug: "pga-tour",
+    authorSlugs: ["reese-mercer"],
+    publishedAt: hoursAgo(1.5),
+    updatedAt: hoursAgo(1.1),
+    readTime: 5,
+    title: "Scheffler vs McIlroy is now a rivalry about control, not just trophies",
+    excerpt: "The leaderboard battle is only half the story. The real tension is whose version of elite golf keeps proving sustainable.",
+    deck: "Scheffler’s calm and McIlroy’s volatility have turned every major Sunday into a referendum on what winning golf should look like.",
+    bodyHtml:
+      "<p>Scottie Scheffler and Rory McIlroy are no longer simply the two most familiar names near the top of the board. They represent competing ways to dominate a season.</p><p>One side wins through repeatable control, the other through ceiling and aura. When they share a weekend, the rivalry writes itself.</p><h2>Beyond the shot chart</h2><p>The reason it sticks is that fans are really choosing between identities: machine-like reliability or the thrill of a run that can still overwhelm everyone in sight.</p>",
+    featuredImage: {
+      src: "/images/articles/golf-major.svg",
+      alt: "Graphic golf fairway with trophy outlines and scoreboard accents",
+      width: 1600,
+      height: 900,
+      credit: "Illustration by Sports Rivalry Studio",
+    },
+    topicSlugs: ["rivalries"],
+    tags: ["Golf", "Scottie Scheffler", "Rory McIlroy"],
+    relatedStorySlugs: [
+      "us-open-week-has-become-a-betting-war-between-discipline-and-chaos",
+      "liv-vs-pga-tour-is-still-the-background-noise-behind-every-major",
+    ],
+    trendingScore: 96,
+    isEditorsPick: true,
+  },
+  {
+    id: "article-103",
+    slug: "elliott-vs-larson-keeps-feeling-like-nascars-cleanest-modern-feud",
+    sportSlug: "nascar",
+    leagueSlug: "cup-series",
+    authorSlugs: ["chase-holloway"],
+    publishedAt: hoursAgo(2),
+    updatedAt: hoursAgo(1.4),
+    readTime: 4,
+    title: "Elliott vs Larson still feels like NASCAR’s cleanest modern feud",
+    excerpt: "It is not built on screaming alone. It works because both drivers keep colliding in the exact races that define the season.",
+    deck: "When Chase Elliott and Kyle Larson arrive with speed on the same weekend, the garage starts reading every pit call like a provocation.",
+    bodyHtml:
+      "<p>Some rivalries are loud because the personalities demand it. Elliott-Larson is different. It feels real because both camps keep showing up in the same decisive moments.</p><p>That overlap makes every restart, qualifying lap, and crew-chief gamble feel a little more loaded than usual.</p><h2>Where it sharpens</h2><p>The best NASCAR feuds survive because they can live on three levels at once: driver ego, team identity, and the scoreboard. This one checks all three boxes.</p>",
+    featuredImage: {
+      src: "/images/articles/nascar-speed.svg",
+      alt: "High-speed stock car illustration with track markings and dark gradients",
+      width: 1600,
+      height: 900,
+      credit: "Illustration by Sports Rivalry Studio",
+    },
+    topicSlugs: ["rivalries"],
+    tags: ["NASCAR", "Chase Elliott", "Kyle Larson"],
+    relatedStorySlugs: [
+      "hamlin-vs-everybody-has-become-nascars-most-bankable-energy-source",
+      "team-penske-and-hendrick-keep-making-pit-road-feel-like-the-real-race",
+    ],
+    trendingScore: 95,
+    isBreaking: true,
+    isEditorsPick: true,
+  },
+  {
+    id: "article-104",
+    slug: "dodgers-padres-have-found-the-perfect-october-hate-cycle",
+    sportSlug: "mlb",
+    leagueSlug: "mlb",
+    authorSlugs: ["miles-donovan"],
+    publishedAt: hoursAgo(2.5),
+    updatedAt: hoursAgo(2),
+    readTime: 4,
+    title: "Dodgers-Padres have found the perfect October hate cycle",
+    excerpt: "Talent is everywhere in this matchup, but the real appeal is how quickly confidence turns into insult.",
+    deck: "Los Angeles and San Diego now play like two clubs that no longer need a postseason prompt to remember the score.",
+    bodyHtml:
+      "<p>The Dodgers still carry the larger machinery, but the Padres have learned how to make the matchup personal enough to flatten the gap. That is why the tone changes the moment the series begins.</p><p>Every confrontation now carries playoff memory, even in June.</p>",
+    featuredImage: {
+      src: "/images/articles/mlb-clubhouse.svg",
+      alt: "Abstract baseball diamond with rivalry scoreboards and dugout lighting",
+      width: 1600,
+      height: 900,
+      credit: "Illustration by Sports Rivalry Studio",
+    },
+    topicSlugs: ["rivalries"],
+    tags: ["MLB", "Dodgers", "Padres"],
+    relatedStorySlugs: [
+      "yankees-red-sox-rivalry-feels-mean-again-because-both-dugouts-need-it",
+      "mets-braves-keep-punishing-any-team-that-blinks-first",
+    ],
+    trendingScore: 93,
+    isEditorsPick: true,
+  },
+  {
+    id: "article-105",
+    slug: "celtics-knicks-is-becoming-the-east-rivalry-that-actually-travels",
+    sportSlug: "basketball",
+    leagueSlug: "nba",
+    authorSlugs: ["tessa-cole"],
+    publishedAt: hoursAgo(3),
+    updatedAt: hoursAgo(2.6),
+    readTime: 5,
+    title: "Celtics-Knicks is becoming the East rivalry that actually travels",
+    excerpt: "Boston owns the ring standard, but New York has built enough swagger to make the matchup feel national.",
+    deck: "Every time these teams meet, the conversation shifts from standings to identity and who gets to frame the East.",
+    bodyHtml:
+      "<p>The Celtics still define the conference ceiling, but the Knicks have become too visible and too emotionally loud to be treated like a supporting act. That tension makes the matchup bigger than the standings.</p><p>It feels like both fan bases think they are arguing over the same throne.</p>",
+    featuredImage: {
+      src: "/images/articles/basketball-rivals.svg",
+      alt: "Stylized basketball court with orange and navy rivalry graphics",
+      width: 1600,
+      height: 900,
+      credit: "Illustration by Sports Rivalry Studio",
+    },
+    topicSlugs: ["rivalries"],
+    tags: ["NBA", "Boston Celtics", "New York Knicks"],
+    relatedStorySlugs: [
+      "caitlin-clark-vs-liberty-pressure-is-turning-fever-games-into-national-events",
+      "aces-liberty-still-own-the-wnba-ego-war-even-when-the-scoreboard-flips",
+    ],
+    trendingScore: 94,
+    isEditorsPick: true,
+  },
+  {
+    id: "article-106",
+    slug: "us-open-week-has-become-a-betting-war-between-discipline-and-chaos",
+    sportSlug: "golf",
+    leagueSlug: "pga-tour",
+    authorSlugs: ["reese-mercer"],
+    publishedAt: hoursAgo(3.5),
+    updatedAt: hoursAgo(3),
+    readTime: 4,
+    title: "U.S. Open week has become a betting war between discipline and chaos",
+    excerpt: "The event now asks one clean question: who can survive the version of golf that refuses to be polite?",
+    deck: "Every U.S. Open build-up eventually turns into a referendum on whether patience or brute confidence should be favored.",
+    bodyHtml:
+      "<p>The U.S. Open is golf's most ruthless personality test. That is why it naturally creates rivalries between player types even before the tee times are announced.</p><p>Fans end up betting on philosophies as much as players: accuracy versus force, patience versus panic.</p>",
+    featuredImage: {
+      src: "/images/articles/golf-major.svg",
+      alt: "Graphic golf fairway with trophy outlines and scoreboard accents",
+      width: 1600,
+      height: 900,
+      credit: "Illustration by Sports Rivalry Studio",
+    },
+    topicSlugs: ["rivalries"],
+    tags: ["Golf", "U.S. Open", "Majors"],
+    relatedStorySlugs: [
+      "scheffler-vs-mcilroy-is-now-a-rivalry-about-control-not-just-trophies",
+      "liv-vs-pga-tour-is-still-the-background-noise-behind-every-major",
+    ],
+    trendingScore: 92,
+    isEditorsPick: true,
+  },
+  {
+    id: "article-107",
+    slug: "hamlin-vs-everybody-has-become-nascars-most-bankable-energy-source",
+    sportSlug: "nascar",
+    leagueSlug: "cup-series",
+    authorSlugs: ["chase-holloway"],
+    publishedAt: hoursAgo(4),
+    updatedAt: hoursAgo(3.4),
+    readTime: 4,
+    title: "Hamlin vs everybody has become NASCAR’s most bankable energy source",
+    excerpt: "No driver absorbs more boos and no team benefits more from that tension staying active.",
+    deck: "Denny Hamlin keeps walking into races as both contender and antagonist, which gives NASCAR a reliable emotional center.",
+    bodyHtml:
+      "<p>The reason the Hamlin dynamic works is simple: people arrive already opinionated. That saves the sport from needing an inciting incident every week.</p><p>When he has speed, the crowd gets louder. When he wins, the reaction becomes part of the show.</p>",
+    featuredImage: {
+      src: "/images/articles/nascar-speed.svg",
+      alt: "High-speed stock car illustration with track markings and dark gradients",
+      width: 1600,
+      height: 900,
+      credit: "Illustration by Sports Rivalry Studio",
+    },
+    topicSlugs: ["rivalries"],
+    tags: ["NASCAR", "Denny Hamlin", "Cup Series"],
+    relatedStorySlugs: [
+      "elliott-vs-larson-keeps-feeling-like-nascars-cleanest-modern-feud",
+      "team-penske-and-hendrick-keep-making-pit-road-feel-like-the-real-race",
+    ],
+    trendingScore: 91,
+    isEditorsPick: true,
+  },
+  {
+    id: "article-108",
+    slug: "mets-braves-keep-punishing-any-team-that-blinks-first",
+    sportSlug: "mlb",
+    leagueSlug: "mlb",
+    authorSlugs: ["miles-donovan"],
+    publishedAt: hoursAgo(4.5),
+    updatedAt: hoursAgo(4.1),
+    readTime: 4,
+    title: "Mets-Braves keep punishing any team that blinks first",
+    excerpt: "This race feels exhausting because both clubs force the other to live without soft innings.",
+    deck: "Atlanta and New York have built a divisional feud around pressure tolerance more than aesthetics.",
+    bodyHtml:
+      "<p>The Mets and Braves are difficult to watch casually because neither side leaves much room for drift. One crooked inning or one bullpen wobble usually changes the series.</p><p>That ruthless pace is why the rivalry stays useful deep into the summer.</p>",
+    featuredImage: {
+      src: "/images/articles/mlb-clubhouse.svg",
+      alt: "Abstract baseball diamond with rivalry scoreboards and dugout lighting",
+      width: 1600,
+      height: 900,
+      credit: "Illustration by Sports Rivalry Studio",
+    },
+    topicSlugs: ["rivalries"],
+    tags: ["MLB", "Mets", "Braves"],
+    relatedStorySlugs: [
+      "yankees-red-sox-rivalry-feels-mean-again-because-both-dugouts-need-it",
+      "dodgers-padres-have-found-the-perfect-october-hate-cycle",
+    ],
+    trendingScore: 90,
+    isEditorsPick: true,
+  },
+  {
+    id: "article-109",
+    slug: "aces-liberty-still-own-the-wnba-ego-war-even-when-the-scoreboard-flips",
+    sportSlug: "basketball",
+    leagueSlug: "wnba",
+    authorSlugs: ["tessa-cole"],
+    publishedAt: hoursAgo(5),
+    updatedAt: hoursAgo(4.5),
+    readTime: 4,
+    title: "Aces-Liberty still own the WNBA ego war even when the scoreboard flips",
+    excerpt: "No other matchup arrives with the same sense that the league’s self-image is on the line.",
+    deck: "Las Vegas and New York keep meeting in games that feel like luxury fights over authority, not just wins.",
+    bodyHtml:
+      "<p>Aces-Liberty works because both rosters believe they should be the last visual you see in October. That certainty changes every regular-season meeting into something more permanent.</p><p>When both sides are healthy, the game feels like a title defense and a title audition at once.</p>",
+    featuredImage: {
+      src: "/images/articles/basketball-rivals.svg",
+      alt: "Stylized basketball court with orange and navy rivalry graphics",
+      width: 1600,
+      height: 900,
+      credit: "Illustration by Sports Rivalry Studio",
+    },
+    topicSlugs: ["rivalries"],
+    tags: ["WNBA", "Las Vegas Aces", "New York Liberty"],
+    relatedStorySlugs: [
+      "caitlin-clark-vs-liberty-pressure-is-turning-fever-games-into-national-events",
+      "celtics-knicks-is-becoming-the-east-rivalry-that-actually-travels",
+    ],
+    trendingScore: 89,
+    isEditorsPick: true,
+  },
+  {
+    id: "article-110",
+    slug: "liv-vs-pga-tour-is-still-the-background-noise-behind-every-major",
+    sportSlug: "golf",
+    leagueSlug: "pga-tour",
+    authorSlugs: ["reese-mercer"],
+    publishedAt: hoursAgo(5.5),
+    updatedAt: hoursAgo(5),
+    readTime: 5,
+    title: "LIV vs PGA Tour is still the background noise behind every major",
+    excerpt: "Even when the trophy goes elsewhere, the split still shapes how fans read the field.",
+    deck: "Golf has learned that tour politics can shadow a leaderboard long after everyone says they are tired of talking about it.",
+    bodyHtml:
+      "<p>The split between LIV and the PGA Tour remains the sport's unavoidable rivalry because it keeps reappearing at the exact moments golf wants to talk about purity instead.</p><p>Every major ends up asking the same question in disguise: whose ecosystem looks more validated today?</p>",
+    featuredImage: {
+      src: "/images/articles/golf-major.svg",
+      alt: "Graphic golf fairway with trophy outlines and scoreboard accents",
+      width: 1600,
+      height: 900,
+      credit: "Illustration by Sports Rivalry Studio",
+    },
+    topicSlugs: ["rivalries"],
+    tags: ["Golf", "LIV Golf", "PGA Tour"],
+    relatedStorySlugs: [
+      "scheffler-vs-mcilroy-is-now-a-rivalry-about-control-not-just-trophies",
+      "us-open-week-has-become-a-betting-war-between-discipline-and-chaos",
+    ],
+    trendingScore: 88,
+    isEditorsPick: true,
+  },
+  {
+    id: "article-111",
+    slug: "team-penske-and-hendrick-keep-making-pit-road-feel-like-the-real-race",
+    sportSlug: "nascar",
+    leagueSlug: "cup-series",
+    authorSlugs: ["chase-holloway"],
+    publishedAt: hoursAgo(6),
+    updatedAt: hoursAgo(5.4),
+    readTime: 4,
+    title: "Penske and Hendrick keep making pit road feel like the real race",
+    excerpt: "The cars matter, but the rival engineering identities are what make this matchup repeatable.",
+    deck: "When Team Penske and Hendrick arrive with equal speed, the duel becomes a test of nerve, sequencing, and crew-chief conviction.",
+    bodyHtml:
+      "<p>The Penske-Hendrick battle has become one of NASCAR's cleanest team rivalries because the disagreement starts before the green flag. Their approaches to race control feel different, and fans can see it.</p><p>That makes every late caution feel like a strategic referendum.</p>",
+    featuredImage: {
+      src: "/images/articles/nascar-speed.svg",
+      alt: "High-speed stock car illustration with track markings and dark gradients",
+      width: 1600,
+      height: 900,
+      credit: "Illustration by Sports Rivalry Studio",
+    },
+    topicSlugs: ["rivalries"],
+    tags: ["NASCAR", "Team Penske", "Hendrick Motorsports"],
+    relatedStorySlugs: [
+      "elliott-vs-larson-keeps-feeling-like-nascars-cleanest-modern-feud",
+      "hamlin-vs-everybody-has-become-nascars-most-bankable-energy-source",
+    ],
+    trendingScore: 87,
+    isEditorsPick: true,
+  },
+  {
+    id: "article-112",
+    slug: "orioles-blue-jays-keep-building-the-division-race-that-refuses-to-relax",
+    sportSlug: "mlb",
+    leagueSlug: "mlb",
+    authorSlugs: ["miles-donovan"],
+    publishedAt: hoursAgo(6.5),
+    updatedAt: hoursAgo(6),
+    readTime: 3,
+    title: "Orioles-Blue Jays keep building the division race that refuses to relax",
+    excerpt: "The series feels younger, meaner, and more dangerous every time the standings tighten.",
+    deck: "Baltimore and Toronto do not have the oldest feud in baseball, but they might have the most impatient one right now.",
+    bodyHtml:
+      "<p>Baltimore-Toronto has become a rivalry for people who like their tension a little less ceremonial and a little more immediate. The urgency is the hook.</p><p>Every series feels like it starts with both clubs already annoyed.</p>",
+    featuredImage: {
+      src: "/images/articles/mlb-clubhouse.svg",
+      alt: "Abstract baseball diamond with rivalry scoreboards and dugout lighting",
+      width: 1600,
+      height: 900,
+      credit: "Illustration by Sports Rivalry Studio",
+    },
+    topicSlugs: ["rivalries"],
+    tags: ["MLB", "Orioles", "Blue Jays"],
+    relatedStorySlugs: [
+      "mets-braves-keep-punishing-any-team-that-blinks-first",
+      "yankees-red-sox-rivalry-feels-mean-again-because-both-dugouts-need-it",
+    ],
+    trendingScore: 86,
+  },
+  {
+    id: "article-113",
+    slug: "pacers-vs-bucks-is-what-happens-when-disrespect-turns-productive",
+    sportSlug: "basketball",
+    leagueSlug: "nba",
+    authorSlugs: ["tessa-cole"],
+    publishedAt: hoursAgo(7),
+    updatedAt: hoursAgo(6.6),
+    readTime: 4,
+    title: "Pacers-Bucks is what happens when disrespect turns productive",
+    excerpt: "Not every rivalry needs a ring on the table. Sometimes mutual irritation is enough to change how both teams play.",
+    deck: "Indiana and Milwaukee have built a real edge because both sides now expect the other to take things personally.",
+    bodyHtml:
+      "<p>The Pacers and Bucks have figured out the right amount of annoyance. There is enough history to matter and enough unfinished business to keep the matchup from softening.</p><p>That makes every tactical adjustment feel sharper than usual.</p>",
+    featuredImage: {
+      src: "/images/articles/basketball-rivals.svg",
+      alt: "Stylized basketball court with orange and navy rivalry graphics",
+      width: 1600,
+      height: 900,
+      credit: "Illustration by Sports Rivalry Studio",
+    },
+    topicSlugs: ["rivalries"],
+    tags: ["NBA", "Indiana Pacers", "Milwaukee Bucks"],
+    relatedStorySlugs: [
+      "celtics-knicks-is-becoming-the-east-rivalry-that-actually-travels",
+      "caitlin-clark-vs-liberty-pressure-is-turning-fever-games-into-national-events",
+    ],
+    trendingScore: 85,
+  },
+  {
+    id: "article-114",
+    slug: "nelly-korda-vs-the-rest-of-the-field-is-golfs-most-suffocating-modern-problem",
+    sportSlug: "golf",
+    leagueSlug: "pga-tour",
+    authorSlugs: ["reese-mercer"],
+    publishedAt: hoursAgo(7.5),
+    updatedAt: hoursAgo(7.1),
+    readTime: 4,
+    title: "Nelly Korda vs the field is golf’s most suffocating modern problem",
+    excerpt: "The rivalry is asymmetrical, but that is exactly what makes every chase card compelling.",
+    deck: "Korda's run has created the kind of pressure where opponents are no longer simply trying to win tournaments, they are trying to interrupt a mood.",
+    bodyHtml:
+      "<p>Golf does not always produce neat head-to-head rivalries, but it absolutely produces eras where the field begins acting like a coalition against one dominant player. That is where Nelly Korda lives now.</p><p>The tension comes from whether anyone can make her look ordinary for two days straight.</p>",
+    featuredImage: {
+      src: "/images/articles/golf-major.svg",
+      alt: "Graphic golf fairway with trophy outlines and scoreboard accents",
+      width: 1600,
+      height: 900,
+      credit: "Illustration by Sports Rivalry Studio",
+    },
+    topicSlugs: ["rivalries"],
+    tags: ["Golf", "Nelly Korda", "LPGA"],
+    relatedStorySlugs: [
+      "scheffler-vs-mcilroy-is-now-a-rivalry-about-control-not-just-trophies",
+      "liv-vs-pga-tour-is-still-the-background-noise-behind-every-major",
+    ],
+    trendingScore: 84,
+  },
+  {
+    id: "article-115",
+    slug: "blaney-vs-bell-is-becoming-the-playoff-rivalry-with-the-cleanest-line",
+    sportSlug: "nascar",
+    leagueSlug: "cup-series",
+    authorSlugs: ["chase-holloway"],
+    publishedAt: hoursAgo(8),
+    updatedAt: hoursAgo(7.5),
+    readTime: 4,
+    title: "Blaney-Bell is becoming the playoff rivalry with the cleanest line",
+    excerpt: "This pairing works because both drivers now feel one disciplined run away from owning the same space.",
+    deck: "Ryan Blaney and Christopher Bell keep colliding in the exact kind of late-season races that turn respect into resentment.",
+    bodyHtml:
+      "<p>Blaney and Bell are building the sort of postseason rivalry NASCAR trusts: serious, fast, and just personal enough to survive multiple rounds.</p><p>When both are alive late in a race, every move starts reading like a preview of November.</p>",
+    featuredImage: {
+      src: "/images/articles/nascar-speed.svg",
+      alt: "High-speed stock car illustration with track markings and dark gradients",
+      width: 1600,
+      height: 900,
+      credit: "Illustration by Sports Rivalry Studio",
+    },
+    topicSlugs: ["rivalries"],
+    tags: ["NASCAR", "Ryan Blaney", "Christopher Bell"],
+    relatedStorySlugs: [
+      "team-penske-and-hendrick-keep-making-pit-road-feel-like-the-real-race",
+      "elliott-vs-larson-keeps-feeling-like-nascars-cleanest-modern-feud",
+    ],
+    trendingScore: 83,
+  },
   {
     id: "article-1",
     slug: "mi-trust-their-middle-overs-machine-as-ipl-pressure-rises",
@@ -589,8 +1319,9 @@ export const sportHubs: SportHub[] = sports.map((sport) => {
     leagueSlugs: leagues
       .filter((league) => league.sportSlug === sport.slug)
       .map((league) => league.slug),
+    featuredTeams: sport.featuredTeams,
     seo: {
-      title: `${sport.name} News | ${SITE_NAME}`,
+      title: `${sport.name} Rivalries | ${SITE_NAME}`,
       description: sport.description,
       canonicalPath: `/${sport.slug}`,
     },
@@ -667,22 +1398,22 @@ export const topicHubs: TopicHub[] = [
 
 export const newsletters: NewsletterIssue[] = [
   {
-    slug: "the-morning-huddle",
-    title: "The Morning Huddle",
-    description: "A quick-hit briefing on what changed overnight and what matters next across Indian and global sport.",
+    slug: "fan-zone-weekly",
+    title: "Fan Zone Weekly",
+    description: "A rivalry-first weekly briefing built for fans who want the loudest storylines without the fluff.",
     heroCopy:
-      "Every morning, Sports Rivalry lines up the biggest rivalry, sharpest turn, and smartest context before the day gets noisy.",
-    schedule: "Delivered Monday to Saturday at 8:00 AM IST",
-    ctaLabel: "Join the list",
+      "Join the fan zone for one sharp weekly pass through the grudges, title races, and superstar pressure points driving the week.",
+    schedule: "Delivered every Friday at 8:00 AM ET",
+    ctaLabel: "Join the fan zone",
     highlightedArticleSlugs: [
-      "mi-trust-their-middle-overs-machine-as-ipl-pressure-rises",
-      "mohun-bagan-look-built-for-control-not-chaos-in-the-isl-run-in",
-      "road-to-la-2028-is-already-shaping-how-indian-athletes-plan-their-seasons",
+      "yankees-red-sox-rivalry-feels-mean-again-because-both-dugouts-need-it",
+      "caitlin-clark-vs-liberty-pressure-is-turning-fever-games-into-national-events",
+      "elliott-vs-larson-keeps-feeling-like-nascars-cleanest-modern-feud",
     ],
     seo: {
-      title: `The Morning Huddle | ${SITE_NAME}`,
-      description: "Sports Rivalry’s flagship newsletter for fast, sharp sports context.",
-      canonicalPath: "/newsletters/the-morning-huddle",
+      title: `Fan Zone Weekly | ${SITE_NAME}`,
+      description: "Sports Rivalry’s rivalry-first fan newsletter.",
+      canonicalPath: "/newsletters/fan-zone-weekly",
     },
   },
 ];
@@ -860,27 +1591,58 @@ export function resolveQuickHits(config: QuickHitsConfig): QuickHitsBlock | null
 }
 
 export function getHomePageData(): HomePageData {
-  const latestArticles = getLatestArticles(12);
-  const breakingNews = latestArticles.filter((article) => article.isBreaking).slice(0, 4);
-  const heroArticle = latestArticles[0];
-  const heroSecondary = latestArticles.slice(1, 4);
-  const sportRails = sports.map((sport) => ({
-    sport,
-    articles: latestArticles.filter((article) => article.sport.slug === sport.slug).slice(0, 4),
-  }));
-  const editorsPicks = latestArticles.filter((article) => article.isEditorsPick).slice(0, 4);
+  const homepageSports = ["mlb", "golf", "basketball", "nascar", "football"];
+  const homepagePool = sortByPublishedAt(
+    articles.filter((article) => homepageSports.includes(article.sport.slug)),
+  );
+  const topHeadlines = getArticlesBySlugs([
+    "yankees-red-sox-rivalry-feels-mean-again-because-both-dugouts-need-it",
+    "caitlin-clark-vs-liberty-pressure-is-turning-fever-games-into-national-events",
+    "scheffler-vs-mcilroy-is-now-a-rivalry-about-control-not-just-trophies",
+    "elliott-vs-larson-keeps-feeling-like-nascars-cleanest-modern-feud",
+    "dodgers-padres-have-found-the-perfect-october-hate-cycle",
+  ]);
+  const breakingNews = homepagePool.filter((article) => article.isBreaking).slice(0, 4);
+  const heroSlides = getArticlesBySlugs([
+    "yankees-red-sox-rivalry-feels-mean-again-because-both-dugouts-need-it",
+    "celtics-knicks-is-becoming-the-east-rivalry-that-actually-travels",
+    "us-open-week-has-become-a-betting-war-between-discipline-and-chaos",
+    "hamlin-vs-everybody-has-become-nascars-most-bankable-energy-source",
+  ]);
+  const latestArticles = homepagePool.slice(0, 12);
+  const heroArticle = heroSlides[0] || homepagePool[0];
+  const heroSecondary = heroSlides.slice(1, 4);
+  const sportRails = homepageSports
+    .map((slug) => {
+      const sport = sports.find((entry) => entry.slug === slug);
+
+      if (!sport) {
+        return null;
+      }
+
+      return {
+        sport,
+        articles: homepagePool.filter((article) => article.sport.slug === sport.slug).slice(0, 4),
+      };
+    })
+    .filter(Boolean) as HomePageData["sportRails"];
+  const editorsPicks = homepagePool.filter((article) => article.isEditorsPick).slice(0, 4);
 
   return {
     breakingNews,
+    topHeadlines,
     heroArticle,
     heroSecondary,
     latestArticles,
-    quickHits: resolveQuickHits(quickHitsConfig),
+    categoryStrip: HOMEPAGE_CATEGORY_STRIP,
+    quickHits: null,
     sportRails,
-    trendingArticles: getTrendingArticles(),
+    trendingArticles: [...homepagePool].sort((left, right) => right.trendingScore - left.trendingScore).slice(0, 6),
     editorsPicks,
     newsletter: newsletters[0],
-    featuredAuthors: authors,
+    featuredAuthors: authors.filter((author) =>
+      ["miles-donovan", "tessa-cole", "reese-mercer", "chase-holloway"].includes(author.slug),
+    ),
   };
 }
 

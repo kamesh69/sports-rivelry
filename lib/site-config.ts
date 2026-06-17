@@ -1,17 +1,27 @@
+import type { FooterLinkGroup, NavItem } from "@/lib/types";
+
 export const SITE_NAME = "Sports Rivalry";
-export const SITE_TAGLINE = "India-first sports news, analysis, and rivalries that travel.";
+export const SITE_TAGLINE = "Rivalry-first coverage for the games fans carry all week.";
 export const SITE_DESCRIPTION =
-  "Sports Rivalry is a headless sports newsroom built for fast-moving coverage, rivalry-driven storytelling, and search-ready editorial publishing.";
+  "Sports Rivalry is a rivalry-driven sports newsroom built around marquee matchups, fast-moving headlines, and fan-heavy editorial presentation.";
 export const SITE_DOMAIN =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://thesportsrivalry.com";
 
-export const SPORTS_NAV = [
-  { slug: "cricket", label: "Cricket" },
-  { slug: "football", label: "Football" },
-  { slug: "badminton", label: "Badminton" },
-  { slug: "kabaddi", label: "Kabaddi" },
-  { slug: "wrestling", label: "Wrestling" },
-  { slug: "olympics", label: "Olympics" },
+export const SPORTS_NAV: NavItem[] = [
+  { slug: "mlb", label: "MLB", href: "/mlb" },
+  { slug: "basketball", label: "Basketball", href: "/basketball" },
+  { slug: "golf", label: "Golf", href: "/golf" },
+  { slug: "nascar", label: "NASCAR", href: "/nascar" },
+  { slug: "football", label: "Football", href: "/football" },
+  { slug: "cricket", label: "Cricket", href: "/cricket" },
+];
+
+export const HOMEPAGE_CATEGORY_STRIP: NavItem[] = [
+  { slug: "mlb", label: "MLB", href: "/mlb" },
+  { slug: "golf", label: "Golf", href: "/golf" },
+  { slug: "college-sports", label: "College Sports", disabled: true },
+  { slug: "nba", label: "NBA", href: "/basketball" },
+  { slug: "nascar", label: "NASCAR", href: "/nascar" },
 ];
 
 export const SOCIAL_LINKS = [
@@ -42,12 +52,29 @@ export const SOCIAL_LINKS = [
   },
 ];
 
-export const TRUST_LINKS = [
-  { href: "/about", label: "About" },
-  { href: "/editorial-guidelines", label: "Editorial Guidelines" },
-  { href: "/corrections", label: "Corrections" },
-  { href: "/contact", label: "Contact" },
-  { href: "/authors", label: "Authors" },
+export const FOOTER_LINK_GROUPS: FooterLinkGroup[] = [
+  {
+    title: "Company",
+    links: [
+      { href: "/about", label: "About Us" },
+      { href: "/advertise", label: "Advertise" },
+      { href: "/authors", label: "Authors" },
+      { href: "/editorial-team", label: "Editorial Team" },
+      { href: "/editorial-guidelines", label: "Editorial Policies" },
+      { href: "/contact", label: "Contact Us" },
+      { href: "/faqs", label: "FAQs" },
+    ],
+  },
+  {
+    title: "Policies",
+    links: [
+      { href: "/take-down-policy", label: "Take Down Policy" },
+      { href: "/privacy-policy", label: "Privacy Policy" },
+      { href: "/terms-of-use", label: "Terms of Use" },
+      { href: "/fact-checking-policy", label: "Fact Checking Policy" },
+      { href: "/corrections", label: "Correction Policy" },
+    ],
+  },
 ];
 
 export const DEFAULT_REVALIDATE_SECONDS = 60;

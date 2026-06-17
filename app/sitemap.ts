@@ -21,12 +21,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getAllLandingPaths(),
   ]);
 
-  return ["/", "/about", "/editorial-guidelines", "/corrections", "/contact", "/authors", "/search", ...pathGroups.flat()].map(
-    (path) => ({
-      url: `${SITE_DOMAIN}${path}`,
-      lastModified: new Date(),
-      changeFrequency: "hourly",
-      priority: path === "/" ? 1 : 0.7,
-    }),
-  );
+  return [
+    "/",
+    "/about",
+    "/advertise",
+    "/authors",
+    "/editorial-team",
+    "/editorial-guidelines",
+    "/take-down-policy",
+    "/contact",
+    "/faqs",
+    "/privacy-policy",
+    "/terms-of-use",
+    "/fact-checking-policy",
+    "/corrections",
+    "/search",
+    ...pathGroups.flat(),
+  ].map((path) => ({
+    url: `${SITE_DOMAIN}${path}`,
+    lastModified: new Date(),
+    changeFrequency: "hourly",
+    priority: path === "/" ? 1 : 0.7,
+  }));
 }

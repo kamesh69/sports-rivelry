@@ -8,7 +8,7 @@ export function Logo() {
       </span>
       <span className="brand-copy">
         <strong>Sports Rivalry</strong>
-        <small>Editorial-first sports intelligence</small>
+        <small>Rivalry-first sports coverage</small>
       </span>
     </Link>
   );

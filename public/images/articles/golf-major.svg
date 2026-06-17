@@ -1,0 +1,20 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" rx="48" fill="#082217"/>
+  <rect x="72" y="72" width="1456" height="756" rx="36" fill="url(#paint0_linear_1_4)"/>
+  <path d="M248 724C418 470 612 336 970 320C1126 314 1262 266 1376 170" stroke="#DCFCE7" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="1110" cy="320" r="16" fill="#FDE68A"/>
+  <path d="M1110 336V516" stroke="#FFF7ED" stroke-width="8"/>
+  <path d="M1110 516L1182 470V540L1110 516Z" fill="#FDE68A"/>
+  <circle cx="1328" cy="238" r="88" fill="#FDE68A" fill-opacity="0.14"/>
+  <circle cx="318" cy="258" r="64" fill="#DCFCE7" fill-opacity="0.16"/>
+  <text x="184" y="188" fill="#F7FEE7" font-family="Helvetica, Arial, sans-serif" font-size="62" font-weight="800">GOLF MAJOR WEEK</text>
+  <text x="184" y="256" fill="#D9F99D" font-family="Helvetica, Arial, sans-serif" font-size="30" font-weight="700">Back-nine pressure, tour politics, and the calm before the swing breaks.</text>
+  <text x="184" y="724" fill="#F7FEE7" font-family="Helvetica, Arial, sans-serif" font-size="42" font-weight="800">In golf, rivalry often arrives disguised as control.</text>
+  <defs>
+    <linearGradient id="paint0_linear_1_4" x1="72" y1="72" x2="1528" y2="828" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#184A2C"/>
+      <stop offset="0.5" stop-color="#1F6B43"/>
+      <stop offset="1" stop-color="#0A2C1F"/>
+    </linearGradient>
+  </defs>
+</svg>

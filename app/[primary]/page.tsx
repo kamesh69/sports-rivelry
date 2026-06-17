@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getArticlesForCollection, getLandingPage, getSportHub, getLatestNews } from "@/lib/cms";
 import { landingPages, sportHubs } from "@/lib/mock-data";
@@ -8,6 +7,7 @@ import { ArticleCard } from "@/components/article-card";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { JsonLd } from "@/components/json-ld";
 import { SectionHeading } from "@/components/section-heading";
+import { SportHubShowcase } from "@/components/sport-hub-showcase";
 
 export const revalidate = 60;
 
@@ -55,7 +55,7 @@ export default async function PrimaryPage({ params }: PrimaryPageProps) {
   if (sportHub) {
     const heroStories = await getArticlesForCollection(sportHub.featuredArticleSlugs);
     const editorsPicks = await getArticlesForCollection(sportHub.editorsPickSlugs);
-    const latestStories = (await getLatestNews()).filter(
+    const latestStories = (await getLatestNews(80)).filter(
       (article) => article.sport.slug === sportHub.slug,
     );
     const breadcrumbs: BreadcrumbItem[] = [
@@ -67,51 +67,12 @@ export default async function PrimaryPage({ params }: PrimaryPageProps) {
       <div className="page-shell page-shell--detail">
         <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
         <Breadcrumbs items={breadcrumbs} />
-        <section className="hub-hero" style={{ ["--hub-accent" as string]: sportHub.accent }}>
-          <span className="eyebrow">Sport hub</span>
-          <h1>{sportHub.name}</h1>
-          <p>{sportHub.description}</p>
-          <div className="tag-row">
-            {sportHub.leagueSlugs.map((slug) => (
-              <Link key={slug} href={`/${sportHub.slug}/${slug}`} className="tag-chip">
-                {slug.replace(/-/g, " ")}
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className="module-block">
-          <SectionHeading eyebrow="Lead" title={`${sportHub.name} top stories`} />
-          <div className="story-grid story-grid--three">
-            {heroStories.map((article, index) => (
-              <ArticleCard
-                key={article.id}
-                article={article}
-                variant={index === 0 ? "hero" : "feature"}
-              />
-            ))}
-          </div>
-        </section>
-
-        <section className="module-block">
-          <SectionHeading eyebrow="Latest" title={`${sportHub.name} news river`} />
-          <div className="story-grid story-grid--three">
-            {latestStories.slice(0, 6).map((article) => (
-              <ArticleCard key={article.id} article={article} />
-            ))}
-          </div>
-        </section>
-
-        {editorsPicks.length ? (
-          <section className="module-block">
-            <SectionHeading eyebrow="Editors" title={`${sportHub.name} picks`} />
-            <div className="story-grid story-grid--three">
-              {editorsPicks.map((article) => (
-                <ArticleCard key={article.id} article={article} />
-              ))}
-            </div>
-          </section>
-        ) : null}
+        <SportHubShowcase
+          hub={sportHub}
+          heroStories={heroStories}
+          latestStories={latestStories}
+          editorsPicks={editorsPicks}
+        />
       </div>
     );
   }

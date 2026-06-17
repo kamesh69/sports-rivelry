@@ -16,10 +16,13 @@ import {
   type BreadcrumbItem,
 } from "@/lib/seo";
 import { formatDateTime } from "@/lib/utils";
-import { AdSlot } from "@/components/ad-slot";
+import { ArticleAuthorCard } from "@/components/article-author-card";
 import { ArticleBody } from "@/components/article-body";
 import { ArticleCard } from "@/components/article-card";
+import { ArticleMoreRail } from "@/components/article-more-rail";
+import { ArticleReactionRow } from "@/components/article-reaction-row";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { ArticleShareBar } from "@/components/article-share-bar";
 import { JsonLd } from "@/components/json-ld";
 import { SectionHeading } from "@/components/section-heading";
 
@@ -153,20 +156,6 @@ export default async function SportDetailPage({ params }: SportDetailPageProps) 
       <Breadcrumbs items={breadcrumbs} />
 
       <article className="article-layout">
-        <header className="article-header">
-          <div className="article-header__meta">
-            <span className="eyebrow">{article.sport.name}</span>
-            {article.league ? <span className="tag-chip">{article.league.name}</span> : null}
-          </div>
-          <h1>{article.title}</h1>
-          <p className="article-deck">{article.deck}</p>
-          <div className="article-byline">
-            <span>{article.authors.map((author) => author.name).join(", ")}</span>
-            <span>{formatDateTime(article.publishedAt)}</span>
-            <span>{article.readTime} min read</span>
-          </div>
-        </header>
-
         <div className="article-media">
           <Image
             src={article.featuredImage.src}
@@ -175,30 +164,44 @@ export default async function SportDetailPage({ params }: SportDetailPageProps) 
             height={article.featuredImage.height}
             priority
           />
+          {article.featuredImage.credit ? (
+            <span className="article-media__credit">{article.featuredImage.credit}</span>
+          ) : null}
         </div>
 
-        <div className="article-main">
-          <div className="article-main__body">
+        <header className="article-header">
+          <div className="article-header__meta">
+            <span className="eyebrow">{article.sport.name}</span>
+            {article.league ? <span className="tag-chip">{article.league.name}</span> : null}
+          </div>
+          <h1>{article.title}</h1>
+          <div className="article-byline">
+            <span>{article.authors.map((author) => author.name).join(", ")}</span>
+            <span>{formatDateTime(article.publishedAt)}</span>
+            <span>{article.readTime} min read</span>
+          </div>
+          <ArticleShareBar path={article.seo.canonicalPath} title={article.title} />
+          <p className="article-deck">{article.deck}</p>
+        </header>
+
+        <div className="article-main article-main--stacked">
+          <div className="article-main__body article-main__body--feature">
             <ArticleBody html={article.bodyHtml} />
-            <div className="topic-row">
-              {article.tags.map((tag) => (
-                <span key={tag} className="tag-chip tag-chip--muted">
-                  {tag}
-                </span>
+            <div className="article-topic-strip">
+              <span>{article.sport.name}</span>
+              {article.league ? <span>{article.league.name}</span> : null}
+              {article.tags.slice(0, 4).map((tag) => (
+                <span key={tag}>{tag}</span>
               ))}
             </div>
+            <ArticleReactionRow />
+            <ArticleAuthorCard author={article.authors[0]} />
           </div>
-          <aside className="article-main__aside">
-            <div className="sidebar-panel">
-              <SectionHeading eyebrow="Related" title="From this beat" />
-              <div className="story-stack">
-                {relatedStories.map((story) => (
-                  <ArticleCard key={story.id} article={story} variant="compact" />
-                ))}
-              </div>
-            </div>
-            <AdSlot label="In-article sidebar ad slot" />
-          </aside>
+
+          <ArticleMoreRail
+              title={`More stories from ${article.league?.name || article.sport.name}`}
+            articles={relatedStories}
+          />
         </div>
       </article>
     </div>

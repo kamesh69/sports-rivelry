@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { getHomePageData } from "@/lib/cms";
 import { ArticleCard } from "@/components/article-card";
-import { AuthorSpotlight } from "@/components/author-spotlight";
+import { CategoryStrip } from "@/components/category-strip";
+import { HomeFeatureGrid } from "@/components/home-feature-grid";
 import { HomeHero } from "@/components/home-hero";
-import { HomeShowcase } from "@/components/home-showcase";
+import { LatestNewsRail } from "@/components/latest-news-rail";
 import { NewsletterBand } from "@/components/newsletter-band";
-import { QuickHits } from "@/components/quick-hits";
-import { SportsWeekPanel } from "@/components/sports-week-panel";
+import { SportSpotlightRail } from "@/components/sport-spotlight-rail";
 import { SectionHeading } from "@/components/section-heading";
 
 export const revalidate = 60;
@@ -18,22 +18,13 @@ export default async function HomePage() {
     <>
       <div className="home-topper">
         <div className="page-shell page-shell--home">
-          <HomeShowcase
+          <LatestNewsRail articles={homeData.latestArticles.slice(0, 8)} />
+          <HomeFeatureGrid
             featured={homeData.heroArticle}
             sideArticles={homeData.heroSecondary}
+            headlines={[...homeData.topHeadlines, ...homeData.trendingArticles]}
           />
         </div>
-      </div>
-
-      <div className="page-shell page-shell--home">
-        <section className="module-block">
-          <SectionHeading title="Latest News" />
-          <div className="story-grid story-grid--latest">
-            {homeData.latestArticles.slice(0, 6).map((article) => (
-              <ArticleCard key={article.id} article={article} variant="headline" />
-            ))}
-          </div>
-        </section>
       </div>
 
       <div className="home-hero-bleed">
@@ -41,12 +32,7 @@ export default async function HomePage() {
       </div>
 
       <div className="page-shell page-shell--home">
-        {homeData.quickHits ? (
-          <section className="module-block module-block--editorial-row">
-            <QuickHits block={homeData.quickHits} />
-            <SportsWeekPanel />
-          </section>
-        ) : null}
+        <CategoryStrip items={homeData.categoryStrip} />
 
         <section className="module-block">
           <SectionHeading eyebrow="Trending" title="What readers are chasing" />
@@ -58,19 +44,9 @@ export default async function HomePage() {
         </section>
 
         {homeData.sportRails.map((rail) => (
-          <section key={rail.sport.slug} className="module-block">
-            <SectionHeading
-              eyebrow={rail.sport.name}
-              title={`${rail.sport.name} hub`}
-              href={`/${rail.sport.slug}`}
-              description={rail.sport.description}
-            />
-            <div className="story-grid story-grid--tiles">
-              {rail.articles.map((article) => (
-                <ArticleCard key={article.id} article={article} variant="tile" />
-              ))}
-            </div>
-          </section>
+          <div key={rail.sport.slug} className="module-block">
+            <SportSpotlightRail sport={rail.sport} articles={rail.articles} />
+          </div>
         ))}
 
         <section className="module-block">
@@ -84,25 +60,11 @@ export default async function HomePage() {
 
         <NewsletterBand issue={homeData.newsletter} />
 
-        <section className="module-block">
-          <SectionHeading
-            eyebrow="Writers"
-            title="Trust-building author identities"
-            href="/authors"
-            description="Author pages, expertise signals, and profile schema are built into the starter."
-          />
-          <div className="author-grid">
-            {homeData.featuredAuthors.map((author) => (
-              <AuthorSpotlight key={author.id} author={author} />
-            ))}
-          </div>
-        </section>
-
         <section className="module-block module-block--trust">
           <SectionHeading
-            eyebrow="SEO foundation"
-            title="Launch-ready trust and newsroom operations"
-            description="Static trust pages reinforce author credibility, corrections policy, editorial standards, and newsroom contact signals."
+            eyebrow="Newsroom"
+            title="How the rivalry desk works"
+            description="Trust pages, author records, and corrections standards stay available without interrupting the front-page energy."
           />
           <div className="trust-link-grid">
             <Link href="/about">About Sports Rivalry</Link>

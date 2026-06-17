@@ -38,7 +38,7 @@ export function formatRelativeTime(dateString: string) {
 }
 
 export function formatDate(dateString: string) {
-  return new Intl.DateTimeFormat("en-IN", {
+  return new Intl.DateTimeFormat("en-US", {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -46,7 +46,7 @@ export function formatDate(dateString: string) {
 }
 
 export function formatDateTime(dateString: string) {
-  return new Intl.DateTimeFormat("en-IN", {
+  return new Intl.DateTimeFormat("en-US", {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(dateString));

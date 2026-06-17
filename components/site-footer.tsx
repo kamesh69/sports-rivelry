@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SPORTS_NAV, TRUST_LINKS } from "@/lib/site-config";
+import { FOOTER_LINK_GROUPS } from "@/lib/site-config";
 
 export function SiteFooter() {
   return (
@@ -8,30 +8,23 @@ export function SiteFooter() {
         <div className="footer-brand">
           <h2>Sports Rivalry</h2>
           <p>
-            Built for search, speed, and the stories that make sports feel bigger than
-            scorelines.
+            Built for fans who track the feud as closely as the score. Sports Rivalry packages
+            the week’s pressure points, grudges, and title-shaping swings into a cleaner
+            editorial experience.
           </p>
         </div>
-        <div>
-          <h3>Sports</h3>
-          <ul className="footer-list">
-            {SPORTS_NAV.map((item) => (
-              <li key={item.slug}>
-                <Link href={`/${item.slug}`}>{item.label}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h3>Trust</h3>
-          <ul className="footer-list">
-            {TRUST_LINKS.map((item) => (
-              <li key={item.href}>
-                <Link href={item.href}>{item.label}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {FOOTER_LINK_GROUPS.map((group) => (
+          <div key={group.title}>
+            <h3>{group.title}</h3>
+            <ul className="footer-list">
+              {group.links.map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href}>{item.label}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
     </footer>
   );

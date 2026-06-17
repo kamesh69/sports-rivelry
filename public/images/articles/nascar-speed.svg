@@ -1,0 +1,19 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" rx="48" fill="#090B10"/>
+  <rect x="72" y="72" width="1456" height="756" rx="36" fill="url(#paint0_linear_1_5)"/>
+  <path d="M240 666C434 438 660 318 956 294C1128 280 1276 236 1366 170" stroke="#E5E7EB" stroke-width="14" stroke-linecap="round" stroke-dasharray="10 18"/>
+  <path d="M288 702C482 474 708 354 1004 330C1176 316 1324 272 1414 206" stroke="#FACC15" stroke-width="18" stroke-linecap="round"/>
+  <rect x="314" y="520" width="428" height="126" rx="28" fill="#111827" fill-opacity="0.55"/>
+  <rect x="866" y="260" width="432" height="132" rx="28" fill="#991B1B" fill-opacity="0.28"/>
+  <circle cx="1240" cy="624" r="102" fill="#60A5FA" fill-opacity="0.16"/>
+  <text x="184" y="188" fill="#F9FAFB" font-family="Helvetica, Arial, sans-serif" font-size="62" font-weight="800">NASCAR SPEED</text>
+  <text x="184" y="256" fill="#E5E7EB" font-family="Helvetica, Arial, sans-serif" font-size="30" font-weight="700">Pit calls, radio shots, and the rivalries that never stay in the hauler.</text>
+  <text x="184" y="726" fill="#F9FAFB" font-family="Helvetica, Arial, sans-serif" font-size="42" font-weight="800">The fastest feud is usually the one that survives the caution flag.</text>
+  <defs>
+    <linearGradient id="paint0_linear_1_5" x1="72" y1="72" x2="1528" y2="828" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="0.45" stop-color="#1F2937"/>
+      <stop offset="1" stop-color="#0F172A"/>
+    </linearGradient>
+  </defs>
+</svg>

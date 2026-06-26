@@ -23,7 +23,8 @@ import {
   sports,
   topicHubs,
 } from "@/lib/mock-data";
-import { stripHtml } from "@/lib/utils";
+import { HOMEPAGE_CATEGORY_STRIP } from "@/lib/site-config";
+import { dedupeByKey, sortByPublishedAt, stripHtml } from "@/lib/utils";
 import type {
   Article,
   AuthorProfile,
@@ -233,7 +234,163 @@ async function getWordPressArticleByUri(uri: string) {
   return normalizeWordPressArticle(data?.contentNode);
 }
 
+const HOME_ARTICLE_FIELDS = `
+  id
+  databaseId
+  slug
+  uri
+  title
+  excerpt
+  content
+  date
+  dateGmt
+  modified
+  modifiedGmt
+  articleFields {
+    deck
+    readTime
+    isBreaking
+    isEditorsPick
+    trendingScore
+    relatedStories {
+      ... on Article {
+        slug
+      }
+    }
+  }
+  featuredImage {
+    node {
+      sourceUrl
+      altText
+      caption
+      mediaDetails {
+        width
+        height
+      }
+    }
+  }
+  sports {
+    nodes {
+      slug
+    }
+  }
+  leagues {
+    nodes {
+      slug
+    }
+  }
+  topics {
+    nodes {
+      slug
+    }
+  }
+  tags {
+    nodes {
+      name
+    }
+  }
+  authors {
+    nodes {
+      slug
+    }
+  }
+  seo {
+    title
+    metaDesc
+  }
+`;
+
+function assembleHomePageData(pool: Article[]): HomePageData {
+  const sorted = sortByPublishedAt(pool);
+  const trendingArticles = [...sorted]
+    .sort((left, right) => right.trendingScore - left.trendingScore)
+    .slice(0, 8);
+  const breakingNews = sorted.filter((article) => article.isBreaking).slice(0, 4);
+  const editorsPicks = sorted.filter((article) => article.isEditorsPick).slice(0, 4);
+  const heroPool = breakingNews.length >= 1 ? breakingNews : trendingArticles;
+  const heroArticle = heroPool[0] || sorted[0];
+  const heroSecondary = dedupeByKey(
+    [...heroPool.slice(1), ...sorted].filter((article) => article.id !== heroArticle?.id),
+    (article) => article.id,
+  ).slice(0, 3);
+  const topHeadlines = trendingArticles.slice(0, 8);
+
+  const sportRailMap = new Map<string, { sport: Article["sport"]; articles: Article[] }>();
+  for (const article of sorted) {
+    const entry = sportRailMap.get(article.sport.slug);
+    if (entry) {
+      if (entry.articles.length < 5) {
+        entry.articles.push(article);
+      }
+    } else {
+      sportRailMap.set(article.sport.slug, { sport: article.sport, articles: [article] });
+    }
+  }
+  const sportRails = Array.from(sportRailMap.values())
+    .filter((rail) => rail.articles.length > 0)
+    .slice(0, 5);
+
+  const recommendedReads = dedupeByKey(
+    [...editorsPicks, ...trendingArticles],
+    (article) => article.id,
+  ).slice(0, 3);
+
+  return {
+    breakingNews,
+    topHeadlines,
+    heroArticle,
+    heroSecondary,
+    latestArticles: sorted.slice(0, 12),
+    categoryStrip: HOMEPAGE_CATEGORY_STRIP,
+    quickHits: null,
+    sportRails,
+    trendingArticles,
+    editorsPicks,
+    recommendedReads,
+    newsletter: newsletters[0],
+    featuredAuthors: authors.slice(0, 4),
+  };
+}
+
+async function getWordPressHomePageData(): Promise<HomePageData | null> {
+  const data = await wpFetch<{ articles?: { nodes?: any[] } }>(
+    `
+      query HomePageArticles {
+        articles(first: 40, where: { orderby: { field: DATE, order: DESC } }) {
+          nodes {
+            ${HOME_ARTICLE_FIELDS}
+          }
+        }
+      }
+    `,
+    {},
+    ["home", "articles"],
+  );
+
+  const nodes = data?.articles?.nodes;
+
+  if (!nodes?.length) {
+    return null;
+  }
+
+  const normalized = nodes
+    .map((node) => normalizeWordPressArticle(node))
+    .filter(Boolean) as Article[];
+
+  if (!normalized.length) {
+    return null;
+  }
+
+  return assembleHomePageData(normalized);
+}
+
 export async function getHomePageData(): Promise<HomePageData> {
+  const wordPressHome = await getWordPressHomePageData();
+
+  if (wordPressHome) {
+    return wordPressHome;
+  }
+
   return getMockHomePageData();
 }
 

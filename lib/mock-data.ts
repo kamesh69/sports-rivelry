@@ -871,6 +871,31 @@ const rawArticles = [
     trendingScore: 86,
   },
   {
+    id: "article-112b",
+    slug: "astros-rangers-turned-a-division-race-into-a-contact-sport",
+    sportSlug: "mlb",
+    leagueSlug: "mlb",
+    authorSlugs: ["miles-donovan"],
+    publishedAt: hoursAgo(8),
+    updatedAt: hoursAgo(7.5),
+    readTime: 4,
+    title: "Astros-Rangers turned a division race into a contact sport",
+    excerpt: "Texas and Houston keep finding new ways to make late-season baseball feel personal.",
+    deck: "The rivalry has enough history to matter and enough recent heat to keep every pitch feeling louder than it should.",
+    bodyHtml:
+      "<p>Houston and Texas do not need a trophy on the line to play like something bigger is at stake. The division math and the recent history do that work for them.</p><p>That is why every series between them feels like it starts one inning too late.</p>",
+    featuredImage: {
+      src: "/images/articles/mlb-clubhouse.svg",
+      alt: "Baseball rivalry illustration with dugout lighting",
+      width: 1600,
+      height: 900,
+    },
+    topicSlugs: ["rivalries"],
+    tags: ["MLB", "Astros", "Rangers"],
+    relatedStorySlugs: ["orioles-blue-jays-keep-building-the-division-race-that-refuses-to-relax"],
+    trendingScore: 84,
+  },
+  {
     id: "article-113",
     slug: "pacers-vs-bucks-is-what-happens-when-disrespect-turns-productive",
     sportSlug: "basketball",
@@ -1266,7 +1291,39 @@ const rawArticles = [
   },
 ];
 
-export const articles: Article[] = rawArticles.map((entry) => {
+// Realistic sports photography for seeded/demo content so the homepage
+// resembles the reference design. Real content is served from WordPress.
+const SEED_PHOTO_IDS = [
+  "1540747913346-19e32dc3e97e",
+  "1521412644187-c49fa049e84d",
+  "1546519638-68e109498ffc",
+  "1574629810360-7efbbe195018",
+  "1579952363873-27f3bade9f55",
+  "1551958219-acbc608c6377",
+  "1431324155629-1a6deb1dec8d",
+  "1517649763962-0c623066013b",
+  "1485395037613-e83d5c1f5290",
+  "1607627000458-210e8d2bdb1d",
+  "1518091043644-c1d4457512c6",
+  "1552667466-07770ae110d0",
+  "1530549387789-4c1017266635",
+  "1471295253337-3ceaaedca402",
+  "1599058917212-d750089bc07e",
+  "1556056504-5c7696c4c28d",
+  "1544025162-d76694265947",
+  "1461896836934-ffe607ba8211",
+  "1543351611-58f69d7c1781",
+  "1526232761682-d26e03ac148e",
+  "1487466365202-1afdb86c764e",
+  "1593341646782-e0b495cff86d",
+];
+
+function seedPhoto(index: number) {
+  const id = SEED_PHOTO_IDS[index % SEED_PHOTO_IDS.length];
+  return `https://images.unsplash.com/photo-${id}?w=1600&q=70&auto=format&fit=crop`;
+}
+
+export const articles: Article[] = rawArticles.map((entry, index) => {
   const sport = sportBySlug(entry.sportSlug);
   const league = entry.leagueSlug ? leagueBySlug(entry.leagueSlug) : undefined;
 
@@ -1277,7 +1334,13 @@ export const articles: Article[] = rawArticles.map((entry) => {
     excerpt: entry.excerpt,
     deck: entry.deck,
     bodyHtml: entry.bodyHtml,
-    featuredImage: entry.featuredImage,
+    featuredImage: {
+      ...entry.featuredImage,
+      src: seedPhoto(index),
+      alt: entry.title,
+      width: 1600,
+      height: 900,
+    },
     sport,
     league:
       league &&
@@ -1622,11 +1685,18 @@ export function getHomePageData(): HomePageData {
 
       return {
         sport,
-        articles: homepagePool.filter((article) => article.sport.slug === sport.slug).slice(0, 4),
+        articles: homepagePool.filter((article) => article.sport.slug === sport.slug).slice(0, 5),
       };
     })
     .filter(Boolean) as HomePageData["sportRails"];
   const editorsPicks = homepagePool.filter((article) => article.isEditorsPick).slice(0, 4);
+  const trendingArticles = [...homepagePool]
+    .sort((left, right) => right.trendingScore - left.trendingScore)
+    .slice(0, 8);
+  const recommendedReads = dedupeByKey(
+    [...editorsPicks, ...trendingArticles],
+    (article) => article.id,
+  ).slice(0, 3);
 
   return {
     breakingNews,
@@ -1637,8 +1707,9 @@ export function getHomePageData(): HomePageData {
     categoryStrip: HOMEPAGE_CATEGORY_STRIP,
     quickHits: null,
     sportRails,
-    trendingArticles: [...homepagePool].sort((left, right) => right.trendingScore - left.trendingScore).slice(0, 6),
+    trendingArticles,
     editorsPicks,
+    recommendedReads,
     newsletter: newsletters[0],
     featuredAuthors: authors.filter((author) =>
       ["miles-donovan", "tessa-cole", "reese-mercer", "chase-holloway"].includes(author.slug),

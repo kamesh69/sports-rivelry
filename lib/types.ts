@@ -185,8 +185,39 @@ export interface HomePageData {
   }>;
   trendingArticles: Article[];
   editorsPicks: Article[];
+  recommendedReads: Article[];
   newsletter: NewsletterIssue;
   featuredAuthors: AuthorProfile[];
+}
+
+export interface FanZoneCard {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  href?: string;
+  sortOrder: number;
+}
+
+export interface FanZoneContent {
+  heading: string;
+  subheading: string;
+  ctaLabel: string;
+  ctaHref: string;
+  cards: FanZoneCard[];
+}
+
+export interface FanPollOption {
+  id: string;
+  label: string;
+  votes: number;
+}
+
+export interface FanPoll {
+  id: string;
+  question: string;
+  isActive: boolean;
+  options: FanPollOption[];
 }
 
 export interface SearchResult {

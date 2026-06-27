@@ -1,34 +1,38 @@
 import Image from "next/image";
-import Link from "next/link";
 import type { AuthorProfile } from "@/lib/types";
+import { SocialIcon } from "@/components/social-icon";
 
 interface ArticleAuthorCardProps {
   author: AuthorProfile;
 }
 
 export function ArticleAuthorCard({ author }: ArticleAuthorCardProps) {
+  const xLink = author.socials.find((link) => link.platform === "x");
+
   return (
     <section className="article-author-card" aria-labelledby="article-author-card-heading">
+      {xLink ? (
+        <a
+          href={xLink.url}
+          className="article-author-card__social"
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`Follow ${author.name} on X`}
+        >
+          <SocialIcon platform="x" />
+        </a>
+      ) : null}
       <Image
         src={author.avatar.src}
         alt={author.avatar.alt}
-        width={author.avatar.width}
-        height={author.avatar.height}
+        width={80}
+        height={80}
         className="article-author-card__avatar"
       />
       <div className="article-author-card__body">
-        <span className="eyebrow">{author.role}</span>
         <h2 id="article-author-card-heading">{author.name}</h2>
-        <p>{author.bio}</p>
-        <p className="author-expertise">{author.expertise}</p>
-        <div className="article-author-card__links">
-          <Link href={`/authors/${author.slug}`}>View author page</Link>
-          {author.socials.slice(0, 2).map((link) => (
-            <a key={link.url} href={link.url} target="_blank" rel="noreferrer">
-              {link.label}
-            </a>
-          ))}
-        </div>
+        <p className="article-author-card__role">{author.role}</p>
+        <p className="article-author-card__bio">{author.bio}</p>
       </div>
     </section>
   );

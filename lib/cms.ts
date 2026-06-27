@@ -150,6 +150,9 @@ function normalizeWordPressArticle(node: any): Article | null {
     trendingScore: Number(node.articleFields?.trendingScore || 0),
     isBreaking: Boolean(node.articleFields?.isBreaking),
     isEditorsPick: Boolean(node.articleFields?.isEditorsPick),
+    essentials:
+      node.articleFields?.essentials?.map((item: { point?: string }) => item.point).filter(Boolean) ||
+      undefined,
   };
 }
 
@@ -178,6 +181,9 @@ async function getWordPressArticleByUri(uri: string) {
               isBreaking
               isEditorsPick
               trendingScore
+              essentials {
+                point
+              }
               relatedStories {
                 ... on Article {
                   slug
@@ -253,6 +259,9 @@ const HOME_ARTICLE_FIELDS = `
     isBreaking
     isEditorsPick
     trendingScore
+    essentials {
+      point
+    }
     relatedStories {
       ... on Article {
         slug

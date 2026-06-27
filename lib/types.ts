@@ -97,6 +97,7 @@ export interface Article {
   trendingScore: number;
   isBreaking?: boolean;
   isEditorsPick?: boolean;
+  essentials?: string[];
 }
 
 export interface TopicHub {

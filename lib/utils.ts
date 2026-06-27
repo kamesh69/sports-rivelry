@@ -45,6 +45,14 @@ export function formatDate(dateString: string) {
   }).format(new Date(dateString));
 }
 
+export function formatArticleDate(dateString: string) {
+  return new Intl.DateTimeFormat("en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(dateString));
+}
+
 export function formatDateTime(dateString: string) {
   return new Intl.DateTimeFormat("en-US", {
     dateStyle: "medium",

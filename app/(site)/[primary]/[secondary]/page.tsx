@@ -1,6 +1,3 @@
-import type { Metadata } from "next";
-import Image from "next/image";
-import { notFound } from "next/navigation";
 import {
   getArticlesForCollection,
   getArticle,
@@ -15,16 +12,22 @@ import {
   buildMetadata,
   type BreadcrumbItem,
 } from "@/lib/seo";
-import { formatDateTime } from "@/lib/utils";
 import { ArticleAuthorCard } from "@/components/article-author-card";
 import { ArticleBody } from "@/components/article-body";
+import { ArticleBrandBanner } from "@/components/article-brand-banner";
 import { ArticleCard } from "@/components/article-card";
-import { ArticleMoreRail } from "@/components/article-more-rail";
+import { ArticleEssentials } from "@/components/article-essentials";
+import { ArticleHeader } from "@/components/article-header";
+import { ArticleHeroImage } from "@/components/article-hero-image";
+import { ArticleMoreGrid } from "@/components/article-more-grid";
 import { ArticleReactionRow } from "@/components/article-reaction-row";
+import { ArticleSidebar } from "@/components/article-sidebar";
+import { ArticleTopics } from "@/components/article-topics";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { ArticleShareBar } from "@/components/article-share-bar";
 import { JsonLd } from "@/components/json-ld";
 import { SectionHeading } from "@/components/section-heading";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 export const revalidate = 60;
 
@@ -132,77 +135,36 @@ export default async function SportDetailPage({ params }: SportDetailPageProps) 
   }
 
   const relatedStories = await getRelatedStories(article);
-  const breadcrumbs: BreadcrumbItem[] = [
-    { name: "Home", href: "/" },
-    { name: article.sport.name, href: `/${article.sport.slug}` },
-  ];
-
-  if (article.league) {
-    breadcrumbs.push({
-      name: article.league.name,
-      href: `/${article.sport.slug}/${article.league.slug}`,
-    });
-  }
-
-  breadcrumbs.push({
-    name: article.title,
-    href: `/${article.sport.slug}/${article.slug}`,
-  });
 
   return (
     <div className="page-shell page-shell--article">
-      <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
       <JsonLd data={buildArticleJsonLd(article)} />
-      <Breadcrumbs items={breadcrumbs} />
-
-      <article className="article-layout">
-        <div className="article-media">
-          <Image
-            src={article.featuredImage.src}
-            alt={article.featuredImage.alt}
-            width={article.featuredImage.width}
-            height={article.featuredImage.height}
-            priority
-          />
-          {article.featuredImage.credit ? (
-            <span className="article-media__credit">{article.featuredImage.credit}</span>
-          ) : null}
-        </div>
-
-        <header className="article-header">
-          <div className="article-header__meta">
-            <span className="eyebrow">{article.sport.name}</span>
-            {article.league ? <span className="tag-chip">{article.league.name}</span> : null}
-          </div>
-          <h1>{article.title}</h1>
-          <div className="article-byline">
-            <span>{article.authors.map((author) => author.name).join(", ")}</span>
-            <span>{formatDateTime(article.publishedAt)}</span>
-            <span>{article.readTime} min read</span>
-          </div>
-          <ArticleShareBar path={article.seo.canonicalPath} title={article.title} />
-          <p className="article-deck">{article.deck}</p>
-        </header>
-
-        <div className="article-main article-main--stacked">
-          <div className="article-main__body article-main__body--feature">
+      <article className="article-page">
+        <ArticleHeader article={article} />
+        <div className="article-page__grid">
+          <div className="article-page__main">
+            <ArticleHeroImage
+              image={article.featuredImage}
+              sharePath={article.seo.canonicalPath}
+              shareTitle={article.title}
+            />
             <ArticleBody html={article.bodyHtml} />
-            <div className="article-topic-strip">
-              <span>{article.sport.name}</span>
-              {article.league ? <span>{article.league.name}</span> : null}
-              {article.tags.slice(0, 4).map((tag) => (
-                <span key={tag}>{tag}</span>
-              ))}
-            </div>
-            <ArticleReactionRow />
-            <ArticleAuthorCard author={article.authors[0]} />
+            {article.essentials?.length ? (
+              <ArticleEssentials items={article.essentials} />
+            ) : null}
           </div>
-
-          <ArticleMoreRail
-              title={`More stories from ${article.league?.name || article.sport.name}`}
-            articles={relatedStories}
+          <ArticleSidebar
+            nextStory={relatedStories[0]}
+            recommended={relatedStories.slice(1, 4)}
           />
         </div>
+        <div className="article-page__modules">
+          <ArticleTopics article={article} />
+          <ArticleReactionRow />
+          {article.authors[0] ? <ArticleAuthorCard author={article.authors[0]} /> : null}
+          <ArticleMoreGrid sport={article.sport} articles={relatedStories.slice(0, 4)} />
+        </div>
+        <ArticleBrandBanner />
       </article>
     </div>
   );

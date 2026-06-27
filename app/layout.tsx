@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Oswald } from "next/font/google";
+import { Inter, Lora, Oswald } from "next/font/google";
 import "@/app/globals.css";
 import { buildMetadata } from "@/lib/seo";
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/site-config";
@@ -18,6 +18,13 @@ const inter = Inter({
   display: "swap",
 });
 
+const lora = Lora({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-article-serif",
+  display: "swap",
+});
+
 export const metadata: Metadata = buildMetadata({
   title: `${SITE_NAME} | Editorial-first sports coverage`,
   description: SITE_DESCRIPTION,
@@ -30,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${oswald.variable} ${inter.variable}`}>
+    <html lang="en" className={`${oswald.variable} ${inter.variable} ${lora.variable}`}>
       <body>{children}</body>
     </html>
   );

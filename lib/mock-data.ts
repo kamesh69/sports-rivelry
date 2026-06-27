@@ -607,13 +607,18 @@ const rawArticles = [
     excerpt: "Boston owns the ring standard, but New York has built enough swagger to make the matchup feel national.",
     deck: "Every time these teams meet, the conversation shifts from standings to identity and who gets to frame the East.",
     bodyHtml:
-      "<p>The Celtics still define the conference ceiling, but the Knicks have become too visible and too emotionally loud to be treated like a supporting act. That tension makes the matchup bigger than the standings.</p><p>It feels like both fan bases think they are arguing over the same throne.</p>",
+      "<p>The Celtics still define the conference ceiling, but the Knicks have become too visible and too emotionally loud to be treated like a supporting act. That tension makes the matchup bigger than the standings.</p><p>It feels like both fan bases think they are arguing over the same throne.</p><h2>1. Develop a Go-To Scoring Move</h2><p>Every contender needs a sequence opponents cannot take away. Boston has several; New York is still building the one that travels in May.</p><h2>2. Improve Offensive Consistency</h2><p>When the Knicks shoot well, the crowd noise becomes part of the game plan. When they do not, the rivalry still feels loud but less convincing.</p><h2>3. Take Ownership in Big Moments</h2><p>Playoff basketball rewards the team willing to absorb the hit and answer anyway. That is the standard both sides are measuring each other against.</p>",
+    essentials: [
+      "Boston still sets the East ceiling, but New York has built enough swagger to make the matchup feel national.",
+      "The Knicks need a go-to scoring sequence that holds up when the crowd and stakes are highest.",
+      "This rivalry now travels because both fan bases believe they are arguing over the same throne.",
+    ],
     featuredImage: {
       src: "/images/articles/basketball-rivals.svg",
       alt: "Stylized basketball court with orange and navy rivalry graphics",
       width: 1600,
       height: 900,
-      credit: "Illustration by Sports Rivalry Studio",
+      credit: "John Doe / Sports Rivalry",
     },
     topicSlugs: ["rivalries"],
     tags: ["NBA", "Boston Celtics", "New York Knicks"],
@@ -1244,6 +1249,7 @@ export const articles: Article[] = rawArticles.map((entry, index) => {
     trendingScore: entry.trendingScore,
     isBreaking: entry.isBreaking,
     isEditorsPick: entry.isEditorsPick,
+    essentials: "essentials" in entry ? entry.essentials : undefined,
   };
 });
 

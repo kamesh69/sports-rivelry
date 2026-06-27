@@ -9,6 +9,13 @@ interface ArticleShareBarProps {
   title: string;
 }
 
+const shareButtons = [
+  { platform: "facebook", label: "Share on Facebook", className: "article-share-bar__button--facebook" },
+  { platform: "x", label: "Share on X", className: "article-share-bar__button--x" },
+  { platform: "reddit", label: "Share on Reddit", className: "article-share-bar__button--reddit" },
+  { platform: "link", label: "Copy link", className: "article-share-bar__button--link" },
+] as const;
+
 export function ArticleShareBar({ path, title }: ArticleShareBarProps) {
   const [copied, setCopied] = useState(false);
   const url = absoluteUrl(path);
@@ -27,46 +34,42 @@ export function ArticleShareBar({ path, title }: ArticleShareBarProps) {
     }
   }
 
+  function handleShare(platform: string) {
+    if (platform === "facebook") {
+      openShare(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
+      return;
+    }
+
+    if (platform === "x") {
+      openShare(
+        `https://x.com/intent/post?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
+      );
+      return;
+    }
+
+    if (platform === "reddit") {
+      openShare(
+        `https://www.reddit.com/submit?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`,
+      );
+      return;
+    }
+
+    void copyLink();
+  }
+
   return (
     <div className="article-share-bar" aria-label="Share this article">
-      <button
-        type="button"
-        className="article-share-bar__button"
-        onClick={() =>
-          openShare(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`)
-        }
-      >
-        <SocialIcon platform="facebook" />
-        <span>Facebook</span>
-      </button>
-      <button
-        type="button"
-        className="article-share-bar__button"
-        onClick={() =>
-          openShare(
-            `https://x.com/intent/post?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
-          )
-        }
-      >
-        <SocialIcon platform="x" />
-        <span>X</span>
-      </button>
-      <button
-        type="button"
-        className="article-share-bar__button"
-        onClick={() =>
-          openShare(
-            `https://www.reddit.com/submit?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`,
-          )
-        }
-      >
-        <SocialIcon platform="reddit" />
-        <span>Reddit</span>
-      </button>
-      <button type="button" className="article-share-bar__button" onClick={copyLink}>
-        <SocialIcon platform="link" />
-        <span>{copied ? "Copied" : "Copy link"}</span>
-      </button>
+      {shareButtons.map((button) => (
+        <button
+          key={button.platform}
+          type="button"
+          className={`article-share-bar__button ${button.className}`}
+          aria-label={button.platform === "link" && copied ? "Link copied" : button.label}
+          onClick={() => handleShare(button.platform)}
+        >
+          <SocialIcon platform={button.platform} />
+        </button>
+      ))}
     </div>
   );
 }

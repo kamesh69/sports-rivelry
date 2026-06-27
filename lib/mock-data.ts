@@ -13,7 +13,12 @@ import type {
   SportSummary,
   TopicHub,
 } from "@/lib/types";
-import { HOMEPAGE_CATEGORY_STRIP, SITE_NAME } from "@/lib/site-config";
+import {
+  HOMEPAGE_CATEGORY_STRIP,
+  HOMEPAGE_SPORTS,
+  SITE_NAME,
+  SPORT_RAIL_ARTICLE_COUNT,
+} from "@/lib/site-config";
 import { dedupeByKey, sortByPublishedAt } from "@/lib/utils";
 
 const now = new Date();
@@ -1654,7 +1659,7 @@ export function resolveQuickHits(config: QuickHitsConfig): QuickHitsBlock | null
 }
 
 export function getHomePageData(): HomePageData {
-  const homepageSports = ["mlb", "golf", "basketball", "nascar", "football"];
+  const homepageSports = [...HOMEPAGE_SPORTS];
   const homepagePool = sortByPublishedAt(
     articles.filter((article) => homepageSports.includes(article.sport.slug)),
   );
@@ -1685,7 +1690,9 @@ export function getHomePageData(): HomePageData {
 
       return {
         sport,
-        articles: homepagePool.filter((article) => article.sport.slug === sport.slug).slice(0, 5),
+        articles: homepagePool
+          .filter((article) => article.sport.slug === sport.slug)
+          .slice(0, SPORT_RAIL_ARTICLE_COUNT),
       };
     })
     .filter(Boolean) as HomePageData["sportRails"];

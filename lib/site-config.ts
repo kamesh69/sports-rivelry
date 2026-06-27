@@ -16,6 +16,11 @@ export const SPORTS_NAV: NavItem[] = [
   { slug: "cricket", label: "Cricket", href: "/cricket" },
 ];
 
+export const HOMEPAGE_SPORTS = ["mlb", "golf", "basketball", "nascar", "football"] as const;
+
+/** One lead story plus four list items in each homepage sport rail. */
+export const SPORT_RAIL_ARTICLE_COUNT = 5;
+
 export const HOMEPAGE_CATEGORY_STRIP: NavItem[] = [
   { slug: "mlb", label: "MLB", href: "/mlb" },
   { slug: "golf", label: "Golf", href: "/golf" },

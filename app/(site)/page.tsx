@@ -87,7 +87,7 @@ export default async function HomePage() {
 
       <div className="page-shell page-shell--home">
         <section className="module-block">
-          <SectionHeading eyebrow="Trending" title="Trending Stories" href="/search" />
+          <SectionHeading title="Trending Stories" href="/search" />
           <div className="story-grid story-grid--tiles">
             {trendingArticles.map((article) => (
               <ArticleCard key={article.id} article={article} variant="tile" />

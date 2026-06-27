@@ -41,12 +41,9 @@ export function HomeFeatureGrid({ featured, sideArticles, headlines }: HomeFeatu
 
       <aside className="home-feature-grid__headlines" aria-labelledby="home-top-headlines">
         <h2 id="home-top-headlines">Top Headlines</h2>
-        <ol className="home-feature-grid__headline-list">
-          {headlines.slice(0, 10).map((article, index) => (
+        <ul className="home-feature-grid__headline-list">
+          {headlines.slice(0, 10).map((article) => (
             <li key={article.id} className="home-feature-grid__headline-item">
-              <span className="home-feature-grid__headline-rank">
-                {String(index + 1).padStart(2, "0")}
-              </span>
               <Link
                 href={`/${article.sport.slug}/${article.slug}`}
                 className="home-feature-grid__headline"
@@ -55,7 +52,7 @@ export function HomeFeatureGrid({ featured, sideArticles, headlines }: HomeFeatu
               </Link>
             </li>
           ))}
-        </ol>
+        </ul>
       </aside>
     </section>
   );

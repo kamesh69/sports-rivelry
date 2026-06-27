@@ -226,3 +226,133 @@ export interface SearchResult {
   href: string;
   summary: string;
 }
+
+/* ---- Sport league page (dark template) ---- */
+
+export interface SportLeagueTab {
+  label: string;
+  href: string;
+  active?: boolean;
+}
+
+export interface SportNavConfig {
+  /** Brand mark monogram shown in the league sub-nav (e.g. "SR"). */
+  mark: string;
+  /** Wordmark shown next to the mark (e.g. "Hoop Report"). */
+  wordmark: string;
+  /** League/section tabs across the sub-nav. */
+  tabs: SportLeagueTab[];
+}
+
+export interface ScoreTeam {
+  name: string;
+  shortName: string;
+  primaryColor: string;
+  accentColor: string;
+  textColor?: string;
+  score?: number;
+  record?: string;
+  isWinner?: boolean;
+}
+
+export interface LiveGame {
+  status: string;
+  isLive?: boolean;
+  clock?: string;
+  home: ScoreTeam;
+  away: ScoreTeam;
+  note?: string;
+}
+
+export interface ScoreboardGame {
+  status: string;
+  isLive?: boolean;
+  away: ScoreTeam;
+  home: ScoreTeam;
+  detail?: string;
+}
+
+export interface PlayerStatLine {
+  player: string;
+  meta: string;
+  monogram: string;
+  stats: Array<{ label: string; value: string }>;
+  footnote?: string;
+}
+
+export interface TeamStanding {
+  rank: number;
+  team: TeamIdentity;
+  record: string;
+  trend: "up" | "down" | "flat";
+  trendLabel: string;
+  statA: string;
+  statB: string;
+}
+
+export interface StatLeader {
+  category: string;
+  player: string;
+  monogram: string;
+  value: string;
+  team: string;
+  image?: MediaAsset;
+}
+
+export interface Matchup {
+  status: string;
+  isLive?: boolean;
+  teams: ScoreTeam[];
+  info?: string;
+}
+
+export interface VideoHighlight {
+  title: string;
+  duration: string;
+  image: MediaAsset;
+  href?: string;
+  featured?: boolean;
+}
+
+export interface OpinionItem {
+  title: string;
+  author: string;
+  monogram: string;
+  href?: string;
+}
+
+export interface SportPageData {
+  navConfig: SportNavConfig;
+  hero: {
+    pillPrimary: string;
+    pillSecondary?: string;
+    headline: string;
+    deck: string;
+    author: string;
+    date: string;
+    readTime: number;
+    href: string;
+    image: MediaAsset;
+  };
+  liveGame?: LiveGame;
+  playerSpotlight?: PlayerStatLine;
+  scoreboard: ScoreboardGame[];
+  scoreboardLabel: string;
+  teamHub?: {
+    tabs: string[];
+    teams: Array<{ team: TeamIdentity; meta: string }>;
+  };
+  matchupsLabel: string;
+  matchups: Matchup[];
+  rankingsLabel: string;
+  rankingsColumns: [string, string];
+  rankings: TeamStanding[];
+  analyticsLabel: string;
+  statLeaders: StatLeader[];
+  videoHighlights: VideoHighlight[];
+  opinions: OpinionItem[];
+  newsletter: {
+    heading: string;
+    subheading: string;
+  };
+}

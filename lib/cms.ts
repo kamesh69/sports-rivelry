@@ -23,6 +23,7 @@ import {
   sports,
   topicHubs,
 } from "@/lib/mock-data";
+import { getSportPageDataBySlug } from "@/lib/sport-page-data";
 import { HOMEPAGE_CATEGORY_STRIP } from "@/lib/site-config";
 import { dedupeByKey, sortByPublishedAt, stripHtml } from "@/lib/utils";
 import type {
@@ -505,4 +506,8 @@ export async function getNewsSitemapArticles() {
 
 export async function getArticlesForCollection(slugs: string[]) {
   return getArticlesBySlugs(slugs);
+}
+
+export async function getSportPageData(slug: string) {
+  return getSportPageDataBySlug(slug);
 }

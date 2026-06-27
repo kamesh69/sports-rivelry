@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getArticlesForCollection, getLandingPage, getSportHub, getLatestNews } from "@/lib/cms";
+import {
+  getArticlesForCollection,
+  getLandingPage,
+  getSportHub,
+  getSportPageData,
+  getLatestNews,
+  getTrendingNews,
+} from "@/lib/cms";
 import { landingPages, sportHubs } from "@/lib/mock-data";
 import { buildBreadcrumbJsonLd, buildMetadata, type BreadcrumbItem } from "@/lib/seo";
 import { ArticleCard } from "@/components/article-card";
@@ -8,6 +15,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { JsonLd } from "@/components/json-ld";
 import { SectionHeading } from "@/components/section-heading";
 import { SportHubShowcase } from "@/components/sport-hub-showcase";
+import { SportLeaguePage } from "@/components/sport-page/sport-league-page";
 
 export const revalidate = 60;
 
@@ -53,15 +61,42 @@ export default async function PrimaryPage({ params }: PrimaryPageProps) {
   const sportHub = await getSportHub(primary);
 
   if (sportHub) {
+    const sportPageData = await getSportPageData(sportHub.slug);
+    const breadcrumbs: BreadcrumbItem[] = [
+      { name: "Home", href: "/" },
+      { name: sportHub.name, href: `/${sportHub.slug}` },
+    ];
+
+    if (sportPageData) {
+      const [latestStories, trendingAll] = await Promise.all([
+        getLatestNews(80),
+        getTrendingNews(40),
+      ]);
+      const sportArticles = latestStories.filter(
+        (article) => article.sport.slug === sportHub.slug,
+      );
+      const trendingArticles = trendingAll.filter(
+        (article) => article.sport.slug === sportHub.slug,
+      );
+
+      return (
+        <>
+          <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+          <SportLeaguePage
+            hub={sportHub}
+            data={sportPageData}
+            articles={sportArticles}
+            trending={trendingArticles}
+          />
+        </>
+      );
+    }
+
     const heroStories = await getArticlesForCollection(sportHub.featuredArticleSlugs);
     const editorsPicks = await getArticlesForCollection(sportHub.editorsPickSlugs);
     const latestStories = (await getLatestNews(80)).filter(
       (article) => article.sport.slug === sportHub.slug,
     );
-    const breadcrumbs: BreadcrumbItem[] = [
-      { name: "Home", href: "/" },
-      { name: sportHub.name, href: `/${sportHub.slug}` },
-    ];
 
     return (
       <div className="page-shell page-shell--detail">

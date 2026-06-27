@@ -1,0 +1,61 @@
+import Image from "next/image";
+import type { StatLeader } from "@/lib/types";
+import { SectionHead } from "@/components/sport-page/atoms";
+
+// Deterministic athlete portrait fallback so every leader shows a photo even
+// when no explicit image is supplied in the data.
+const PORTRAITS = [
+  "1577212017184-80cc0da11082",
+  "1546519638-68e109498ffc",
+  "1571019613454-1cb2f99b2d8b",
+  "1517466787929-bc90951d0974",
+  "1583454110551-21f2fa2afe61",
+  "1526232761682-d26e85d9fa9e",
+  "1599058917212-d750089bc07e",
+  "1594381898411-846e7d193883",
+  "1564415051543-1f8d2fd6e5b1",
+  "1502904550040-7534597429ae",
+];
+
+function portrait(index: number) {
+  const id = PORTRAITS[index % PORTRAITS.length];
+  return `https://images.unsplash.com/photo-${id}?w=160&h=160&q=70&auto=format&fit=crop&crop=faces`;
+}
+
+export function StatLeaders({
+  label,
+  leaders,
+  viewAllHref,
+}: {
+  label: string;
+  leaders: StatLeader[];
+  viewAllHref: string;
+}) {
+  if (!leaders.length) {
+    return null;
+  }
+
+  return (
+    <section className="sp-section" aria-label={label}>
+      <SectionHead title={label} href={viewAllHref} actionLabel="All Stats" />
+      <div className="sp-leaders">
+        {leaders.map((leader, index) => (
+          <div key={leader.category} className="sp-leader">
+            <span className="sp-leader__label">{leader.category}</span>
+            <span className="sp-leader__photo">
+              <Image
+                src={leader.image?.src || portrait(index)}
+                alt={leader.player}
+                width={66}
+                height={66}
+              />
+            </span>
+            <span className="sp-leader__value">{leader.value}</span>
+            <span className="sp-leader__name">{leader.player}</span>
+            <span className="sp-leader__team">{leader.team}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}

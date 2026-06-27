@@ -1660,8 +1660,9 @@ export function resolveQuickHits(config: QuickHitsConfig): QuickHitsBlock | null
 
 export function getHomePageData(): HomePageData {
   const homepageSports = [...HOMEPAGE_SPORTS];
+  const homepageSportSlugs = new Set<string>(HOMEPAGE_SPORTS);
   const homepagePool = sortByPublishedAt(
-    articles.filter((article) => homepageSports.includes(article.sport.slug)),
+    articles.filter((article) => homepageSportSlugs.has(article.sport.slug)),
   );
   const topHeadlines = getArticlesBySlugs([
     "yankees-red-sox-rivalry-feels-mean-again-because-both-dugouts-need-it",

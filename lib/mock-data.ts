@@ -161,12 +161,6 @@ export const sports: SportSummary[] = [
     ],
   },
   {
-    slug: "cricket",
-    name: "Cricket",
-    description: "India’s biggest rivalries, leagues, and dressing-room turns.",
-    accent: "#9c1d22",
-  },
-  {
     slug: "football",
     name: "Football",
     description: "Transfers, title races, Indian football growth, and global matchweek drama.",
@@ -199,13 +193,6 @@ export const sports: SportSummary[] = [
 ];
 
 export const leagues: LeagueSummary[] = [
-  {
-    slug: "ipl",
-    name: "IPL",
-    sportSlug: "cricket",
-    seasonLabel: "2026 Season",
-    description: "Franchise form, tactical tweaks, and title-race swings.",
-  },
   {
     slug: "isl",
     name: "ISL",
@@ -265,35 +252,6 @@ export const leagues: LeagueSummary[] = [
 ];
 
 export const authors: AuthorProfile[] = [
-  {
-    id: "author-1",
-    slug: "anay-mehra",
-    name: "Anay Mehra",
-    role: "Senior Cricket Writer",
-    beat: "Cricket",
-    bio: "Anay tracks franchise strategy, selection pressure, and the cultural force of Indian cricket.",
-    expertise:
-      "Specialises in squad building, matchups, and the storylines that connect IPL form to national-team pressure.",
-    avatar: {
-      src: "/images/authors/anay.svg",
-      alt: "Portrait illustration of Anay Mehra",
-      width: 720,
-      height: 720,
-    },
-    socials: [
-      { platform: "X", label: "@anaywrites", url: "https://x.com/anaywrites" },
-      {
-        platform: "Instagram",
-        label: "@anay.mehra",
-        url: "https://instagram.com/anay.mehra",
-      },
-    ],
-    seo: {
-      title: `Anay Mehra | ${SITE_NAME}`,
-      description: "Senior Cricket Writer at Sports Rivalry.",
-      canonicalPath: "/authors/anay-mehra",
-    },
-  },
   {
     id: "author-2",
     slug: "sana-qureshi",
@@ -370,7 +328,7 @@ export const authors: AuthorProfile[] = [
     expertise:
       "Known for translating bullpen usage, lineup tension, and inter-division hate into clean rivalry narratives.",
     avatar: {
-      src: "/images/authors/anay.svg",
+      src: "/images/authors/riya.svg",
       alt: "Portrait illustration of Miles Donovan",
       width: 720,
       height: 720,
@@ -988,87 +946,6 @@ const rawArticles = [
     trendingScore: 83,
   },
   {
-    id: "article-1",
-    slug: "mi-trust-their-middle-overs-machine-as-ipl-pressure-rises",
-    sportSlug: "cricket",
-    leagueSlug: "ipl",
-    authorSlugs: ["anay-mehra"],
-    publishedAt: hoursAgo(2),
-    updatedAt: hoursAgo(1),
-    readTime: 5,
-    title: "MI trust their middle-overs machine as IPL pressure rises",
-    excerpt: "Mumbai’s gamble is no longer about star power. It is about owning the innings after the powerplay.",
-    deck: "Mumbai’s recent surge has come from slowing the game down exactly where rivals want to accelerate.",
-    bodyHtml:
-      "<p>Mumbai Indians have rebuilt control around the least glamorous stretch of a T20 innings. Instead of chasing powerplay fireworks alone, they are squeezing opponents through the middle overs with deeper bowling matchups and calmer batting roles.</p><p>The shift matters because title contenders are no longer separating themselves only by explosive openings. They are winning the seven-over wrestling match in the middle, where risk, spin, and tempo all collide.</p><p>That gives MI an advantage in high-pressure games: their best cricket now looks repeatable rather than streaky.</p>",
-    featuredImage: {
-      src: "/images/articles/cricket-pulse.svg",
-      alt: "Stylized cricket stadium with red scoreboard tones",
-      width: 1600,
-      height: 900,
-    },
-    topicSlugs: ["rivalries", "ipl-2026"],
-    tags: ["IPL", "Mumbai Indians", "T20 tactics"],
-    relatedStorySlugs: [
-      "rcb-need-a-calmer-finish-to-turn-hype-into-ipl-points",
-      "ipl-2026-title-race-has-already-became-a-battle-of-bench-depth",
-    ],
-    trendingScore: 95,
-    isBreaking: true,
-    isEditorsPick: true,
-  },
-  {
-    id: "article-2",
-    slug: "rcb-need-a-calmer-finish-to-turn-hype-into-ipl-points",
-    sportSlug: "cricket",
-    leagueSlug: "ipl",
-    authorSlugs: ["anay-mehra"],
-    publishedAt: hoursAgo(6),
-    updatedAt: hoursAgo(5),
-    readTime: 4,
-    title: "RCB need a calmer finish to turn hype into IPL points",
-    excerpt: "The problem is not talent. It is the last five overs feeling louder than the first fifteen.",
-    deck: "Bengaluru’s margin for error keeps shrinking because the endgame still looks emotional instead of methodical.",
-    bodyHtml:
-      "<p>Royal Challengers Bengaluru are creating enough moments to stay relevant, but title-chasing teams need closing patterns, not just crowd surges. Their batting is still too vulnerable to a single collapse point in the 16th or 17th over.</p><p>If they fix the tempo of the finish, they can turn dramatic nights into a more stable run of results.</p>",
-    featuredImage: {
-      src: "/images/articles/cricket-control.svg",
-      alt: "Cricket field with tactical markings and scoreboard elements",
-      width: 1600,
-      height: 900,
-    },
-    topicSlugs: ["rivalries", "ipl-2026"],
-    tags: ["RCB", "IPL", "batting strategy"],
-    relatedStorySlugs: ["mi-trust-their-middle-overs-machine-as-ipl-pressure-rises"],
-    trendingScore: 82,
-    isEditorsPick: true,
-  },
-  {
-    id: "article-3",
-    slug: "ipl-2026-title-race-has-already-became-a-battle-of-bench-depth",
-    sportSlug: "cricket",
-    leagueSlug: "ipl",
-    authorSlugs: ["anay-mehra"],
-    publishedAt: hoursAgo(12),
-    updatedAt: hoursAgo(10),
-    readTime: 6,
-    title: "IPL 2026 title race has already become a battle of bench depth",
-    excerpt: "The best squads are not just surviving absences. They are making depth feel like a tactical weapon.",
-    deck: "In a long league, the contenders are showing that squad architecture matters as much as star ceilings.",
-    bodyHtml:
-      "<p>Injuries, workload management, and matchup-based rotation are redefining what a strong IPL campaign looks like. The best teams are no longer clinging to a fixed eleven; they are using the squad like a toolkit.</p><p>That gives coaches the confidence to adapt to venue, spin profile, or left-right combinations without losing shape.</p>",
-    featuredImage: {
-      src: "/images/articles/cricket-bench.svg",
-      alt: "Cricket bench and tactical notes in a red-toned abstract illustration",
-      width: 1600,
-      height: 900,
-    },
-    topicSlugs: ["ipl-2026"],
-    tags: ["IPL", "team building", "franchise strategy"],
-    relatedStorySlugs: ["mi-trust-their-middle-overs-machine-as-ipl-pressure-rises"],
-    trendingScore: 77,
-  },
-  {
     id: "article-4",
     slug: "mohun-bagan-look-built-for-control-not-chaos-in-the-isl-run-in",
     sportSlug: "football",
@@ -1428,17 +1305,6 @@ export const topicHubs: TopicHub[] = [
     },
   },
   {
-    slug: "ipl-2026",
-    title: "IPL 2026",
-    description: "News, strategy, and title-race turns from the 2026 IPL season.",
-    articleSlugs: articles.filter((article) => article.topicSlugs.includes("ipl-2026")).map((article) => article.slug),
-    seo: {
-      title: `IPL 2026 | ${SITE_NAME}`,
-      description: "IPL 2026 news, form, and franchise storylines.",
-      canonicalPath: "/topics/ipl-2026",
-    },
-  },
-  {
     slug: "road-to-la-2028",
     title: "Road to LA 2028",
     description: "Tracking the athletes, qualification arcs, and decisions shaping India’s Olympic future.",
@@ -1486,23 +1352,7 @@ export const newsletters: NewsletterIssue[] = [
   },
 ];
 
-export const landingPages: LandingPage[] = [
-  {
-    slug: "ipl-2026",
-    title: "IPL 2026: News, Schedule, Results, and Title-Race Storylines",
-    kicker: "Event Hub",
-    description: "An evergreen IPL hub designed for search, fast updates, and deep franchise context.",
-    heroArticleSlug: "mi-trust-their-middle-overs-machine-as-ipl-pressure-rises",
-    articleSlugs: articles
-      .filter((article) => article.league?.slug === "ipl")
-      .map((article) => article.slug),
-    seo: {
-      title: `IPL 2026 Hub | ${SITE_NAME}`,
-      description: "Latest IPL 2026 news, features, and franchise analysis.",
-      canonicalPath: "/ipl-2026",
-    },
-  },
-];
+export const landingPages: LandingPage[] = [];
 
 export function getArticleBySlug(slug: string) {
   return articles.find((article) => article.slug === slug) || null;
@@ -1583,12 +1433,12 @@ export function getTrendingArticles(limit = 6) {
 
 export const quickHitsConfig: QuickHitsConfig = {
   enabled: true,
-  title: "IPL middle-overs week: Anay Mehra’s quick hits",
+  title: "MLB pennant-race week: Miles Donovan’s quick hits",
   selectionMode: "manual",
-  featuredArticleSlug: "mi-trust-their-middle-overs-machine-as-ipl-pressure-rises",
+  featuredArticleSlug: "yankees-red-sox-rivalry-feels-mean-again-because-both-dugouts-need-it",
   secondaryArticleSlugs: [
-    "rcb-need-a-calmer-finish-to-turn-hype-into-ipl-points",
-    "ipl-2026-title-race-has-already-became-a-battle-of-bench-depth",
+    "dodgers-padres-have-found-the-perfect-october-hate-cycle",
+    "mets-braves-keep-punishing-any-team-that-blinks-first",
   ],
   secondaryCount: 2,
 };

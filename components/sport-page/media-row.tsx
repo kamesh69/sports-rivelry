@@ -4,6 +4,10 @@ import type { Article, OpinionItem, VideoHighlight } from "@/lib/types";
 import { formatRelativeTime } from "@/lib/utils";
 import { SectionHead } from "@/components/sport-page/atoms";
 
+function articleTag(article: Article) {
+  return article.league?.name || article.sport.name;
+}
+
 export function MediaRow({
   videos,
   opinions,
@@ -65,11 +69,20 @@ export function MediaRow({
           <SectionHead title="Opinion & Analysis" />
           <div className="sp-opinion-list">
             {opinions.map((opinion) => (
-              <article key={opinion.title} className="sp-opinion">
-                <span className="sp-avatar">{opinion.monogram}</span>
-                <div className="sp-opinion__body">
+              <article key={opinion.title} className="sp-media-row">
+                <div className="sp-media-row__thumb">
+                  <Image
+                    src={opinion.image.src}
+                    alt={opinion.image.alt}
+                    fill
+                    sizes="88px"
+                    style={{ objectFit: "cover" }}
+                  />
+                </div>
+                <div className="sp-media-row__body">
+                  <span className="sp-tag sp-tag--muted">{opinion.category}</span>
                   <h5>{opinion.title}</h5>
-                  <span>By {opinion.author}</span>
+                  <span className="sp-media-row__byline">{opinion.author}</span>
                 </div>
               </article>
             ))}
@@ -83,13 +96,23 @@ export function MediaRow({
               <Link
                 key={article.id}
                 href={`/${article.sport.slug}/${article.slug}`}
-                className="sp-newsitem"
+                className="sp-media-row sp-media-row--link"
               >
-                <span className="sp-newsitem__tag">
-                  {article.league?.name || article.sport.name}
-                </span>
-                <h5>{article.title}</h5>
-                <time>{formatRelativeTime(article.publishedAt)}</time>
+                <div className="sp-media-row__thumb">
+                  <Image
+                    src={article.featuredImage.src}
+                    alt={article.featuredImage.alt}
+                    fill
+                    sizes="88px"
+                    style={{ objectFit: "cover" }}
+                  />
+                </div>
+                <div className="sp-media-row__body">
+                  <h5>{article.title}</h5>
+                  <span className="sp-media-row__meta">
+                    {formatRelativeTime(article.publishedAt)} · {articleTag(article)}
+                  </span>
+                </div>
               </Link>
             ))}
           </div>

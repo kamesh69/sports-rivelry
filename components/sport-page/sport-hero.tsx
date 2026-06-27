@@ -73,7 +73,7 @@ export function SportHero({
             <div className="sp-hero__meta">
               <span className="sp-avatar">{initials(author)}</span>
               <span className="sp-hero__byline">
-                <strong>By {author}</strong>
+                <strong>{author}</strong>
                 <br />
                 <span>
                   {date} · {readTime} min read

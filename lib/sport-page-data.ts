@@ -33,6 +33,20 @@ function img(id: string, alt: string, width = 1600) {
   };
 }
 
+function opinion(id: string, title: string, author: string, category: string) {
+  return {
+    title,
+    author,
+    category,
+    image: {
+      src: `https://images.unsplash.com/photo-${id}?w=480&q=70&auto=format&fit=crop`,
+      alt: title,
+      width: 480,
+      height: 320,
+    },
+  };
+}
+
 const basketball: SportPageData = {
   navConfig: {
     mark: "SR",
@@ -120,14 +134,38 @@ const basketball: SportPageData = {
     },
   ],
   teamHub: {
-    tabs: ["NBA", "NCAA", "NCAAW", "WNBA"],
+    tabs: ["NBA", "NCAA (M)", "NCAA (W)", "WNBA"],
     teams: [
-      { team: team("Boston Celtics", "BOS", "#007a33", "#ffffff"), meta: "64-18 · 1st East" },
-      { team: team("Oklahoma City Thunder", "OKC", "#007ac1", "#ef3b24"), meta: "57-25 · 1st West" },
-      { team: team("Cleveland Cavaliers", "CLE", "#860038", "#fdbb30"), meta: "60-22 · 2nd East" },
-      { team: team("Minnesota Timberwolves", "MIN", "#0c2340", "#78be20"), meta: "56-26 · 3rd West" },
-      { team: team("New York Knicks", "NYK", "#0f4c81", "#f97316"), meta: "51-31 · 3rd East" },
-      { team: team("Denver Nuggets", "DEN", "#0e2240", "#fec524"), meta: "57-25 · 2nd West" },
+      {
+        team: team("Boston Celtics", "BOS", "#007a33", "#ffffff"),
+        meta: "64-18 · 1st East",
+        form: ["W", "W", "L", "W", "W"],
+      },
+      {
+        team: team("Oklahoma City Thunder", "OKC", "#007ac1", "#ef3b24"),
+        meta: "57-25 · 1st West",
+        form: ["W", "W", "W", "W", "L"],
+      },
+      {
+        team: team("Cleveland Cavaliers", "CLE", "#860038", "#fdbb30"),
+        meta: "60-22 · 2nd East",
+        form: ["W", "L", "W", "W", "W"],
+      },
+      {
+        team: team("Minnesota Timberwolves", "MIN", "#0c2340", "#78be20"),
+        meta: "56-26 · 3rd West",
+        form: ["L", "W", "W", "L", "W"],
+      },
+      {
+        team: team("New York Knicks", "NYK", "#0f4c81", "#f97316"),
+        meta: "51-31 · 3rd East",
+        form: ["W", "W", "L", "L", "W"],
+      },
+      {
+        team: team("Denver Nuggets", "DEN", "#0e2240", "#fec524"),
+        meta: "57-25 · 2nd West",
+        form: ["L", "W", "W", "W", "L"],
+      },
     ],
   },
   matchupsLabel: "Featured Matchups",
@@ -135,11 +173,13 @@ const basketball: SportPageData = {
     {
       status: "LIVE",
       isLive: true,
+      clock: "Q4 2:38",
       teams: [
         { ...team("Denver Nuggets", "DEN", "#0e2240", "#fec524"), score: 102 },
         { ...team("Oklahoma City Thunder", "OKC", "#007ac1", "#ef3b24"), score: 118 },
       ],
-      info: "Game 4 · Paycom Center",
+      seriesNote: "Game 4 · OKC Leads 3-1",
+      venue: "Paycom Center",
     },
     {
       status: "7:30 PM ET",
@@ -147,7 +187,10 @@ const basketball: SportPageData = {
         team("Los Angeles Lakers", "LAL", "#552583", "#fdb927"),
         team("Dallas Mavericks", "DAL", "#00538c", "#b8c4ca"),
       ],
-      info: "Crypto.com Arena · TNT",
+      venue: "Crypto.com Arena",
+      network: "TNT",
+      spread: "LAL -5.5",
+      overUnder: "O/U 228.5",
     },
     {
       status: "10:00 PM ET",
@@ -155,7 +198,10 @@ const basketball: SportPageData = {
         team("New York Knicks", "NYK", "#0f4c81", "#f97316"),
         team("Phoenix Suns", "PHX", "#1d1160", "#e56020"),
       ],
-      info: "Footprint Center · TNT",
+      venue: "Footprint Center",
+      network: "TNT",
+      spread: "NYK -2.5",
+      overUnder: "O/U 221.0",
     },
   ],
   rankingsLabel: "Power Rankings",
@@ -183,9 +229,24 @@ const basketball: SportPageData = {
     video("1504450758481-7338eba7524a", "Top 10 plays of the night", "3:02"),
   ],
   opinions: [
-    { title: "Why the Pacers' offense is the NBA's most efficient", author: "Tessa Cole", monogram: "TC" },
-    { title: "2025 NBA Draft big board: the 30 prospects ranked", author: "Tessa Cole", monogram: "TC" },
-    { title: "The evolution of the point guard: from magic to modern day", author: "Selena Smith", monogram: "SS" },
+    opinion(
+      "1546519638-68e109498ffc",
+      "Why the Pacers' offense is the NBA's most efficient",
+      "Tessa Cole",
+      "Film Room",
+    ),
+    opinion(
+      "1579952363873-27f3bade9f55",
+      "2025 NBA Draft big board: the 30 prospects ranked",
+      "Tessa Cole",
+      "Draft Analysis",
+    ),
+    opinion(
+      "1551958219-acbc608c6377",
+      "The evolution of the point guard: from magic to modern day",
+      "Selena Smith",
+      "Long Read",
+    ),
   ],
   newsletter: {
     heading: "Get the best of basketball delivered to your inbox",
@@ -254,19 +315,49 @@ const mlb: SportPageData = {
   teamHub: {
     tabs: ["AL East", "AL Central", "AL West", "NL East"],
     teams: [
-      { team: team("Boston Red Sox", "BOS", "#bd3039", "#0c2340"), meta: "58-39 · 1st AL East" },
-      { team: team("New York Yankees", "NYY", "#132448", "#e5e7eb"), meta: "56-41 · 2nd AL East" },
-      { team: team("Los Angeles Dodgers", "LAD", "#005a9c", "#ffffff"), meta: "61-36 · 1st NL West" },
-      { team: team("Atlanta Braves", "ATL", "#13274f", "#ce1141"), meta: "57-40 · 1st NL East" },
-      { team: team("Houston Astros", "HOU", "#002d62", "#eb6e1f"), meta: "55-42 · 1st AL West" },
-      { team: team("Baltimore Orioles", "BAL", "#df4601", "#000000"), meta: "54-43 · 3rd AL East" },
+      { team: team("Boston Red Sox", "BOS", "#bd3039", "#0c2340"), meta: "58-39 · 1st AL East", form: ["W", "W", "L", "W", "W"] },
+      { team: team("New York Yankees", "NYY", "#132448", "#e5e7eb"), meta: "56-41 · 2nd AL East", form: ["L", "W", "W", "L", "W"] },
+      { team: team("Los Angeles Dodgers", "LAD", "#005a9c", "#ffffff"), meta: "61-36 · 1st NL West", form: ["W", "W", "W", "L", "W"] },
+      { team: team("Atlanta Braves", "ATL", "#13274f", "#ce1141"), meta: "57-40 · 1st NL East", form: ["W", "L", "W", "W", "L"] },
+      { team: team("Houston Astros", "HOU", "#002d62", "#eb6e1f"), meta: "55-42 · 1st AL West", form: ["W", "W", "L", "W", "L"] },
+      { team: team("Baltimore Orioles", "BAL", "#df4601", "#000000"), meta: "54-43 · 3rd AL East", form: ["L", "W", "L", "W", "W"] },
     ],
   },
   matchupsLabel: "Featured Matchups",
   matchups: [
-    { status: "LIVE", isLive: true, teams: [{ ...team("New York Yankees", "NYY", "#132448", "#e5e7eb"), score: 4 }, { ...team("Boston Red Sox", "BOS", "#bd3039", "#0c2340"), score: 5 }], info: "Fenway Park · ESPN" },
-    { status: "8:10 PM ET", teams: [team("Los Angeles Dodgers", "LAD", "#005a9c", "#ffffff"), team("San Francisco Giants", "SF", "#27251f", "#fd5a1e")], info: "Oracle Park · FOX" },
-    { status: "9:40 PM ET", teams: [team("New York Mets", "NYM", "#002d72", "#f97316"), team("Arizona D-backs", "ARI", "#a71930", "#e3d4ad")], info: "Chase Field · FS1" },
+    {
+      status: "LIVE",
+      isLive: true,
+      clock: "Bot 8th",
+      teams: [
+        { ...team("New York Yankees", "NYY", "#132448", "#e5e7eb"), score: 4 },
+        { ...team("Boston Red Sox", "BOS", "#bd3039", "#0c2340"), score: 5 },
+      ],
+      venue: "Fenway Park",
+      network: "ESPN",
+    },
+    {
+      status: "8:10 PM ET",
+      teams: [
+        team("Los Angeles Dodgers", "LAD", "#005a9c", "#ffffff"),
+        team("San Francisco Giants", "SF", "#27251f", "#fd5a1e"),
+      ],
+      venue: "Oracle Park",
+      network: "FOX",
+      spread: "LAD -1.5",
+      overUnder: "O/U 8.5",
+    },
+    {
+      status: "9:40 PM ET",
+      teams: [
+        team("New York Mets", "NYM", "#002d72", "#f97316"),
+        team("Arizona D-backs", "ARI", "#a71930", "#e3d4ad"),
+      ],
+      venue: "Chase Field",
+      network: "FS1",
+      spread: "NYM -2.5",
+      overUnder: "O/U 9.0",
+    },
   ],
   rankingsLabel: "Power Rankings",
   rankingsColumns: ["RUN DIFF", "WIN%"],
@@ -293,9 +384,24 @@ const mlb: SportPageData = {
     video("1566577739112-5180d4bf9390", "Top defensive plays of the week", "2:40"),
   ],
   opinions: [
-    { title: "Why the Dodgers' rotation is built for October", author: "Miles Donovan", monogram: "MD" },
-    { title: "2026 trade deadline: ten names that could move", author: "Miles Donovan", monogram: "MD" },
-    { title: "The case for a shift back to small-ball baseball", author: "Selena Smith", monogram: "SS" },
+    opinion(
+      "1508344928928-7165b67de128",
+      "Why the Dodgers' rotation is built for October",
+      "Miles Donovan",
+      "Film Room",
+    ),
+    opinion(
+      "1471295253337-3ceaaedca402",
+      "2026 trade deadline: ten names that could move",
+      "Miles Donovan",
+      "Trade Desk",
+    ),
+    opinion(
+      "1566577739112-5180d4bf9390",
+      "The case for a shift back to small-ball baseball",
+      "Selena Smith",
+      "Long Read",
+    ),
   ],
   newsletter: {
     heading: "Get the best of baseball delivered to your inbox",
@@ -363,19 +469,45 @@ const golf: SportPageData = {
   teamHub: {
     tabs: ["PGA Tour", "LPGA", "LIV", "DP World"],
     teams: [
-      { team: team("Scottie Scheffler", "SS", "#14532d", "#ffffff"), meta: "World No. 1" },
-      { team: team("Rory McIlroy", "RM", "#0a4a8a", "#d9f99d"), meta: "World No. 2" },
-      { team: team("Xander Schauffele", "XS", "#7c2d12", "#ffedd5"), meta: "World No. 3" },
-      { team: team("Ludvig Aberg", "LA", "#335c1e", "#d9f99d"), meta: "World No. 5" },
-      { team: team("Nelly Korda", "NK", "#be185d", "#ffffff"), meta: "LPGA No. 1" },
-      { team: team("Collin Morikawa", "CM", "#991b1b", "#ffffff"), meta: "World No. 4" },
+      { team: team("Scottie Scheffler", "SS", "#14532d", "#ffffff"), meta: "World No. 1", form: ["W", "W", "W", "L", "W"] },
+      { team: team("Rory McIlroy", "RM", "#0a4a8a", "#d9f99d"), meta: "World No. 2", form: ["W", "L", "W", "W", "L"] },
+      { team: team("Xander Schauffele", "XS", "#7c2d12", "#ffedd5"), meta: "World No. 3", form: ["L", "W", "W", "W", "W"] },
+      { team: team("Ludvig Aberg", "LA", "#335c1e", "#d9f99d"), meta: "World No. 5", form: ["W", "W", "L", "W", "W"] },
+      { team: team("Nelly Korda", "NK", "#be185d", "#ffffff"), meta: "LPGA No. 1", form: ["W", "W", "W", "W", "L"] },
+      { team: team("Collin Morikawa", "CM", "#991b1b", "#ffffff"), meta: "World No. 4", form: ["W", "L", "L", "W", "W"] },
     ],
   },
   matchupsLabel: "Featured Groups",
   matchups: [
-    { status: "LIVE", isLive: true, teams: [{ ...team("Scottie Scheffler", "SS", "#14532d", "#ffffff"), score: -8 }, { ...team("Rory McIlroy", "RM", "#0a4a8a", "#d9f99d"), score: -7 }], info: "Final pairing · 14th" },
-    { status: "2:40 PM", teams: [team("Xander Schauffele", "XS", "#7c2d12", "#ffedd5"), team("Ludvig Aberg", "LA", "#335c1e", "#d9f99d")], info: "Tee 1 · NBC" },
-    { status: "2:28 PM", teams: [team("Collin Morikawa", "CM", "#991b1b", "#ffffff"), team("Viktor Hovland", "VH", "#1d4ed8", "#ffffff")], info: "Tee 1 · NBC" },
+    {
+      status: "LIVE",
+      isLive: true,
+      clock: "Thru 14",
+      teams: [
+        { ...team("Scottie Scheffler", "SS", "#14532d", "#ffffff"), score: -8 },
+        { ...team("Rory McIlroy", "RM", "#0a4a8a", "#d9f99d"), score: -7 },
+      ],
+      seriesNote: "Final pairing · Hole 14",
+      venue: "Pinehurst No. 2",
+    },
+    {
+      status: "2:40 PM",
+      teams: [
+        team("Xander Schauffele", "XS", "#7c2d12", "#ffedd5"),
+        team("Ludvig Aberg", "LA", "#335c1e", "#d9f99d"),
+      ],
+      venue: "Tee 1",
+      network: "NBC",
+    },
+    {
+      status: "2:28 PM",
+      teams: [
+        team("Collin Morikawa", "CM", "#991b1b", "#ffffff"),
+        team("Viktor Hovland", "VH", "#1d4ed8", "#ffffff"),
+      ],
+      venue: "Tee 1",
+      network: "NBC",
+    },
   ],
   rankingsLabel: "World Rankings",
   rankingsColumns: ["AVG PTS", "EVENTS"],
@@ -402,9 +534,24 @@ const golf: SportPageData = {
     video("1592919505780-303950717480", "How Rory rebuilt his short game", "3:10"),
   ],
   opinions: [
-    { title: "Why Scheffler's consistency is rewriting the record books", author: "Reese Mercer", monogram: "RM" },
-    { title: "LIV vs PGA: where the truce actually stands", author: "Reese Mercer", monogram: "RM" },
-    { title: "The next generation of major contenders", author: "Selena Smith", monogram: "SS" },
+    opinion(
+      "1535131749006-b7f58c99034b",
+      "Why Scheffler's consistency is rewriting the record books",
+      "Reese Mercer",
+      "Analysis",
+    ),
+    opinion(
+      "1587174486073-ae5e5cff23aa",
+      "LIV vs PGA: where the truce actually stands",
+      "Reese Mercer",
+      "Long Read",
+    ),
+    opinion(
+      "1592919505780-303950717480",
+      "The next generation of major contenders",
+      "Selena Smith",
+      "Draft Watch",
+    ),
   ],
   newsletter: {
     heading: "Get the best of golf delivered to your inbox",
@@ -472,19 +619,45 @@ const nascar: SportPageData = {
   teamHub: {
     tabs: ["Cup Series", "Xfinity", "Trucks", "Teams"],
     teams: [
-      { team: team("Kyle Larson", "5", "#111827", "#60a5fa"), meta: "1st · 612 pts" },
-      { team: team("Chase Elliott", "9", "#1d4ed8", "#ffffff"), meta: "2nd · 598 pts" },
-      { team: team("Denny Hamlin", "11", "#991b1b", "#ffffff"), meta: "3rd · 571 pts" },
-      { team: team("Ryan Blaney", "12", "#1d4ed8", "#ffffff"), meta: "4th · 560 pts" },
-      { team: team("Christopher Bell", "20", "#facc15", "#111111", "#111111"), meta: "5th · 549 pts" },
-      { team: team("William Byron", "24", "#0ea5e9", "#ffffff"), meta: "6th · 538 pts" },
+      { team: team("Kyle Larson", "5", "#111827", "#60a5fa"), meta: "1st · 612 pts", form: ["W", "W", "L", "W", "W"] },
+      { team: team("Chase Elliott", "9", "#1d4ed8", "#ffffff"), meta: "2nd · 598 pts", form: ["W", "L", "W", "W", "L"] },
+      { team: team("Denny Hamlin", "11", "#991b1b", "#ffffff"), meta: "3rd · 571 pts", form: ["L", "W", "W", "L", "W"] },
+      { team: team("Ryan Blaney", "12", "#1d4ed8", "#ffffff"), meta: "4th · 560 pts", form: ["W", "W", "L", "W", "L"] },
+      { team: team("Christopher Bell", "20", "#facc15", "#111111", "#111111"), meta: "5th · 549 pts", form: ["L", "W", "W", "W", "W"] },
+      { team: team("William Byron", "24", "#0ea5e9", "#ffffff"), meta: "6th · 538 pts", form: ["W", "L", "L", "W", "W"] },
     ],
   },
   matchupsLabel: "Upcoming Races",
   matchups: [
-    { status: "LIVE", isLive: true, teams: [{ ...team("Kyle Larson", "5", "#111827", "#60a5fa"), score: 1 }, { ...team("Chase Elliott", "9", "#1d4ed8", "#ffffff"), score: 2 }], info: "Bristol · Lap 188" },
-    { status: "SUN 3:00", teams: [team("Sonoma Raceway", "SON", "#166534", "#ffffff"), team("Road Course", "RC", "#1c1f27", "#9aa0aa")], info: "Sonoma · FOX" },
-    { status: "SUN 2:30", teams: [team("Pocono Raceway", "POC", "#2563eb", "#ffffff"), team("The Tricky Triangle", "TT", "#1c1f27", "#9aa0aa")], info: "Pocono · USA" },
+    {
+      status: "LIVE",
+      isLive: true,
+      clock: "Lap 188",
+      teams: [
+        { ...team("Kyle Larson", "5", "#111827", "#60a5fa"), score: 1 },
+        { ...team("Chase Elliott", "9", "#1d4ed8", "#ffffff"), score: 2 },
+      ],
+      seriesNote: "Bristol Night Race",
+      venue: "Bristol Motor Speedway",
+    },
+    {
+      status: "SUN 3:00",
+      teams: [
+        team("Sonoma Raceway", "SON", "#166534", "#ffffff"),
+        team("Road Course", "RC", "#1c1f27", "#9aa0aa"),
+      ],
+      venue: "Sonoma Raceway",
+      network: "FOX",
+    },
+    {
+      status: "SUN 2:30",
+      teams: [
+        team("Pocono Raceway", "POC", "#2563eb", "#ffffff"),
+        team("The Tricky Triangle", "TT", "#1c1f27", "#9aa0aa"),
+      ],
+      venue: "Pocono Raceway",
+      network: "USA",
+    },
   ],
   rankingsLabel: "Cup Standings",
   rankingsColumns: ["WINS", "PLAYOFF"],
@@ -511,9 +684,24 @@ const nascar: SportPageData = {
     video("1583121274602-3e2820c69888", "Pit-road strategy that won the race", "2:46"),
   ],
   opinions: [
-    { title: "Why Hendrick's pit crews keep winning the race off pit road", author: "Chase Holloway", monogram: "CH" },
-    { title: "Playoff picture: who's locked in and who's sweating", author: "Chase Holloway", monogram: "CH" },
-    { title: "The aero package debate that won't go away", author: "Selena Smith", monogram: "SS" },
+    opinion(
+      "1530549387789-4c1017266635",
+      "Why Hendrick's pit crews keep winning the race off pit road",
+      "Chase Holloway",
+      "Film Room",
+    ),
+    opinion(
+      "1552519507-da3b142c6e3d",
+      "Playoff picture: who's locked in and who's sweating",
+      "Chase Holloway",
+      "Analysis",
+    ),
+    opinion(
+      "1583121274602-3e2820c69888",
+      "The aero package debate that won't go away",
+      "Selena Smith",
+      "Long Read",
+    ),
   ],
   newsletter: {
     heading: "Get the best of NASCAR delivered to your inbox",
@@ -581,19 +769,47 @@ const football: SportPageData = {
   teamHub: {
     tabs: ["Premier League", "ISL", "La Liga", "Serie A"],
     teams: [
-      { team: team("Arsenal", "ARS", "#ef0107", "#ffffff"), meta: "1st · 78 pts" },
-      { team: team("Manchester City", "MCI", "#6cabdd", "#1c2c5b"), meta: "2nd · 78 pts" },
-      { team: team("Liverpool", "LIV", "#c8102e", "#ffffff"), meta: "3rd · 71 pts" },
-      { team: team("Mohun Bagan", "MBG", "#13642b", "#a01b1b"), meta: "1st · ISL" },
-      { team: team("Chelsea", "CHE", "#034694", "#ffffff"), meta: "4th · 66 pts" },
-      { team: team("Tottenham", "TOT", "#132257", "#ffffff"), meta: "5th · 61 pts" },
+      { team: team("Arsenal", "ARS", "#ef0107", "#ffffff"), meta: "1st · 78 pts", form: ["W", "D", "W", "W", "L"] },
+      { team: team("Manchester City", "MCI", "#6cabdd", "#1c2c5b"), meta: "2nd · 78 pts", form: ["W", "W", "D", "W", "W"] },
+      { team: team("Liverpool", "LIV", "#c8102e", "#ffffff"), meta: "3rd · 71 pts", form: ["W", "W", "L", "W", "W"] },
+      { team: team("Mohun Bagan", "MBG", "#13642b", "#a01b1b"), meta: "1st · ISL", form: ["W", "W", "W", "D", "W"] },
+      { team: team("Chelsea", "CHE", "#034694", "#ffffff"), meta: "4th · 66 pts", form: ["L", "W", "W", "L", "W"] },
+      { team: team("Tottenham", "TOT", "#132257", "#ffffff"), meta: "5th · 61 pts", form: ["D", "L", "W", "W", "D"] },
     ],
   },
   matchupsLabel: "Featured Fixtures",
   matchups: [
-    { status: "LIVE", isLive: true, teams: [{ ...team("Arsenal", "ARS", "#ef0107", "#ffffff"), score: 2 }, { ...team("Manchester City", "MCI", "#6cabdd", "#1c2c5b"), score: 2 }], info: "Emirates · 78'" },
-    { status: "SUN 16:30", teams: [team("Liverpool", "LIV", "#c8102e", "#ffffff"), team("Man United", "MUN", "#da291c", "#fbe122")], info: "Anfield · Sky" },
-    { status: "SUN 19:45", teams: [team("Mohun Bagan", "MBG", "#13642b", "#a01b1b"), team("Bengaluru FC", "BFC", "#1d4ed8", "#ffffff")], info: "ISL Final · Star" },
+    {
+      status: "LIVE",
+      isLive: true,
+      clock: "78'",
+      teams: [
+        { ...team("Arsenal", "ARS", "#ef0107", "#ffffff"), score: 2 },
+        { ...team("Manchester City", "MCI", "#6cabdd", "#1c2c5b"), score: 2 },
+      ],
+      venue: "Emirates Stadium",
+      network: "Sky Sports",
+    },
+    {
+      status: "SUN 16:30",
+      teams: [
+        team("Liverpool", "LIV", "#c8102e", "#ffffff"),
+        team("Man United", "MUN", "#da291c", "#fbe122"),
+      ],
+      venue: "Anfield",
+      network: "Sky Sports",
+      spread: "LIV -1.5",
+      overUnder: "O/U 2.5",
+    },
+    {
+      status: "SUN 19:45",
+      teams: [
+        team("Mohun Bagan", "MBG", "#13642b", "#a01b1b"),
+        team("Bengaluru FC", "BFC", "#1d4ed8", "#ffffff"),
+      ],
+      venue: "Salt Lake Stadium",
+      network: "Star Sports",
+    },
   ],
   rankingsLabel: "League Table",
   rankingsColumns: ["GD", "PTS"],
@@ -620,122 +836,28 @@ const football: SportPageData = {
     video("1551958219-acbc608c6377", "Mohun Bagan march into the ISL final", "1:49"),
   ],
   opinions: [
-    { title: "Why the title race is the tightest in a decade", author: "Sana Qureshi", monogram: "SQ" },
-    { title: "ISL is building genuine playing identities at last", author: "Sana Qureshi", monogram: "SQ" },
-    { title: "The transfer window that could redraw the top four", author: "Selena Smith", monogram: "SS" },
+    opinion(
+      "1574629810360-7efbbe195018",
+      "Why the title race is the tightest in a decade",
+      "Sana Qureshi",
+      "Analysis",
+    ),
+    opinion(
+      "1431324155629-1a6deb1dec8d",
+      "ISL is building genuine playing identities at last",
+      "Sana Qureshi",
+      "Long Read",
+    ),
+    opinion(
+      "1518091043644-c1d4457512c6",
+      "The transfer window that could redraw the top four",
+      "Selena Smith",
+      "Transfer Desk",
+    ),
   ],
   newsletter: {
     heading: "Get the best of football delivered to your inbox",
     subheading: "Tables, fixtures, and transfer analysis worldwide.",
-  },
-};
-
-const cricket: SportPageData = {
-  navConfig: {
-    mark: "SR",
-    wordmark: "Sports Rivalry",
-    tabs: [
-      { label: "IPL", href: "/cricket", active: true },
-      { label: "International", href: "/cricket" },
-      { label: "T20", href: "/cricket" },
-      { label: "Teams", href: "/cricket" },
-      { label: "Standings", href: "/cricket" },
-      { label: "Schedule", href: "/cricket" },
-      { label: "Stats", href: "/cricket" },
-      { label: "Rankings", href: "/cricket" },
-      { label: "Fantasy", href: "/cricket" },
-      { label: "Videos", href: "/cricket" },
-      { label: "Podcasts", href: "/cricket" },
-    ],
-  },
-  hero: {
-    pillPrimary: "Breaking News",
-    pillSecondary: "IPL 2026",
-    headline: "Suryakumar's 74 Powers Mumbai Past Bengaluru",
-    deck: "A blistering Suryakumar Yadav knock hands Mumbai control of the chase at the Wankhede as the IPL title race tightens at the top.",
-    author: "Anay Mehra",
-    date: "Apr 28, 2026",
-    readTime: 5,
-    href: "/cricket",
-    image: img("1531415074968-036ba1b575da", "Cricket stadium under lights"),
-  },
-  liveGame: {
-    status: "LIVE · 16.2 ov",
-    isLive: true,
-    clock: "RR 9.8",
-    away: { ...team("Mumbai Indians", "MI", "#004ba0", "#d1ab3e"), score: 178 },
-    home: { ...team("Royal Challengers", "RCB", "#d50032", "#000000"), score: 142 },
-    note: "MI need 37 off 23",
-  },
-  playerSpotlight: {
-    player: "Suryakumar Yadav",
-    meta: "MI · Batter",
-    monogram: "SY",
-    stats: [
-      { label: "R", value: "74" },
-      { label: "B", value: "39" },
-      { label: "4s", value: "6" },
-      { label: "6s", value: "4" },
-    ],
-    footnote: "Tonight vs RCB",
-  },
-  scoreboardLabel: "Around the League",
-  scoreboard: [
-    { status: "MI WON", away: { ...team("Mumbai Indians", "MI", "#004ba0", "#d1ab3e"), score: 201 }, home: { ...team("Chennai", "CSK", "#f9cd05", "#005db4", "#111111"), score: 187 } },
-    { status: "GT WON", away: { ...team("Gujarat Titans", "GT", "#1b2133", "#b5a36a"), score: 192 }, home: { ...team("Rajasthan", "RR", "#e3318f", "#1b48a0"), score: 178 } },
-    { status: "KKR WON", away: { ...team("Kolkata", "KKR", "#3a225d", "#b3a123"), score: 210 }, home: { ...team("Punjab", "PBKS", "#d11d24", "#a7a9ac"), score: 198 } },
-    { status: "7:30 PM IST", away: team("Delhi Capitals", "DC", "#17449b", "#ef1b23"), home: team("Sunrisers", "SRH", "#f7a721", "#e8520e", "#111111"), detail: "Star" },
-    { status: "3:30 PM IST", away: team("Lucknow", "LSG", "#0057a0", "#f2a900"), home: team("Mumbai Indians", "MI", "#004ba0", "#d1ab3e"), detail: "JioCinema" },
-  ],
-  teamHub: {
-    tabs: ["IPL", "International", "T20", "Teams"],
-    teams: [
-      { team: team("Mumbai Indians", "MI", "#004ba0", "#d1ab3e"), meta: "1st · 18 pts" },
-      { team: team("Gujarat Titans", "GT", "#1b2133", "#b5a36a"), meta: "2nd · 16 pts" },
-      { team: team("Kolkata", "KKR", "#3a225d", "#b3a123"), meta: "3rd · 16 pts" },
-      { team: team("Chennai", "CSK", "#f9cd05", "#005db4", "#111111"), meta: "4th · 14 pts" },
-      { team: team("Royal Challengers", "RCB", "#d50032", "#000000"), meta: "5th · 12 pts" },
-      { team: team("Rajasthan", "RR", "#e3318f", "#1b48a0"), meta: "6th · 12 pts" },
-    ],
-  },
-  matchupsLabel: "Featured Matches",
-  matchups: [
-    { status: "LIVE", isLive: true, teams: [{ ...team("Mumbai Indians", "MI", "#004ba0", "#d1ab3e"), score: 178 }, { ...team("Royal Challengers", "RCB", "#d50032", "#000000"), score: 142 }], info: "Wankhede · 16.2 ov" },
-    { status: "7:30 PM IST", teams: [team("Chennai", "CSK", "#f9cd05", "#005db4", "#111111"), team("Gujarat Titans", "GT", "#1b2133", "#b5a36a")], info: "Chepauk · Star" },
-    { status: "3:30 PM IST", teams: [team("Kolkata", "KKR", "#3a225d", "#b3a123"), team("Delhi Capitals", "DC", "#17449b", "#ef1b23")], info: "Eden Gardens · Star" },
-  ],
-  rankingsLabel: "Points Table",
-  rankingsColumns: ["NRR", "PTS"],
-  rankings: [
-    { rank: 1, team: team("Mumbai Indians", "MI", "#004ba0", "#d1ab3e"), record: "9 GP", trend: "flat", trendLabel: "—", statA: "+0.92", statB: "18" },
-    { rank: 2, team: team("Gujarat Titans", "GT", "#1b2133", "#b5a36a"), record: "9 GP", trend: "up", trendLabel: "+1", statA: "+0.61", statB: "16" },
-    { rank: 3, team: team("Kolkata", "KKR", "#3a225d", "#b3a123"), record: "9 GP", trend: "down", trendLabel: "-1", statA: "+0.48", statB: "16" },
-    { rank: 4, team: team("Chennai", "CSK", "#f9cd05", "#005db4", "#111111"), record: "9 GP", trend: "up", trendLabel: "+2", statA: "+0.22", statB: "14" },
-    { rank: 5, team: team("Royal Challengers", "RCB", "#d50032", "#000000"), record: "9 GP", trend: "down", trendLabel: "-1", statA: "-0.11", statB: "12" },
-  ],
-  analyticsLabel: "Cricket Analytics",
-  statLeaders: [
-    { category: "Runs", player: "V. Kohli", monogram: "VK", value: "542", team: "RCB" },
-    { category: "Wickets", player: "J. Bumrah", monogram: "JB", value: "21", team: "MI" },
-    { category: "Sixes", player: "S. Yadav", monogram: "SY", value: "32", team: "MI" },
-    { category: "Strike Rate", player: "H. Pandya", monogram: "HP", value: "168.4", team: "MI" },
-    { category: "Economy", player: "R. Ashwin", monogram: "RA", value: "6.9", team: "CSK" },
-    { category: "Avg", player: "S. Gill", monogram: "SG", value: "58.2", team: "GT" },
-    { category: "Catches", player: "R. Pant", monogram: "RP", value: "14", team: "DC" },
-  ],
-  videoHighlights: [
-    video("1531415074968-036ba1b575da", "Suryakumar's 74 powers MI past RCB", "2:18", true),
-    video("1607734834519-d8576ae60ea6", "Top sixes from the IPL week", "1:55"),
-    video("1593766827228-8737b4534aa6", "Bumrah's death-over masterclass", "2:33"),
-  ],
-  opinions: [
-    { title: "Why MI's middle-overs control is winning them games", author: "Anay Mehra", monogram: "AM" },
-    { title: "IPL 2026 title race: bench depth is the difference", author: "Anay Mehra", monogram: "AM" },
-    { title: "The case for resting India's pace battery", author: "Selena Smith", monogram: "SS" },
-  ],
-  newsletter: {
-    heading: "Get the best of cricket delivered to your inbox",
-    subheading: "Points tables, stats, and IPL title-race analysis.",
   },
 };
 
@@ -745,7 +867,6 @@ export const SPORT_PAGE_DATA: Record<string, SportPageData> = {
   golf,
   nascar,
   football,
-  cricket,
 };
 
 export function getSportPageDataBySlug(slug: string): SportPageData | null {

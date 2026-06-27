@@ -24,10 +24,11 @@ export function FeaturedStories({
   viewAllHref: string;
 }) {
   return (
-    <section className="sp-section" aria-label="Featured stories">
-      <SectionHead title="Featured Stories" href={viewAllHref} />
+    <section className="sp-section" aria-label="Featured stories and headlines">
       <div className="sp-feature-wrap">
-        <div>
+        <SectionHead title="Featured Stories" href={viewAllHref} />
+
+        <div className="sp-feature-grid">
           <Link href={articleHref(lead)} className="sp-featured__lead">
             <div className="sp-featured__lead-media">
               <Image
@@ -37,35 +38,34 @@ export function FeaturedStories({
                 sizes="(max-width: 900px) 100vw, 40vw"
                 style={{ objectFit: "cover" }}
               />
-            </div>
-            <div className="sp-featured__lead-body">
-              <span className="sp-tag">{articleTag(lead)}</span>
-              <h3>{lead.title}</h3>
-              <p>{lead.excerpt}</p>
-              <span className="sp-byline">
-                By <strong>{lead.authors[0]?.name || "Staff"}</strong> ·{" "}
-                {formatRelativeTime(lead.publishedAt)}
-              </span>
+              <div className="sp-featured__lead-overlay">
+                <span className="sp-tag sp-tag--dark sp-tag--overlay">{articleTag(lead)}</span>
+                <h3>{lead.title}</h3>
+                <p>{lead.excerpt}</p>
+                <span className="sp-byline sp-byline--light">
+                  {formatRelativeTime(lead.publishedAt)}
+                </span>
+              </div>
             </div>
           </Link>
 
-          <div className="sp-featured__grid">
+          <div className="sp-feature-stack">
             {grid.map((article) => (
-              <Link key={article.id} href={articleHref(article)} className="sp-storycard">
-                <div className="sp-storycard__media">
+              <Link key={article.id} href={articleHref(article)} className="sp-feature-row">
+                <div className="sp-feature-row__media">
                   <Image
                     src={article.featuredImage.src}
                     alt={article.featuredImage.alt}
                     fill
-                    sizes="(max-width: 900px) 50vw, 22vw"
+                    sizes="120px"
                     style={{ objectFit: "cover" }}
                   />
-                  <span className="sp-tag">{articleTag(article)}</span>
                 </div>
-                <div className="sp-storycard__body">
+                <div className="sp-feature-row__body">
+                  <span className="sp-tag sp-tag--muted">{articleTag(article)}</span>
                   <h4>{article.title}</h4>
-                  <span className="sp-byline">
-                    By <strong>{article.authors[0]?.name || "Staff"}</strong>
+                  <span className="sp-byline sp-byline--row">
+                    By {article.authors[0]?.name || "Staff"} · {formatRelativeTime(article.publishedAt)}
                   </span>
                 </div>
               </Link>

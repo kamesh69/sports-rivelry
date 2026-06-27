@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 import type { ScoreTeam, TeamIdentity } from "@/lib/types";
 
-type BadgeSize = "xs" | "sm" | "md" | "lg";
+type BadgeSize = "xs" | "sm" | "md" | "lg" | "xl";
 
 export function TeamBadge({
   team,

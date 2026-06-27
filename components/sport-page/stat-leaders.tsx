@@ -2,8 +2,6 @@ import Image from "next/image";
 import type { StatLeader } from "@/lib/types";
 import { SectionHead } from "@/components/sport-page/atoms";
 
-// Deterministic athlete portrait fallback so every leader shows a photo even
-// when no explicit image is supplied in the data.
 const PORTRAITS = [
   "1577212017184-80cc0da11082",
   "1546519638-68e109498ffc",
@@ -19,7 +17,7 @@ const PORTRAITS = [
 
 function portrait(index: number) {
   const id = PORTRAITS[index % PORTRAITS.length];
-  return `https://images.unsplash.com/photo-${id}?w=160&h=160&q=70&auto=format&fit=crop&crop=faces`;
+  return `https://images.unsplash.com/photo-${id}?w=420&h=520&q=75&auto=format&fit=crop&crop=faces`;
 }
 
 export function StatLeaders({
@@ -41,18 +39,21 @@ export function StatLeaders({
       <div className="sp-leaders">
         {leaders.map((leader, index) => (
           <div key={leader.category} className="sp-leader">
-            <span className="sp-leader__label">{leader.category}</span>
-            <span className="sp-leader__photo">
+            <div className="sp-leader__main">
+              <span className="sp-leader__label">{leader.category}</span>
+              <span className="sp-leader__name">{leader.player}</span>
+              <span className="sp-leader__value">{leader.value}</span>
+              <span className="sp-leader__team">{leader.team}</span>
+            </div>
+            <div className="sp-leader__photo" aria-hidden="true">
               <Image
                 src={leader.image?.src || portrait(index)}
-                alt={leader.player}
-                width={66}
-                height={66}
+                alt=""
+                fill
+                sizes="140px"
+                style={{ objectFit: "cover", objectPosition: "center 12%" }}
               />
-            </span>
-            <span className="sp-leader__value">{leader.value}</span>
-            <span className="sp-leader__name">{leader.player}</span>
-            <span className="sp-leader__team">{leader.team}</span>
+            </div>
           </div>
         ))}
       </div>

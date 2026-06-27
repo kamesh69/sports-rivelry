@@ -118,7 +118,7 @@ function normalizeWordPressArticle(node: any): Article | null {
     deck: node.articleFields?.deck || node.excerpt || "",
     bodyHtml: node.content || "",
     featuredImage: {
-      src: node.featuredImage?.node?.sourceUrl || "/images/articles/cricket-pulse.svg",
+      src: node.featuredImage?.node?.sourceUrl || "/images/articles/mlb-clubhouse.svg",
       alt: node.featuredImage?.node?.altText || node.title,
       width: node.featuredImage?.node?.mediaDetails?.width || MEDIA_STANDARDS.articleFeatured.width,
       height: node.featuredImage?.node?.mediaDetails?.height || MEDIA_STANDARDS.articleFeatured.height,

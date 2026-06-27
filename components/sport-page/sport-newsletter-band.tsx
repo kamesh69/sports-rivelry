@@ -46,7 +46,7 @@ export function SportNewsletterBand({
             </button>
           </form>
           {state.status !== "idle" ? (
-            <p role="status" style={{ marginTop: "0.6rem", color: "var(--sp-muted)" }}>
+            <p role="status" className="sp-newsband__status">
               {state.message}
             </p>
           ) : null}

@@ -13,7 +13,6 @@ export const SPORTS_NAV: NavItem[] = [
   { slug: "golf", label: "Golf", href: "/golf" },
   { slug: "nascar", label: "NASCAR", href: "/nascar" },
   { slug: "football", label: "Football", href: "/football" },
-  { slug: "cricket", label: "Cricket", href: "/cricket" },
 ];
 
 export const HOMEPAGE_SPORTS = ["mlb", "golf", "basketball", "nascar", "football"] as const;

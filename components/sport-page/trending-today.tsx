@@ -37,7 +37,7 @@ export function TrendingToday({
             <div className="sp-trendcard__body">
               <h4>{article.title}</h4>
               <span className="sp-byline">
-                By <strong>{article.authors[0]?.name || "Staff"}</strong>
+                <strong>{article.authors[0]?.name || "Staff"}</strong>
               </span>
             </div>
           </Link>

@@ -52,7 +52,7 @@ The mu-plugin starter lives at [wordpress/wp-content/mu-plugins/sr-headless-core
 
 - The frontend uses a repository layer in `lib/cms.ts`.
 - When WordPress is not configured or unavailable, the site falls back to `lib/mock-data.ts`.
-- The route pair `app/[primary]/page.tsx` and `app/[primary]/[secondary]/page.tsx` resolves clean URLs like `/cricket`, `/cricket/ipl`, and `/cricket/story-slug`.
+- The route pair `app/[primary]/page.tsx` and `app/[primary]/[secondary]/page.tsx` resolves clean URLs like `/mlb`, `/basketball/nba`, and `/football/story-slug`.
 
 Additional implementation notes live in:
 

@@ -7,6 +7,57 @@ const TREND_SYMBOL: Record<TeamStanding["trend"], string> = {
   flat: "—",
 };
 
+function MatchupCard({ matchup }: { matchup: Matchup }) {
+  const [away, home] = matchup.teams;
+  const timeLabel = matchup.isLive ? matchup.clock || matchup.status : matchup.status;
+
+  return (
+    <div className="sp-matchup-card">
+      <div className="sp-matchup-card__head">
+        {matchup.isLive ? (
+          <span className="sp-matchup-card__live">
+            <span className="sp-live-dot" aria-hidden="true" />
+            LIVE
+          </span>
+        ) : (
+          <span />
+        )}
+        <span className="sp-matchup-card__time">{timeLabel}</span>
+      </div>
+
+      <div className="sp-matchup-card__teams">
+        <div className="sp-matchup-card__team">
+          <TeamBadge team={away} size="md" />
+          <span className="sp-matchup-card__score">
+            {away.score !== undefined ? away.score : away.shortName}
+          </span>
+        </div>
+        {matchup.isLive ? <span className="sp-matchup-card__vs">vs</span> : null}
+        <div className="sp-matchup-card__team">
+          <TeamBadge team={home} size="md" />
+          <span className="sp-matchup-card__score">
+            {home.score !== undefined ? home.score : home.shortName}
+          </span>
+        </div>
+      </div>
+
+      <div className="sp-matchup-card__details">
+        {matchup.seriesNote ? <p>{matchup.seriesNote}</p> : null}
+        {matchup.venue ? <p>{matchup.venue}</p> : null}
+        {matchup.network ? <p>{matchup.network}</p> : null}
+        {!matchup.venue && !matchup.network && matchup.info ? <p>{matchup.info}</p> : null}
+      </div>
+
+      {matchup.spread || matchup.overUnder ? (
+        <div className="sp-matchup-card__odds">
+          {matchup.spread ? <span>{matchup.spread}</span> : null}
+          {matchup.overUnder ? <span>{matchup.overUnder}</span> : null}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 export function MatchupsAndRankings({
   matchupsLabel,
   matchups,
@@ -27,37 +78,20 @@ export function MatchupsAndRankings({
   return (
     <section className="sp-section" aria-label="Matchups and rankings">
       <div className="sp-twocol">
-        <div>
+        <div className="sp-twocol__col">
           <SectionHead title={matchupsLabel} href={scheduleHref} actionLabel="Full Schedule" />
-          <div className="sp-panel">
-            {matchups.map((matchup, index) => (
-              <div key={index} className="sp-matchup">
-                <div
-                  className={`sp-matchup__status${
-                    matchup.isLive ? " sp-matchup__status--live" : ""
-                  }`}
-                >
-                  {matchup.isLive ? <span className="sp-live-dot" /> : null}
-                  {matchup.status}
-                </div>
-                <div className="sp-matchup__teams">
-                  {matchup.teams.map((team) => (
-                    <div key={team.shortName} className="sp-matchup__team">
-                      <TeamBadge team={team} size="sm" />
-                      <span>{team.name}</span>
-                      <span>{team.score ?? ""}</span>
-                    </div>
-                  ))}
-                </div>
-                {matchup.info ? <div className="sp-matchup__info">{matchup.info}</div> : null}
-              </div>
-            ))}
+          <div className="sp-matchups-panel">
+            <div className="sp-matchups-row">
+              {matchups.map((matchup, index) => (
+                <MatchupCard key={index} matchup={matchup} />
+              ))}
+            </div>
           </div>
         </div>
 
-        <div>
+        <div className="sp-twocol__col">
           <SectionHead title={rankingsLabel} href={rankingsHref} actionLabel="See Full Rankings" />
-          <div className="sp-panel">
+          <div className="sp-panel sp-panel--rankings">
             <table className="sp-rank-table">
               <thead>
                 <tr>

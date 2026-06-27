@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import type { Article, SportHub, SportPageData } from "@/lib/types";
 import { dedupeByKey } from "@/lib/utils";
 import { SportHero } from "@/components/sport-page/sport-hero";
@@ -21,15 +20,14 @@ export function SportLeaguePage({ hub, data, articles, trending }: SportLeaguePa
   const pool = dedupeByKey(articles, (article) => article.id);
   const featuredLead = pool[0];
   const featuredGrid = pool.slice(1, 4);
-  const headlines = pool.slice(0, 7);
-  const trendingPool = (trending.length ? trending : pool).slice(0, 5);
+  const headlines = pool.slice(0, 10);
+  const trendingPool = dedupeByKey([...pool, ...trending], (article) => article.id).slice(0, 5);
   const latestNews = pool.slice(0, 5);
 
   const sportHref = `/${hub.slug}`;
-  const accent: CSSProperties = { "--sport-accent": hub.accent } as CSSProperties;
 
   return (
-    <div className="sport-theme" style={accent}>
+    <div className="sport-theme">
       <SportHero
         image={data.hero.image}
         pillPrimary={data.hero.pillPrimary}

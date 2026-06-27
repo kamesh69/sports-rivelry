@@ -141,7 +141,7 @@ export default async function PrimaryPage({ params }: PrimaryPageProps) {
         <SectionHeading
           eyebrow="Evergreen hub"
           title="High-intent search coverage"
-          description="This template is built for IPL, World Cup, Olympics, and tournament landing pages that mix manual hero slots with rolling news."
+          description="This template is built for World Cup, Olympics, and tournament landing pages that mix manual hero slots with rolling news."
         />
         <div className="story-grid story-grid--three">
           {heroStories.map((article, index) => (

@@ -302,8 +302,14 @@ export interface StatLeader {
 export interface Matchup {
   status: string;
   isLive?: boolean;
+  clock?: string;
   teams: ScoreTeam[];
   info?: string;
+  venue?: string;
+  network?: string;
+  seriesNote?: string;
+  spread?: string;
+  overUnder?: string;
 }
 
 export interface VideoHighlight {
@@ -317,7 +323,8 @@ export interface VideoHighlight {
 export interface OpinionItem {
   title: string;
   author: string;
-  monogram: string;
+  category: string;
+  image: MediaAsset;
   href?: string;
 }
 
@@ -340,7 +347,7 @@ export interface SportPageData {
   scoreboardLabel: string;
   teamHub?: {
     tabs: string[];
-    teams: Array<{ team: TeamIdentity; meta: string }>;
+    teams: Array<{ team: TeamIdentity; meta: string; form?: ("W" | "L" | "D")[] }>;
   };
   matchupsLabel: string;
   matchups: Matchup[];

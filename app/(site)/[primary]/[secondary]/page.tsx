@@ -26,6 +26,7 @@ import { ArticleTopics } from "@/components/article-topics";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { JsonLd } from "@/components/json-ld";
 import { SectionHeading } from "@/components/section-heading";
+import { MlbStatsPage } from "@/components/mlb-stats-page";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -40,6 +41,7 @@ interface SportDetailPageProps {
 
 export async function generateStaticParams() {
   return [
+    { primary: "mlb", secondary: "stats" },
     ...articles.map((article) => ({
       primary: article.sport.slug,
       secondary: article.slug,
@@ -55,6 +57,15 @@ export async function generateMetadata({
   params,
 }: SportDetailPageProps): Promise<Metadata> {
   const { primary, secondary } = await params;
+
+  if (primary === "mlb" && secondary === "stats") {
+    return buildMetadata({
+      title: "MLB Player Stats 2026 — Batting, Pitching & Fielding | Sports Rivalry",
+      description: "Full MLB player statistics for the 2026 season including batting averages, ERA, pitching records, and fielding metrics for every player.",
+      canonicalPath: "/mlb/stats",
+    });
+  }
+
   const resolved = await resolveSportDetail(primary, secondary);
 
   if (!resolved) {
@@ -86,6 +97,22 @@ export async function generateMetadata({
 
 export default async function SportDetailPage({ params }: SportDetailPageProps) {
   const { primary, secondary } = await params;
+
+  /* ── MLB stats page ─────────────────────────────── */
+  if (primary === "mlb" && secondary === "stats") {
+    const breadcrumbs: BreadcrumbItem[] = [
+      { name: "Home", href: "/" },
+      { name: "MLB", href: "/mlb" },
+      { name: "Stats", href: "/mlb/stats" },
+    ];
+    return (
+      <>
+        <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+        <MlbStatsPage />
+      </>
+    );
+  }
+
   const resolved = await resolveSportDetail(primary, secondary);
 
   if (!resolved) {

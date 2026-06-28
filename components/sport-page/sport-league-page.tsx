@@ -25,6 +25,7 @@ export function SportLeaguePage({ hub, data, articles, trending }: SportLeaguePa
   const latestNews = pool.slice(0, 5);
 
   const sportHref = `/${hub.slug}`;
+  const statsHref = hub.slug === "mlb" ? `/${hub.slug}/stats` : sportHref;
 
   return (
     <div className="sport-theme">
@@ -71,7 +72,7 @@ export function SportLeaguePage({ hub, data, articles, trending }: SportLeaguePa
         <StatLeaders
           label={data.analyticsLabel}
           leaders={data.statLeaders}
-          viewAllHref={sportHref}
+          viewAllHref={statsHref}
         />
 
         <MediaRow

@@ -695,6 +695,56 @@ const PLAYERS: PlayerProfile[] = [
       { date: "Aug 29, 2020", description: "Detroit Tigers selected the contract of LHP Tarik Skubal from Triple-A Toledo." },
     ],
   },
+
+  /* ─────────────────────────────────────────────────────
+     MLB — Jacob Misiorowski
+  ───────────────────────────────────────────────────── */
+  {
+    slug: "jacob-misiorowski",
+    sport: "mlb",
+    name: "Jacob Misiorowski",
+    number: "32",
+    position: "P",
+    team: "Milwaukee Brewers",
+    teamShort: "MIL",
+    teamColor: "#0a2351",
+    height: "6'6\"",
+    weight: "220 lbs",
+    age: 23,
+    fullName: "Jacob Misiorowski",
+    bats: "R",
+    throws: "R",
+    born: "Jan 2, 2003 (Age 23)",
+    hometown: "Prosper, TX",
+    draft: "2022, Milwaukee Brewers, Round 1, Overall Pick 24",
+    college: "East Carolina",
+    debut: "Aug 15, 2025",
+    status: "Active",
+    nextGame: "vs CHC — Tue, 7:40 PM CT",
+    photo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1200&q=80&auto=format&fit=crop",
+    heroPhoto: "https://images.unsplash.com/photo-1566577739112-5180d4bf9890?w=1800&q=80&auto=format&fit=crop",
+    headshot: "https://images.unsplash.com/photo-1526232761682-d26e85d9fa9e?w=240&h=240&q=80&auto=format&fit=crop&crop=faces",
+    summaryLabels: ["W", "L", "ERA", "G", "GS", "SV", "IP", "K", "WHIP"],
+    summaryCurrentSeason: ["9", "3", "1.45", "16", "16", "0", "99.0", "146", "0.77"],
+    summaryCareer: ["9", "3", "1.45", "16", "16", "0", "99.0", "146", "0.77"],
+    mlbCareerStats: [
+      { season: "2025", team: "MIL", league: "NL", w: 9, l: 3, era: "1.45", g: 16, gs: 16, cg: 0, sho: 0, hld: 0, sv: 0, ip: "99.0", h: 49, r: 16, er: 16, bb: 27, ibb: 0, so: 146, avg: ".138", whip: "0.77" },
+    ],
+    mlbAdvancedPitching: [
+      { season: "2025", qs: 11, gf: 0, doubles: 8, triples: 0, gdp: 4, wp: 2, bk: 0, sb: 3, cs: 2, po: 0, pk: 0, str_pct: "68.2%", p_ip: "15.1", p_pa: "3.52" },
+    ],
+    mlbAdvancedPitching2: [
+      { season: "2025", w_pct: ".750", ra9: "1.45", tbf: 378, babip: ".198", obp: ".218", slg: ".248", ops: ".466", k9: "13.3", bb9: "2.5", hr9: "0.5", h9: "4.5", k_bb: "5.41", ir: 0, irs: 0, br: 4, brs: 1 },
+    ],
+    awards: [
+      { name: "NL Rookie of the Month", years: "Aug 2025", team: "Milwaukee Brewers", icon: "star" },
+      { name: "NL Pitcher of the Month", years: "Sep 2025", team: "Milwaukee Brewers", icon: "trophy" },
+    ],
+    transactions: [
+      { date: "Jul 17, 2022", description: "Milwaukee Brewers selected RHP Jacob Misiorowski in the 1st round (24th overall) of the 2022 MLB Draft.", teamLogo: "MIL" },
+      { date: "Aug 15, 2025", description: "Milwaukee Brewers selected the contract of RHP Jacob Misiorowski from Triple-A Nashville.", teamLogo: "MIL" },
+    ],
+  },
 ];
 
 export function getPlayerBySlug(slug: string): PlayerProfile | undefined {

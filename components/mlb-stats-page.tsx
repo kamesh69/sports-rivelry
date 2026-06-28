@@ -90,7 +90,7 @@ const PITCHING: PitchingRow[] = [
   { rk: 8,  name: "Justin Wrobleski",   team: "LAD", pos: "SP", gp: 14, gs: 13, qs: 8,  era: "2.71", w: 9,  l: 2, sv: 0,  hld: 0,  ip: "86.1",  h: 69,  er: 26, hr: 7,  bb: 18, k: 63,  k9: "6.5",  war: "1.9", whip: "1.01" },
   { rk: 9,  name: "Chase Burns",        team: "CIN", pos: "SP", gp: 16, gs: 16, qs: 8,  era: "2.36", w: 9,  l: 3, sv: 0,  hld: 0,  ip: "91.2",  h: 70,  er: 24, hr: 11, bb: 29, k: 112, k9: "11.0", war: "4.2", whip: "1.08" },
   { rk: 10, name: "Jacob Misiorowski",  team: "MIL", pos: "SP", gp: 16, gs: 16, qs: 11, era: "1.45", w: 9,  l: 3, sv: 0,  hld: 0,  ip: "99.0",  h: 49,  er: 16, hr: 5,  bb: 27, k: 146, k9: "13.3", war: "4.6", whip: "0.77" },
-  { rk: 11, name: "Chris Sale",         team: "ATL", pos: "SP", gp: 14, gs: 14, qs: 9,  era: "2.14", w: 8,  l: 5, sv: 0,  hld: 0,  ip: "84.0",  h: 67,  er: 20, hr: 6,  bb: 21, k: 99,  k9: "10.6", war: "2.7", whip: "1.05" },
+  { rk: 11, name: "Gerrit Cole",        team: "NYY", pos: "SP", gp: 5,  gs: 5,  qs: 4,  era: "3.12", w: 2,  l: 1, sv: 0,  hld: 0,  ip: "31.2",  h: 24,  er: 11, hr: 3,  bb: 14, k: 38,  k9: "10.8", war: "1.2", whip: "1.20" },
   { rk: 12, name: "Nathan Eovaldi",     team: "TEX", pos: "SP", gp: 16, gs: 16, qs: 9,  era: "3.95", w: 8,  l: 7, sv: 0,  hld: 0,  ip: "100.1", h: 93,  er: 44, hr: 17, bb: 23, k: 101, k9: "9.1",  war: "1.1", whip: "1.16" },
   { rk: 13, name: "Zack Wheeler",       team: "PHI", pos: "SP", gp: 12, gs: 12, qs: 9,  era: "2.03", w: 8,  l: 1, sv: 0,  hld: 0,  ip: "75.1",  h: 46,  er: 17, hr: 8,  bb: 19, k: 74,  k9: "8.8",  war: "3.9", whip: "0.86" },
   { rk: 14, name: "Antonio Senzatela",  team: "COL", pos: "RP", gp: 24, gs: 0,  qs: 0,  era: "2.28", w: 8,  l: 0, sv: 3,  hld: 2,  ip: "43.1",  h: 33,  er: 11, hr: 3,  bb: 13, k: 36,  k9: "7.5",  war: "1.9", whip: "1.06" },
@@ -224,7 +224,7 @@ const FIELDING_GLOSSARY = [
 /* ─────────────────────────────────────────────
    Constants
 ───────────────────────────────────────────── */
-const INITIAL_ROWS = 10;
+const INITIAL_ROWS = 11;
 const SEASONS = ["2026 Regular Season", "2025 Regular Season", "2024 Regular Season"];
 const TEAMS = ["All MLB", "AL East", "AL Central", "AL West", "NL East", "NL Central", "NL West"];
 

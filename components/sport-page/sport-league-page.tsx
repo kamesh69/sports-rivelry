@@ -73,6 +73,7 @@ export function SportLeaguePage({ hub, data, articles, trending }: SportLeaguePa
           label={data.analyticsLabel}
           leaders={data.statLeaders}
           viewAllHref={statsHref}
+          sportSlug={hub.slug}
         />
 
         <MediaRow

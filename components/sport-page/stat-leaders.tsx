@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { StatLeader } from "@/lib/types";
 import { SectionHead } from "@/components/sport-page/atoms";
 
@@ -24,10 +25,12 @@ export function StatLeaders({
   label,
   leaders,
   viewAllHref,
+  sportSlug = "basketball",
 }: {
   label: string;
   leaders: StatLeader[];
   viewAllHref: string;
+  sportSlug?: string;
 }) {
   if (!leaders.length) {
     return null;
@@ -37,25 +40,46 @@ export function StatLeaders({
     <section className="sp-section" aria-label={label}>
       <SectionHead title={label} href={viewAllHref} actionLabel="All Stats" />
       <div className="sp-leaders">
-        {leaders.map((leader, index) => (
-          <div key={leader.category} className="sp-leader">
-            <div className="sp-leader__main">
-              <span className="sp-leader__label">{leader.category}</span>
-              <span className="sp-leader__name">{leader.player}</span>
-              <span className="sp-leader__value">{leader.value}</span>
-              <span className="sp-leader__team">{leader.team}</span>
+        {leaders.map((leader, index) => {
+          const playerHref = leader.slug
+            ? `/${sportSlug}/player/${leader.slug}`
+            : undefined;
+
+          const inner = (
+            <>
+              <div className="sp-leader__main">
+                <span className="sp-leader__label">{leader.category}</span>
+                <span className="sp-leader__name">{leader.player}</span>
+                <span className="sp-leader__value">{leader.value}</span>
+                <span className="sp-leader__team">{leader.team}</span>
+              </div>
+              <div className="sp-leader__photo" aria-hidden="true">
+                <Image
+                  src={leader.image?.src || portrait(index)}
+                  alt=""
+                  fill
+                  sizes="140px"
+                  style={{ objectFit: "cover", objectPosition: "center 12%" }}
+                />
+              </div>
+            </>
+          );
+
+          return playerHref ? (
+            <Link
+              key={`${leader.category}-${leader.slug ?? index}`}
+              href={playerHref}
+              className="sp-leader sp-leader--clickable"
+              aria-label={`View ${leader.player} player profile`}
+            >
+              {inner}
+            </Link>
+          ) : (
+            <div key={leader.category} className="sp-leader">
+              {inner}
             </div>
-            <div className="sp-leader__photo" aria-hidden="true">
-              <Image
-                src={leader.image?.src || portrait(index)}
-                alt=""
-                fill
-                sizes="140px"
-                style={{ objectFit: "cover", objectPosition: "center 12%" }}
-              />
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

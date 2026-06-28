@@ -32,7 +32,9 @@ html {
 
 body {
   margin: 0;
-  overflow-x: hidden;
+  /* clip = clips horizontal overflow WITHOUT creating a scroll container.
+     hidden would make body the scroll container → breaks position:sticky. */
+  overflow-x: clip;
   background: var(--background);
   color: var(--text);
   font-family: var(--font-body);
@@ -7353,4 +7355,1236 @@ img {
     padding: 0.65rem 1rem;
     font-size: 0.85rem;
   }
+}
+
+/* ═══════════════════════════════════════════════════
+   PLAYER STATS PAGE  (.psp-*)
+═══════════════════════════════════════════════════ */
+
+/* Player page: viewport must scroll (not body) so sticky works */
+html.psp-scroll-root,
+body.psp-scroll-root {
+  overflow: visible !important;
+}
+
+/* Fill gutters with Sports Rivalry brand color */
+html:has(.psp-page),
+body:has(.psp-page) {
+  background: var(--accent);
+}
+
+.psp-page {
+  width: 100%;
+  max-width: 1340px;
+  margin: 0 auto;
+  background: #f5f6f9;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  color: var(--text);
+  border-left:  3px solid var(--accent);
+  border-right: 3px solid var(--accent);
+  overflow: visible;
+}
+
+main:has(.psp-page) {
+  overflow: visible;
+}
+
+/* ── Hero banner ────────────────────────────────── */
+.psp-hero {
+  position: relative;
+  width: 100%;
+  min-height: clamp(340px, 44vw, 480px);
+  background: #0c0d11;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.psp-hero__photo-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.psp-hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(8, 9, 12, 0.92) 0%, rgba(8, 9, 12, 0.62) 42%, rgba(8, 9, 12, 0.28) 68%, rgba(8, 9, 12, 0.88) 100%),
+    linear-gradient(0deg, rgba(8, 9, 12, 0.82) 0%, rgba(8, 9, 12, 0.18) 48%, rgba(8, 9, 12, 0.55) 100%);
+}
+
+.psp-hero__inner {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.25rem 2rem 2rem;
+  min-height: clamp(340px, 44vw, 480px);
+}
+
+.psp-hero__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.psp-hero__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.psp-hero__breadcrumb a {
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  transition: color 120ms;
+}
+
+.psp-hero__breadcrumb a:hover {
+  color: #ffffff;
+}
+
+.psp-hero__breadcrumb span:last-child {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.psp-hero__filters {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.psp-hero__filter-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
+}
+
+.psp-hero__filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.psp-hero__select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.psp-hero__select-wrap svg {
+  position: absolute;
+  right: 0.55rem;
+  pointer-events: none;
+  color: #374151;
+}
+
+.psp-hero__select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: #ffffff;
+  border: none;
+  border-radius: 0;
+  padding: 0.42rem 1.75rem 0.42rem 0.75rem;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #111111;
+  cursor: pointer;
+  outline: none;
+  min-width: 7.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.psp-hero__select:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35);
+}
+
+.psp-hero__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-left: 0.35rem;
+}
+
+.psp-hero__brand-text {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+}
+
+.psp-hero__brand-mark {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.psp-hero__player {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.25rem;
+  padding-top: 1.5rem;
+}
+
+.psp-hero__headshot {
+  flex-shrink: 0;
+  width: 112px;
+  height: 112px;
+  border: 3px solid #ffffff;
+  border-radius: 0;
+  overflow: hidden;
+  background: #1a1d24;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+}
+
+.psp-hero__headshot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.psp-hero__identity {
+  flex: 1;
+  min-width: 0;
+  padding-bottom: 0.15rem;
+}
+
+.psp-hero__name {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-headline), "Arial Narrow", Arial, sans-serif;
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  line-height: 1.05;
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+}
+
+.psp-hero__number {
+  font-size: 0.72em;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.psp-hero__meta {
+  margin: 0 0 1rem;
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+.psp-hero__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.psp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.55rem 1.35rem;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 150ms ease;
+  white-space: nowrap;
+}
+
+.psp-btn--follow {
+  background: #ffffff;
+  color: #111111;
+  border-color: #ffffff;
+}
+
+.psp-btn--follow:hover {
+  background: #f3f4f6;
+  border-color: #f3f4f6;
+}
+
+.psp-btn--watch {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+}
+
+.psp-btn--watch:hover {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+}
+
+/* Legacy button aliases (unused but kept for safety) */
+.psp-btn--primary {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+}
+
+.psp-btn--ghost {
+  background: #ffffff;
+  color: #111111;
+  border-color: #ffffff;
+}
+
+/* ── Page tabs ───────────────────────────────────── */
+
+.psp-page-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0;
+  margin-bottom: 1.25rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.psp-page-tab {
+  position: relative;
+  background: none;
+  border: none;
+  padding: 0.65rem 1.1rem;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 120ms ease;
+  outline: none;
+}
+
+.psp-page-tab::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0.75rem;
+  right: 0.75rem;
+  height: 3px;
+  background: transparent;
+  transition: background 120ms;
+}
+
+.psp-page-tab:hover {
+  color: #111111;
+}
+
+.psp-page-tab--active {
+  color: #111111;
+  font-weight: 700;
+}
+
+.psp-page-tab--active::after {
+  background: var(--accent);
+}
+
+/* ── Main body layout ───────────────────────────── */
+.psp-body {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.75rem 2rem 5rem;
+}
+
+/* ── Merged profile + summary card ──────────────── */
+.psp-profile-card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  margin-top: 0.5rem;
+}
+
+.psp-profile-card__layout {
+  display: flex;
+  align-items: stretch;
+}
+
+.psp-profile-bio {
+  flex: 0 0 280px;
+  padding: 1.15rem 1.15rem 1rem;
+  border-right: 1px solid #eeeeee;
+  background: #ffffff;
+}
+
+.psp-profile-card__stats {
+  flex: 1;
+  min-width: 0;
+  padding: 1rem 1.25rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.psp-profile-card__toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.85rem;
+}
+
+.psp-bio-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.psp-bio-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.42rem 0;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.psp-bio-row:last-child {
+  border-bottom: none;
+}
+
+.psp-bio-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  line-height: 1.2;
+}
+
+.psp-bio-value {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #111111;
+  line-height: 1.35;
+}
+
+.psp-bio-value--sub {
+  font-weight: 500;
+  color: #374151;
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+
+.psp-bio-social {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding-top: 0.2rem;
+}
+
+.psp-bio-social__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 0;
+  background: transparent;
+  color: #111111;
+  text-decoration: none;
+  transition: color 120ms;
+}
+
+.psp-bio-social__link:hover {
+  color: var(--accent);
+}
+
+.psp-bio-more-btn {
+  width: 100%;
+  margin-top: 0.65rem;
+  padding: 0.5rem;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 0;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 120ms, background 120ms;
+}
+
+.psp-bio-more-btn:hover {
+  border-color: #9ca3af;
+  background: #f9fafb;
+}
+
+/* ── Quick summary / status (inside merged card) ── */
+.psp-status-line {
+  margin-top: auto;
+  padding-top: 0.85rem;
+  border-top: 1px solid #f0f0f0;
+  font-size: 0.84rem;
+  color: #374151;
+}
+
+.psp-status-line strong {
+  color: #111111;
+  font-weight: 700;
+}
+
+.psp-status-line__sep {
+  margin: 0 0.5rem;
+  color: #d1d5db;
+}
+
+/* ── Stats section divider ──────────────────────── */
+.psp-stats-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 2.25rem;
+  margin-bottom: 1.5rem;
+  color: #111111;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.psp-stats-divider::before,
+.psp-stats-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e0e0e0;
+}
+
+.psp-stats-divider span {
+  flex-shrink: 0;
+  padding: 0 0.25rem;
+}
+
+.psp-stats-rule {
+  width: 100%;
+  height: 0;
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 0 0 0.85rem;
+}
+
+/* ── Full-width stats section ────────────────────── */
+.psp-stats-full {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  min-width: 0;
+}
+
+.psp-pill-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.65rem;
+}
+
+.psp-pill-tab {
+  background: #ffffff;
+  border: 1.5px solid #d1d5db;
+  border-radius: 0;
+  padding: 0.38rem 0.95rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: border-color 120ms, color 120ms;
+  outline: none;
+}
+
+.psp-pill-tab:hover {
+  border-color: #9ca3af;
+}
+
+.psp-pill-tab--active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.psp-filter-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.psp-filter-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.psp-filter-pill {
+  background: #ffffff;
+  border: 1.5px solid #d1d5db;
+  border-radius: 0;
+  padding: 0.32rem 0.75rem;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: border-color 120ms, color 120ms;
+  outline: none;
+}
+
+.psp-filter-pill--active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.psp-season-select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.psp-season-select-wrap svg {
+  position: absolute;
+  right: 0.65rem;
+  pointer-events: none;
+  color: #6b7280;
+}
+
+.psp-season-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: #ffffff;
+  border: 1.5px solid #d1d5db;
+  border-radius: 0;
+  padding: 0.32rem 1.75rem 0.32rem 0.85rem;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  outline: none;
+}
+
+/* ── Summary stats table ─────────────────────────── */
+.psp-summary-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid #e0e0e0;
+  border-radius: 0;
+}
+
+.psp-summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.psp-summary-table__th {
+  padding: 0.65rem 0.75rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  color: #ffffff;
+  background: var(--accent);
+  white-space: nowrap;
+}
+
+.psp-summary-table__th--year {
+  text-align: left;
+  padding-left: 1rem;
+}
+
+.psp-summary-table__td {
+  padding: 0.65rem 0.75rem;
+  text-align: center;
+  font-weight: 600;
+  color: #0f1115;
+  white-space: nowrap;
+  border-bottom: 1px solid #f0f0f0;
+  background: #ffffff;
+}
+
+.psp-summary-table__td--label {
+  text-align: left;
+  padding-left: 1rem;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.8rem;
+}
+
+.psp-summary-table tbody tr:last-child .psp-summary-table__td {
+  border-bottom: none;
+}
+
+/* ── Toggle (Batting / Pitching) ───────────────── */
+.psp-toggle-wrap {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 0;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.psp-toggle {
+  background: none;
+  border: none;
+  padding: 0.4rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background 120ms, color 120ms;
+  outline: none;
+}
+
+.psp-toggle--active {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+/* ── Career section ──────────────────────────────── */
+.psp-career-section {
+  margin-bottom: 2rem;
+}
+
+.psp-section-title {
+  margin: 0 0 1rem;
+  font-family: var(--font-headline), "Arial Narrow", Arial, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #0f1115;
+}
+
+/* ── Table ───────────────────────────────────────── */
+.psp-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid #e5e7eb;
+  border-radius: 0;
+}
+
+.psp-table-scroll::-webkit-scrollbar {
+  height: 5px;
+}
+
+.psp-table-scroll::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+.psp-table-scroll::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.psp-table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  font-family: var(--font-body);
+}
+
+.psp-table__th {
+  padding: 0.65rem 0.6rem;
+  text-align: right;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: var(--accent);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.psp-table__th--left {
+  text-align: left;
+  padding-left: 1rem;
+}
+
+.psp-table__tr {
+  transition: background 80ms ease;
+}
+
+.psp-table__tr:nth-child(even) {
+  background: #fafafa;
+}
+
+.psp-table__tr:hover {
+  background: #f0f4ff;
+}
+
+.psp-table__tr:not(:last-child) .psp-table__td {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.psp-table__tr--career {
+  background: #f3f4f6 !important;
+}
+
+.psp-table__tr--career .psp-table__td {
+  font-weight: 700;
+  border-top: 2px solid #e5e7eb;
+}
+
+.psp-table__td {
+  padding: 0.6rem;
+  text-align: right;
+  color: #374151;
+  white-space: nowrap;
+  vertical-align: middle;
+  line-height: 1.3;
+}
+
+.psp-table__td--season {
+  text-align: left;
+  font-weight: 700;
+  color: var(--accent);
+  padding-left: 1rem;
+}
+
+.psp-table__td--team {
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+}
+
+.psp-table__td--left {
+  text-align: left;
+  padding-left: 1rem;
+}
+
+.psp-table__td--accent {
+  font-weight: 700;
+  color: #0f1115;
+}
+
+/* ── Show more ───────────────────────────────────── */
+.psp-showmore-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 1.25rem 0 0;
+}
+
+.psp-showmore {
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2563eb;
+  cursor: pointer;
+  padding: 0.35rem 0;
+  border-bottom: 1.5px solid #2563eb;
+  letter-spacing: 0.01em;
+  transition: opacity 120ms;
+}
+
+.psp-showmore:hover {
+  opacity: 0.7;
+}
+
+/* ── Advanced stats extra scroll margin ─────────── */
+.psp-table-scroll--mb {
+  margin-bottom: 1.25rem;
+}
+
+/* ── Awards section — reference design ──────────── */
+.psp-awards-section {
+  margin-top: 2.5rem;
+  margin-bottom: 2rem;
+  padding-top: 0.5rem;
+  position: relative;
+  z-index: 0;   /* awards sit below the bio (z-index:20 on bio wrapper) */
+}
+
+.psp-section-title--center {
+  text-align: center;
+}
+
+.psp-awards-grid {
+  display: flex;
+  flex-wrap: nowrap;          /* single row, cards grow to fill */
+  justify-content: stretch;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.psp-award-card {
+  flex: 1 1 0;               /* grow equally, ignore content width */
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem 0.75rem 1.25rem;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  gap: 0;
+  transition: border-color 150ms, box-shadow 150ms;
+}
+
+.psp-award-card:hover {
+  border-color: #9ca3af;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.psp-award-card__icon-wrap {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #374151;
+  margin-bottom: 0.7rem;
+}
+
+.psp-award-card__name {
+  margin: 0 0 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0f1115;
+  line-height: 1.3;
+}
+
+.psp-award-card__years {
+  margin: 0 0 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent);
+  line-height: 1.3;
+}
+
+.psp-award-card__team {
+  margin: 0 0 0.2rem;
+  font-size: 0.7rem;
+  color: #6b7280;
+  line-height: 1.3;
+}
+
+.psp-award-card__league {
+  margin: 0;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
+/* ── Transactions section — reference design ─────── */
+.psp-transactions-section {
+  margin-bottom: 1rem;
+}
+
+.psp-tx-table-wrap {
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.psp-tx-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  font-family: var(--font-body);
+}
+
+.psp-tx-table__th {
+  padding: 0.6rem 1rem;
+  text-align: left;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #374151;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.psp-tx-table__th--logo {
+  width: 52px;
+}
+
+.psp-tx-table__th--desc {
+  width: 100%;
+}
+
+.psp-tx-table__tr {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 80ms;
+}
+
+.psp-tx-table__tr:last-child {
+  border-bottom: none;
+}
+
+.psp-tx-table__tr:hover {
+  background: #fafafa;
+}
+
+.psp-tx-table__td {
+  padding: 0.9rem 1rem;
+  vertical-align: middle;
+  font-size: 0.82rem;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.psp-tx-table__td--logo {
+  padding-left: 1rem;
+  padding-right: 0.5rem;
+}
+
+.psp-tx-table__td--date {
+  white-space: nowrap;
+  font-weight: 600;
+  color: #374151;
+  min-width: 110px;
+}
+
+.psp-tx-table__td--desc {
+  color: #111111;
+}
+
+/* Team monogram badge */
+.psp-tx-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+
+.psp-tx-badge--generic {
+  background: #f3f4f6;
+  color: #374151;
+  font-size: 1rem;
+}
+
+/* ── View more ───────────────────────────────────── */
+.psp-view-more-wrap {
+  display: flex;
+  justify-content: center;
+  padding-top: 1rem;
+}
+
+.psp-view-more {
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  cursor: pointer;
+  padding: 0.35rem 0;
+  letter-spacing: 0.01em;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity 120ms;
+}
+
+.psp-view-more:hover {
+  opacity: 0.7;
+}
+
+/* ── Coming soon placeholder ─────────────────────── */
+.psp-coming-soon {
+  padding: 2.5rem;
+  text-align: center;
+  color: #9ca3af;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 0;
+}
+
+.psp-coming-soon p {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.psp-coming-soon--lg {
+  padding: 5rem 2rem;
+  border-radius: 0;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 1024px) {
+  .psp-body {
+    padding: 1.5rem 1.25rem 4rem;
+  }
+
+  .psp-profile-bio {
+    flex: 0 0 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .psp-body {
+    padding: 1.25rem 1rem 4rem;
+  }
+
+  .psp-profile-card__layout {
+    flex-direction: column;
+  }
+
+  .psp-profile-bio {
+    flex: none;
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #eeeeee;
+  }
+
+  .psp-page-tabs {
+    justify-content: flex-start;
+  }
+
+  .psp-hero__inner {
+    padding: 1rem 1rem 1.5rem;
+    min-height: clamp(300px, 55vw, 420px);
+  }
+
+  .psp-hero__top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .psp-hero__filters {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .psp-hero__filter-label {
+    width: 100%;
+  }
+
+  .psp-hero__headshot {
+    width: 88px;
+    height: 88px;
+  }
+
+  .psp-hero__player {
+    align-items: flex-start;
+  }
+
+  .psp-filter-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .psp-season-select-wrap {
+    margin-left: 0;
+  }
+
+  .psp-awards-grid {
+    flex-wrap: wrap;
+  }
+  .psp-award-card {
+    flex: 1 1 calc(50% - 0.375rem);
+    min-width: 140px;
+  }
+}
+
+@media (max-width: 480px) {
+  .psp-awards-grid {
+    flex-wrap: wrap;
+  }
+  .psp-award-card {
+    flex: 1 1 100%;
+  }
+
+  .psp-page-tabs__inner {
+    padding: 0 1rem;
+  }
+
+  .psp-body {
+    padding: 1rem 0.75rem 3rem;
+  }
+}
+
+/* ── Player name links in MLB stats table ─────── */
+.mlb-stats__player-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 120ms, text-decoration-color 120ms;
+  text-underline-offset: 2px;
+}
+
+.mlb-stats__player-link:hover {
+  color: var(--accent-strong);
+  text-decoration: underline;
+}
+
+/* ── Clickable stat leader cards ─────────────── */
+.sp-leader--clickable {
+  display: flex;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.sp-leader--clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  z-index: 1;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

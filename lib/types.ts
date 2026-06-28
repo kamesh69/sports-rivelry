@@ -297,7 +297,190 @@ export interface StatLeader {
   monogram: string;
   value: string;
   team: string;
+  slug?: string;
   image?: MediaAsset;
+}
+
+/* ---- Player profile (statistics page) ---- */
+
+export interface PlayerCareerRow {
+  season: string;
+  team: string;
+  league: string;
+  g: number;
+  gs: number;
+  mpg: string;
+  fgm: string;
+  fga: string;
+  fg_pct: string;
+  thpm: string;
+  thpa: string;
+  thp_pct: string;
+  ftm: string;
+  fta: string;
+  ft_pct: string;
+  rpg: string;
+  apg: string;
+  spg: string;
+  bpg: string;
+  topg: string;
+  ppg: string;
+}
+
+export interface MlbCareerRow {
+  season: string;
+  team: string;
+  league: string;
+  w: number;
+  l: number;
+  era: string;
+  g: number;
+  gs: number;
+  cg: number;
+  sho: number;
+  hld: number;
+  sv: number;
+  ip: string;
+  h: number;
+  r: number;
+  er: number;
+  bb: number;
+  ibb: number;
+  so: number;
+  avg: string;
+  whip: string;
+}
+
+export interface MlbBattingCareerRow {
+  season: string;
+  team: string;
+  league: string;
+  g: number;
+  ab: number;
+  r: number;
+  h: number;
+  doubles: number;
+  triples: number;
+  hr: number;
+  rbi: number;
+  sb: number;
+  bb: number;
+  so: number;
+  avg: string;
+  obp: string;
+  slg: string;
+  ops: string;
+  war: string;
+}
+
+export interface PlayerAward {
+  name: string;
+  years: string;
+  team: string;
+  icon: "trophy" | "star" | "crown" | "shield" | "medal";
+}
+
+export interface PlayerTransaction {
+  date: string;
+  description: string;
+  teamLogo?: string;
+}
+
+export interface MlbAdvancedPitchingRow {
+  season: string;
+  qs: number;
+  gf: number;
+  doubles: number;
+  triples: number;
+  gdp: number;
+  wp: number;
+  bk: number;
+  sb: number;
+  cs: number;
+  po: number;
+  pk: number;
+  str_pct: string;
+  p_ip: string;
+  p_pa: string;
+}
+
+export interface MlbAdvancedPitchingRow2 {
+  season: string;
+  w_pct: string;
+  ra9: string;
+  tbf: number;
+  babip: string;
+  obp: string;
+  slg: string;
+  ops: string;
+  k9: string;
+  bb9: string;
+  hr9: string;
+  h9: string;
+  k_bb: string;
+  ir: number;
+  irs: number;
+  br: number;
+  brs: number;
+}
+
+export interface MlbAdvancedBattingRow {
+  season: string;
+  pa: number;
+  ops_plus: number;
+  woba: string;
+  babip: string;
+  bb_pct: string;
+  k_pct: string;
+  iso: string;
+  ld_pct: string;
+  gb_pct: string;
+  fb_pct: string;
+  hr_fb: string;
+  pull_pct: string;
+  cent_pct: string;
+  oppo_pct: string;
+}
+
+export interface PlayerProfile {
+  slug: string;
+  sport: "basketball" | "mlb";
+  name: string;
+  number: string;
+  position: string;
+  team: string;
+  teamShort: string;
+  teamColor: string;
+  height: string;
+  weight: string;
+  age: number;
+  fullName: string;
+  nickname?: string;
+  bats?: string;
+  throws?: string;
+  born: string;
+  hometown: string;
+  draft?: string;
+  college?: string;
+  debut: string;
+  status: string;
+  nextGame?: string;
+  photo: string;
+  /** Wide action/cinematic shot for the hero banner background. */
+  heroPhoto?: string;
+  /** Square portrait used in the hero headshot card. */
+  headshot?: string;
+  summaryLabels: string[];
+  summaryCurrentSeason: string[];
+  summaryCareer: string[];
+  careerStats?: PlayerCareerRow[];
+  mlbCareerStats?: MlbCareerRow[];
+  mlbBattingCareerStats?: MlbBattingCareerRow[];
+  mlbAdvancedPitching?: MlbAdvancedPitchingRow[];
+  mlbAdvancedPitching2?: MlbAdvancedPitchingRow2[];
+  mlbAdvancedBatting?: MlbAdvancedBattingRow[];
+  awards: PlayerAward[];
+  transactions: PlayerTransaction[];
 }
 
 export interface Matchup {

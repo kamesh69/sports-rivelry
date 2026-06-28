@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { nameToSlug } from "@/lib/player-data";
 
 /* ─────────────────────────────────────────────
    Types
@@ -301,7 +303,9 @@ function PitchingTable({ rows }: { rows: PitchingRow[] }) {
           {rows.map((row) => (
             <tr key={row.rk} className="mlb-stats__tr">
               <td className="mlb-stats__td mlb-stats__td--rk">{row.rk}</td>
-              <td className="mlb-stats__td mlb-stats__td--name">{row.name}</td>
+              <td className="mlb-stats__td mlb-stats__td--name">
+                <Link href={`/mlb/player/${nameToSlug(row.name)}`} className="mlb-stats__player-link">{row.name}</Link>
+              </td>
               <td className="mlb-stats__td">{row.team}</td>
               <td className="mlb-stats__td">{row.pos}</td>
               <td className="mlb-stats__td">{row.gp}</td>
@@ -361,7 +365,9 @@ function BattingTable({ rows }: { rows: BattingRow[] }) {
           {rows.map((row) => (
             <tr key={row.rk} className="mlb-stats__tr">
               <td className="mlb-stats__td mlb-stats__td--rk">{row.rk}</td>
-              <td className="mlb-stats__td mlb-stats__td--name">{row.name}</td>
+              <td className="mlb-stats__td mlb-stats__td--name">
+                <Link href={`/mlb/player/${nameToSlug(row.name)}`} className="mlb-stats__player-link">{row.name}</Link>
+              </td>
               <td className="mlb-stats__td">{row.team}</td>
               <td className="mlb-stats__td">{row.pos}</td>
               <td className="mlb-stats__td">{row.g}</td>
@@ -417,7 +423,9 @@ function FieldingTable({ rows }: { rows: FieldingRow[] }) {
           {rows.map((row) => (
             <tr key={row.rk} className="mlb-stats__tr">
               <td className="mlb-stats__td mlb-stats__td--rk">{row.rk}</td>
-              <td className="mlb-stats__td mlb-stats__td--name">{row.name}</td>
+              <td className="mlb-stats__td mlb-stats__td--name">
+                <Link href={`/mlb/player/${nameToSlug(row.name)}`} className="mlb-stats__player-link">{row.name}</Link>
+              </td>
               <td className="mlb-stats__td">{row.team}</td>
               <td className="mlb-stats__td">{row.pos}</td>
               <td className="mlb-stats__td">{row.g}</td>

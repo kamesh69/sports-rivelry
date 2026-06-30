@@ -19,6 +19,11 @@ const remotePatterns: NonNullable<NextConfig["images"]>["remotePatterns"] = [
     hostname: "images.unsplash.com",
     pathname: "/**",
   },
+  {
+    protocol: "https",
+    hostname: "picsum.photos",
+    pathname: "/**",
+  },
 ];
 
 if (supabaseHost) {

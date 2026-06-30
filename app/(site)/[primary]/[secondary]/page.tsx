@@ -27,6 +27,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { JsonLd } from "@/components/json-ld";
 import { SectionHeading } from "@/components/section-heading";
 import { MlbStatsPage } from "@/components/mlb-stats-page";
+import { MlbTeamsPageLoader } from "@/components/mlb-teams-page";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -42,6 +43,7 @@ interface SportDetailPageProps {
 export async function generateStaticParams() {
   return [
     { primary: "mlb", secondary: "stats" },
+    { primary: "mlb", secondary: "teams" },
     ...articles.map((article) => ({
       primary: article.sport.slug,
       secondary: article.slug,
@@ -63,6 +65,14 @@ export async function generateMetadata({
       title: "MLB Player Stats 2026 — Batting, Pitching & Fielding | Sports Rivalry",
       description: "Full MLB player statistics for the 2026 season including batting averages, ERA, pitching records, and fielding metrics for every player.",
       canonicalPath: "/mlb/stats",
+    });
+  }
+
+  if (primary === "mlb" && secondary === "teams") {
+    return buildMetadata({
+      title: "MLB Teams Directory — All 30 Franchises | Sports Rivalry",
+      description: "Browse every Major League Baseball franchise. Discover team histories, championships, stadiums, divisions, and organizational information from one beautifully organized directory.",
+      canonicalPath: "/mlb/teams",
     });
   }
 
@@ -109,6 +119,21 @@ export default async function SportDetailPage({ params }: SportDetailPageProps) 
       <>
         <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
         <MlbStatsPage />
+      </>
+    );
+  }
+
+  /* ── MLB teams directory ─────────────────────────── */
+  if (primary === "mlb" && secondary === "teams") {
+    const breadcrumbs: BreadcrumbItem[] = [
+      { name: "Home", href: "/" },
+      { name: "MLB", href: "/mlb" },
+      { name: "Teams", href: "/mlb/teams" },
+    ];
+    return (
+      <>
+        <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+        <MlbTeamsPageLoader />
       </>
     );
   }

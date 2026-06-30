@@ -26,6 +26,7 @@ export function SportLeaguePage({ hub, data, articles, trending }: SportLeaguePa
 
   const sportHref = `/${hub.slug}`;
   const statsHref = hub.slug === "mlb" ? `/${hub.slug}/stats` : sportHref;
+  const teamsHref = hub.slug === "mlb" ? `/${hub.slug}/teams` : sportHref;
 
   return (
     <div className="sport-theme">
@@ -57,7 +58,7 @@ export function SportLeaguePage({ hub, data, articles, trending }: SportLeaguePa
 
         <TrendingToday articles={trendingPool} viewAllHref={sportHref} />
 
-        {data.teamHub ? <TeamHub teamHub={data.teamHub} viewAllHref={sportHref} /> : null}
+        {data.teamHub ? <TeamHub teamHub={data.teamHub} viewAllHref={teamsHref} /> : null}
 
         <MatchupsAndRankings
           matchupsLabel={data.matchupsLabel}

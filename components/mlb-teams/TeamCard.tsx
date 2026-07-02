@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { MLBTeam } from "@/lib/mlb-team-types";
 import { TeamBadge } from "@/components/sport-page/atoms";
+import { getTeamRosterPath } from "@/lib/navigation";
 
 interface TeamCardProps {
   team: MLBTeam;
@@ -18,7 +19,7 @@ export function TeamCard({ team }: TeamCardProps) {
 
   return (
     <Link
-      href={`/mlb/team/${team.slug}`}
+      href={getTeamRosterPath(team.slug)}
       className="td-teamcard td-fadein"
       aria-label={`${team.name} — ${team.league} League, ${team.division} Division`}
     >

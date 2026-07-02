@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { MLBTeam } from "@/lib/mlb-team-types";
 import { TeamBadge } from "@/components/sport-page/atoms";
+import { getTeamRosterPath } from "@/lib/navigation";
 
 interface FeaturedTeamsCarouselProps {
   teams: MLBTeam[];
@@ -120,18 +121,18 @@ export function FeaturedTeamsCarousel({ teams }: FeaturedTeamsCarouselProps) {
 
                 <div className="td-carousel__actions">
                   <Link
-                    href={`/mlb/team/${team.slug}`}
+                    href={getTeamRosterPath(team.slug)}
                     className="td-btn-primary"
                     aria-label={`View ${team.name}`}
                   >
                     View Team
                   </Link>
                   <Link
-                    href={`/mlb/team/${team.slug}#history`}
+                    href={`${getTeamRosterPath(team.slug)}#roster`}
                     className="td-btn-secondary"
-                    aria-label={`Explore ${team.name} history`}
+                    aria-label={`Explore ${team.name} roster`}
                   >
-                    Explore History
+                    Explore Roster
                   </Link>
                 </div>
               </div>

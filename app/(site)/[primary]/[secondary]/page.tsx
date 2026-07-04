@@ -28,6 +28,8 @@ import { JsonLd } from "@/components/json-ld";
 import { SectionHeading } from "@/components/section-heading";
 import { MlbStatsPage } from "@/components/mlb-stats-page";
 import { MlbTeamsPageLoader } from "@/components/mlb-teams-page";
+import { MlbNewsPageLoader } from "@/components/mlb-news-page";
+import { MLB_NEWS_PATH } from "@/lib/navigation";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -44,6 +46,7 @@ export async function generateStaticParams() {
   return [
     { primary: "mlb", secondary: "stats" },
     { primary: "mlb", secondary: "teams" },
+    { primary: "mlb", secondary: "news" },
     ...articles.map((article) => ({
       primary: article.sport.slug,
       secondary: article.slug,
@@ -73,6 +76,14 @@ export async function generateMetadata({
       title: "MLB Teams Directory — All 30 Franchises | Sports Rivalry",
       description: "Browse every Major League Baseball franchise. Discover team histories, championships, stadiums, divisions, and organizational information from one beautifully organized directory.",
       canonicalPath: "/mlb/teams",
+    });
+  }
+
+  if (primary === "mlb" && secondary === "news") {
+    return buildMetadata({
+      title: "More On Baseball — MLB News | Sports Rivalry",
+      description: "The latest MLB headlines: trades, injuries, interviews, analysis, and more from around the league.",
+      canonicalPath: MLB_NEWS_PATH,
     });
   }
 
@@ -134,6 +145,21 @@ export default async function SportDetailPage({ params }: SportDetailPageProps) 
       <>
         <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
         <MlbTeamsPageLoader />
+      </>
+    );
+  }
+
+  /* ── MLB news listing ────────────────────────────── */
+  if (primary === "mlb" && secondary === "news") {
+    const breadcrumbs: BreadcrumbItem[] = [
+      { name: "Home", href: "/" },
+      { name: "Baseball", href: "/mlb" },
+      { name: "News", href: MLB_NEWS_PATH },
+    ];
+    return (
+      <>
+        <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+        <MlbNewsPageLoader />
       </>
     );
   }

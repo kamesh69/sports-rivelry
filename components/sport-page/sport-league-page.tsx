@@ -8,6 +8,7 @@ import { MatchupsAndRankings } from "@/components/sport-page/matchups-rankings";
 import { StatLeaders } from "@/components/sport-page/stat-leaders";
 import { MediaRow } from "@/components/sport-page/media-row";
 import { SportNewsletterBand } from "@/components/sport-page/sport-newsletter-band";
+import { MLB_NEWS_PATH } from "@/lib/navigation";
 
 interface SportLeaguePageProps {
   hub: SportHub;
@@ -27,6 +28,7 @@ export function SportLeaguePage({ hub, data, articles, trending }: SportLeaguePa
   const sportHref = `/${hub.slug}`;
   const statsHref = hub.slug === "mlb" ? `/${hub.slug}/stats` : sportHref;
   const teamsHref = hub.slug === "mlb" ? `/${hub.slug}/teams` : sportHref;
+  const featuredStoriesHref = hub.slug === "mlb" ? MLB_NEWS_PATH : sportHref;
 
   return (
     <div className="sport-theme">
@@ -52,7 +54,7 @@ export function SportLeaguePage({ hub, data, articles, trending }: SportLeaguePa
             lead={featuredLead}
             grid={featuredGrid}
             headlines={headlines}
-            viewAllHref={sportHref}
+            viewAllHref={featuredStoriesHref}
           />
         ) : null}
 

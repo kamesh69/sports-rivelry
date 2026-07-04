@@ -4,6 +4,9 @@ import { TeamRosterPage } from "@/components/team-roster/TeamRosterPage";
 import { buildBreadcrumbJsonLd, buildMetadata, type BreadcrumbItem } from "@/lib/seo";
 import { getTeams, getTeamBySlug } from "@/services/team.service";
 import { getGroupedRosterForTeam } from "@/services/player.service";
+import { getNewsBySlug, getRelatedNews } from "@/services/news.service";
+import { NEWS_ARTICLES } from "@/lib/news-data";
+import { NewsArticleDetail } from "@/components/news/NewsArticleDetail";
 import { JsonLd } from "@/components/json-ld";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -32,6 +35,11 @@ export async function generateStaticParams() {
       secondary: "teams",
       tertiary: team.slug,
     })),
+    ...NEWS_ARTICLES.map((article) => ({
+      primary: "mlb",
+      secondary: "news",
+      tertiary: article.slug,
+    })),
   ];
 }
 
@@ -55,6 +63,26 @@ export async function generateMetadata({ params }: TertiaryPageProps): Promise<M
       title: `${team.name} Roster ${new Date().getFullYear()} — Players, Positions & Stats | Sports Rivalry`,
       description: `Full ${team.name} roster: pitchers, catchers, infielders and outfielders with jersey numbers, bats/throws, age, height, weight and birthplace.`,
       canonicalPath: `/mlb/teams/${team.slug}`,
+    });
+  }
+
+  /* ── MLB news article ─────────────────────────────── */
+  if (primary === "mlb" && secondary === "news") {
+    const article = await getNewsBySlug(tertiary);
+
+    if (!article) {
+      return buildMetadata({
+        title: "Article not found | Sports Rivalry",
+        description: "",
+        canonicalPath: "/mlb/news",
+        noIndex: true,
+      });
+    }
+
+    return buildMetadata({
+      title: `${article.title} | Sports Rivalry`,
+      description: article.summary,
+      canonicalPath: `/mlb/news/${article.slug}`,
     });
   }
 
@@ -109,6 +137,31 @@ export default async function TertiaryPage({ params }: TertiaryPageProps) {
       <>
         <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
         <TeamRosterPage team={team} allTeams={allTeams} initialGroupedRoster={groupedRoster} />
+      </>
+    );
+  }
+
+  /* ── MLB news article ─────────────────────────────── */
+  if (primary === "mlb" && secondary === "news") {
+    const article = await getNewsBySlug(tertiary);
+
+    if (!article) {
+      notFound();
+    }
+
+    const related = await getRelatedNews(article);
+
+    const breadcrumbs: BreadcrumbItem[] = [
+      { name: "Home", href: "/" },
+      { name: "Baseball", href: "/mlb" },
+      { name: "News", href: "/mlb/news" },
+      { name: article.title, href: `/mlb/news/${article.slug}` },
+    ];
+
+    return (
+      <>
+        <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+        <NewsArticleDetail article={article} related={related} />
       </>
     );
   }

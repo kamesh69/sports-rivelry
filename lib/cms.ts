@@ -78,7 +78,7 @@ async function wpFetch<TData>(
 
     return payload.data || null;
   } catch (error) {
-    console.error("Sports Rivalry CMS fallback engaged", error);
+    console.error("The Sports Rivalry CMS fallback engaged", error);
     return null;
   }
 }

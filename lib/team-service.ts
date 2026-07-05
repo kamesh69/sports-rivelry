@@ -632,38 +632,38 @@ export const TEAM_CATEGORIES: TeamCategory[] = [
 export const TIMELINE_EVENTS: TimelineEvent[] = [
   {
     year: "1871",
-    title: "National Association Founded",
-    description: "The first professional baseball league, the National Association of Professional Base Ball Players, was established.",
+    title: "National Association of Professional Base Ball Players formed",
+    description: "",
   },
   {
     year: "1901",
-    title: "American League Created",
-    description: "Ban Johnson's American League declared itself a major league, establishing the two-league structure that defines MLB today.",
+    title: "American League Established",
+    description: "",
   },
   {
     year: "1903",
     title: "First Modern World Series",
-    description: "The Boston Americans defeated the Pittsburgh Pirates in the inaugural World Series, creating America's Fall Classic.",
+    description: "",
   },
   {
     year: "1947",
     title: "Jackie Robinson Breaks the Color Barrier",
-    description: "Jackie Robinson joined the Brooklyn Dodgers, becoming the first Black player in the modern era of Major League Baseball.",
+    description: "",
   },
   {
     year: "1961",
     title: "Expansion Era Begins",
-    description: "MLB expanded from 16 to 18 teams, beginning a decades-long process that eventually reached 30 franchises.",
+    description: "",
   },
   {
     year: "1998",
     title: "Arizona Diamondbacks Join MLB",
-    description: "The Arizona Diamondbacks and Tampa Bay Devil Rays joined as expansion teams, bringing MLB to 30 teams.",
+    description: "",
   },
   {
     year: "2023",
-    title: "Latest League Expansion",
-    description: "MLB implemented rule changes including a pitch clock and shift restrictions, modernizing the game for a new generation.",
+    title: "Latest League Expansion Updates",
+    description: "",
   },
 ];
 
@@ -676,8 +676,8 @@ export const QUICK_FACTS: QuickFact[] = [
   { icon: "🆕", value: "1998", label: "Newest Franchise (D-backs)" },
   { icon: "🥇", value: "27", label: "Most Championships (Yankees)" },
   { icon: "🏟", value: "105,339", label: "Largest Stadium (Dodger Stadium)" },
-  { icon: "🏟", value: "11,000", label: "Smallest Stadium (Sac)" },
-  { icon: "📈", value: "86", label: "Longest Active Streak" },
+  { icon: "🏟", value: "11,000", label: "Smallest Stadium (Tropicana Field)" },
+  { icon: "📈", value: "86", label: "Longest Active Streak (Braves)" },
   { icon: "💰", value: "$6.3B", label: "Most Valuable Franchise (Yankees)" },
 ];
 

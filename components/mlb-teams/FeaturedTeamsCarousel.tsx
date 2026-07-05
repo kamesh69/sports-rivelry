@@ -68,16 +68,16 @@ export function FeaturedTeamsCarousel({ teams }: FeaturedTeamsCarouselProps) {
         <h2 className="td-section-title">Featured Teams</h2>
       </div>
 
-      <div className="td-carousel-wrap">
-        <div ref={trackRef} className="td-carousel" role="list" aria-label="Featured teams carousel">
+      <div className="td-carousel-wrap td-carousel-wrap--featured">
+        <div ref={trackRef} className="td-carousel td-carousel--featured" role="list" aria-label="Featured teams carousel">
           {teams.map((team) => (
             <article
               key={team.id}
-              className="td-carousel__card"
+              className="td-featured-card"
               role="listitem"
               aria-label={team.name}
             >
-              <div className="td-carousel__img-wrap">
+              <div className="td-featured-card__hero">
                 <Image
                   src={team.stadiumImage}
                   alt={`${team.stadium} — home of the ${team.name}`}
@@ -86,53 +86,40 @@ export function FeaturedTeamsCarousel({ teams }: FeaturedTeamsCarouselProps) {
                   style={{ objectFit: "cover" }}
                   loading="lazy"
                 />
-                <div className="td-carousel__img-overlay" aria-hidden="true" />
-                <div className="td-carousel__badge-wrap" aria-hidden="true">
-                  <span className="td-carousel__league-badge">{team.league} League</span>
-                  <span className="td-carousel__div-badge">{team.division}</span>
+                <div className="td-featured-card__logo" aria-hidden="true">
+                  <TeamBadge team={teamToIdentity(team)} size="xl" />
                 </div>
               </div>
 
-              <div className="td-carousel__body">
-                <div className="td-carousel__team-row">
-                  <TeamBadge team={teamToIdentity(team)} size="lg" />
-                  <div>
-                    <div className="td-carousel__name">{team.name}</div>
-                    <div className="td-carousel__league">{team.league} League · {team.division}</div>
-                  </div>
+              <div className="td-featured-card__body">
+                <h3 className="td-featured-card__name">{team.name}</h3>
+                <p className="td-featured-card__league">{team.league} League</p>
+
+                <div className="td-featured-card__stats">
+                  <span className="td-featured-card__stat">
+                    <span aria-hidden="true">🏆</span>
+                    {team.championships} Championships
+                  </span>
+                  <span className="td-featured-card__stat">
+                    <span aria-hidden="true">🏟</span>
+                    Founded {team.founded}
+                  </span>
                 </div>
 
-                <div className="td-carousel__meta">
-                  <div className="td-carousel__meta-item">
-                    <span className="td-carousel__meta-value">{team.championships}</span>
-                    <span className="td-carousel__meta-label">Championships</span>
-                  </div>
-                  <div className="td-carousel__meta-item">
-                    <span className="td-carousel__meta-value">{team.founded}</span>
-                    <span className="td-carousel__meta-label">Founded</span>
-                  </div>
-                  <div className="td-carousel__meta-item">
-                    <span className="td-carousel__meta-value">
-                      {(team.stadiumCapacity / 1000).toFixed(0)}K
-                    </span>
-                    <span className="td-carousel__meta-label">Capacity</span>
-                  </div>
-                </div>
-
-                <div className="td-carousel__actions">
+                <div className="td-featured-card__actions">
                   <Link
                     href={getTeamRosterPath(team.slug)}
-                    className="td-btn-primary"
+                    className="td-btn-primary td-btn-primary--featured"
                     aria-label={`View ${team.name}`}
                   >
                     View Team
                   </Link>
                   <Link
-                    href={`${getTeamRosterPath(team.slug)}#roster`}
-                    className="td-btn-secondary"
-                    aria-label={`Explore ${team.name} roster`}
+                    href={`${getTeamRosterPath(team.slug)}#history`}
+                    className="td-btn-secondary td-btn-secondary--featured"
+                    aria-label={`Explore ${team.name} history`}
                   >
-                    Explore Roster
+                    Explore History
                   </Link>
                 </div>
               </div>

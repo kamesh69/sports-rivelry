@@ -1,9 +1,14 @@
 import type { FooterLinkGroup, NavItem } from "@/lib/types";
 
-export const SITE_NAME = "Sports Rivalry";
+export const SITE_NAME = "The Sports Rivalry";
 export const SITE_TAGLINE = "Rivalry-first coverage for the games fans carry all week.";
 export const SITE_DESCRIPTION =
-  "Sports Rivalry is a rivalry-driven sports newsroom built around marquee matchups, fast-moving headlines, and fan-heavy editorial presentation.";
+  "The Sports Rivalry is a rivalry-driven sports newsroom built around marquee matchups, fast-moving headlines, and fan-heavy editorial presentation.";
+export const SITE_LOGO_PATH = "/images/brand/tsr-logo.png";
+export const SITE_LOGO_CIRCLE_PATH = "/images/brand/tsr-logo-circle.png";
+export const SITE_LOGO_WIDTH = 819;
+export const SITE_LOGO_HEIGHT = 1024;
+export const SITE_LOGO_CIRCLE_SIZE = 818;
 export const SITE_DOMAIN =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://thesportsrivalry.com";
 
@@ -31,27 +36,27 @@ export const HOMEPAGE_CATEGORY_STRIP: NavItem[] = [
 export const SOCIAL_LINKS = [
   {
     platform: "x",
-    label: "Follow Sports Rivalry on X",
+    label: "Follow The Sports Rivalry on X",
     url: "https://x.com/sportsrivalry",
   },
   {
     platform: "instagram",
-    label: "Follow Sports Rivalry on Instagram",
+    label: "Follow The Sports Rivalry on Instagram",
     url: "https://instagram.com/sportsrivalry",
   },
   {
     platform: "youtube",
-    label: "Follow Sports Rivalry on YouTube",
+    label: "Follow The Sports Rivalry on YouTube",
     url: "https://youtube.com/@sportsrivalry",
   },
   {
     platform: "facebook",
-    label: "Follow Sports Rivalry on Facebook",
+    label: "Follow The Sports Rivalry on Facebook",
     url: "https://facebook.com/sportsrivalry",
   },
   {
     platform: "linkedin",
-    label: "Follow Sports Rivalry on LinkedIn",
+    label: "Follow The Sports Rivalry on LinkedIn",
     url: "https://linkedin.com/company/sportsrivalry",
   },
 ];

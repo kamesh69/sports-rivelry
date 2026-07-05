@@ -5,7 +5,7 @@ import { signOutAction } from "@/app/admin/actions";
 import { AdminNav } from "./admin-nav";
 
 export const metadata: Metadata = {
-  title: "Admin | Sports Rivalry",
+  title: "Admin | The Sports Rivalry",
   robots: { index: false, follow: false },
 };
 
@@ -21,7 +21,7 @@ export default async function AdminDashboardLayout({
     <div className="admin-shell">
       <aside className="admin-sidebar">
         <Link href="/admin" className="admin-sidebar__brand">
-          Sports Rivalry
+          The Sports Rivalry
           <span>Admin</span>
         </Link>
         <AdminNav />

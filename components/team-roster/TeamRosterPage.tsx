@@ -5,12 +5,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { MLBTeam } from "@/lib/mlb-team-types";
 import type { Player, PositionGroup } from "@/lib/player-types";
-import { getPlayersGroupedByPosition, searchPlayers } from "@/services/player.service";
+import { getPlayersGroupedByPosition } from "@/services/player.service";
 import { getTeamRosterPath, TEAMS_DIRECTORY_PATH } from "@/lib/navigation";
 import { TeamHero } from "@/components/team-roster/TeamHero";
 import { RosterSection } from "@/components/team-roster/RosterSection";
 import { ManagerSection } from "@/components/team-roster/ManagerSection";
-import { MoreMlbTeamsSection } from "@/components/team-roster/MoreMlbTeamsSection";
+import { BrandStrip } from "@/components/brand-strip";
 import { EmptyState } from "@/components/team-roster/EmptyState";
 import { ErrorState } from "@/components/team-roster/ErrorState";
 import { TableSkeleton } from "@/components/team-roster/RosterSkeleton";
@@ -34,7 +34,6 @@ export function TeamRosterPage({ team, allTeams, initialGroupedRoster }: TeamRos
 
   const [season, setSeason] = useState("2026");
   const [position, setPosition] = useState<PlayerFilterValue>("All Players");
-  const [search, setSearch] = useState("");
   const [error] = useState<string | null>(null);
 
   /* Changing the team dropdown pushes a new URL — Next.js re-renders this
@@ -56,15 +55,11 @@ export function TeamRosterPage({ team, allTeams, initialGroupedRoster }: TeamRos
   );
 
   const filteredPlayers = useMemo(() => {
-    let players = allPlayers;
-    if (search.trim()) {
-      players = searchPlayers(players, search);
+    if (position === "All Players") {
+      return allPlayers;
     }
-    if (position !== "All Players") {
-      players = players.filter((player) => player.group === position);
-    }
-    return players;
-  }, [allPlayers, search, position]);
+    return allPlayers.filter((player) => player.group === position);
+  }, [allPlayers, position]);
 
   const groupedRoster = useMemo(
     () => getPlayersGroupedByPosition(filteredPlayers),
@@ -93,37 +88,8 @@ export function TeamRosterPage({ team, allTeams, initialGroupedRoster }: TeamRos
 
       <div className="tr-shell">
         <div className="tr-header">
-          <div>
-            <h1 className="tr-header__title">{team.name} Roster</h1>
-            <p className="tr-header__subtitle">
-              {allPlayers.length} active roster spots · {season} season
-            </p>
-          </div>
+          <h1 className="tr-header__title">{team.name} Roster</h1>
           <div className="tr-header__actions">
-            <label className="tr-search">
-              <span className="visually-hidden">Search player</span>
-              <svg
-                className="tr-search__icon"
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                aria-hidden="true"
-              >
-                <circle cx="11" cy="11" r="7" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
-              <input
-                type="search"
-                className="tr-search__input"
-                placeholder="Search player..."
-                value={search}
-                onChange={(event) => setSearch(event.target.value)}
-                aria-label="Search player by name, position, birth place or jersey number"
-              />
-            </label>
             <Link href={TEAMS_DIRECTORY_PATH} className="tr-more-btn">
               More MLB Teams
             </Link>
@@ -148,7 +114,7 @@ export function TeamRosterPage({ team, allTeams, initialGroupedRoster }: TeamRos
         <ManagerSection team={team} />
       </div>
 
-      <MoreMlbTeamsSection teams={allTeams} currentTeamId={team.id} />
+      <BrandStrip />
     </div>
   );
 }

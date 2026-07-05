@@ -14,7 +14,6 @@ export function RosterSection({ group, players }: RosterSectionProps) {
     <section className="tr-roster-section td-fadein" aria-label={`${group} roster`}>
       <div className="tr-roster-section__head">
         <h2 className="tr-roster-section__title">{group}</h2>
-        <span className="tr-roster-section__count">{players.length}</span>
       </div>
       <RosterTable players={players} groupLabel={group} />
     </section>

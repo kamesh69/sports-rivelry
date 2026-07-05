@@ -17,67 +17,44 @@ export function TeamCard({ team }: TeamCardProps) {
     textColor: team.textColor,
   };
 
+  const leagueTag = `${team.league === "American" ? "AL" : "NL"} ${team.division}`;
+
   return (
     <Link
       href={getTeamRosterPath(team.slug)}
-      className="td-teamcard td-fadein"
-      aria-label={`${team.name} — ${team.league} League, ${team.division} Division`}
+      className="td-teamcard td-teamcard--ref td-fadein"
+      aria-label={`${team.name} — ${leagueTag}`}
     >
-      <div className="td-teamcard__img-wrap">
-        <Image
-          src={team.stadiumImage}
-          alt={`${team.stadium}`}
-          fill
-          sizes="(max-width: 480px) 100vw, (max-width: 900px) 50vw, (max-width: 1100px) 33vw, 25vw"
-          style={{ objectFit: "cover" }}
-          loading="lazy"
-        />
-        <div className="td-teamcard__img-overlay" aria-hidden="true" />
+      <div className="td-teamcard__logo-wrap" aria-hidden="true">
+        <TeamBadge team={teamIdentity} size="xl" />
       </div>
 
-      <div className="td-teamcard__body">
-        <div className="td-teamcard__top">
-          <div>
-            <h3 className="td-teamcard__name">{team.name}</h3>
-            <p className="td-teamcard__location">
-              <span aria-hidden="true">📍</span>
-              {team.city}
-            </p>
-          </div>
-          <TeamBadge team={teamIdentity} size="lg" />
-        </div>
+      <div className="td-teamcard__main">
+        <h3 className="td-teamcard__name">{team.name}</h3>
 
-        <div className="td-teamcard__info">
-          <div className="td-teamcard__info-row">
-            <span aria-hidden="true">🏟</span>
-            <span>{team.stadium}</span>
+        <div className="td-teamcard__body-row">
+          <div className="td-teamcard__meta">
+            <span className="td-teamcard__division-tag">{leagueTag}</span>
+            <p className="td-teamcard__location">{team.city}</p>
+            <p className="td-teamcard__founded">Year: {team.founded}</p>
           </div>
-          <div className="td-teamcard__info-row">
-            <span aria-hidden="true">👥</span>
-            <span>Cap. {team.stadiumCapacity.toLocaleString()}</span>
-          </div>
-          <div className="td-teamcard__info-row">
-            <span aria-hidden="true">📅</span>
-            <span>Est. {team.founded}</span>
-          </div>
-        </div>
 
-        <div className="td-teamcard__tags" aria-label="League and division">
-          <span className={`td-tag td-tag--${team.league === "American" ? "al" : "nl"}`}>
-            {team.league === "American" ? "AL" : "NL"}
-          </span>
-          <span className="td-tag td-tag--div">{team.division}</span>
-          {team.championships > 0 && (
-            <span className="td-tag td-tag--al" aria-label={`${team.championships} championships`}>
-              🏆 {team.championships}
-            </span>
-          )}
-        </div>
-
-        <div className="td-teamcard__footer">
-          <span className="td-teamcard__btn" aria-hidden="true">
-            View Team →
-          </span>
+          <div className="td-teamcard__stadium-wrap" aria-hidden="true">
+            <Image
+              src={team.stadiumImage}
+              alt=""
+              fill
+              sizes="140px"
+              style={{ objectFit: "cover" }}
+              loading="lazy"
+            />
+            <div className="td-teamcard__stadium-caption">
+              <span className="td-teamcard__stadium-name">{team.stadium}</span>
+              <span className="td-teamcard__stadium-cap">
+                Capacity: {team.stadiumCapacity.toLocaleString()}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </Link>

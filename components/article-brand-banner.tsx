@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { SOCIAL_LINKS, SITE_TAGLINE } from "@/lib/site-config";
+import { BrandLogoImage } from "@/components/brand-logo-image";
+import { SITE_NAME, SITE_TAGLINE, SOCIAL_LINKS } from "@/lib/site-config";
 import { SocialIcon } from "@/components/social-icon";
 
 export function ArticleBrandBanner() {
@@ -8,9 +9,9 @@ export function ArticleBrandBanner() {
   return (
     <div className="article-brand-banner">
       <div className="article-brand-banner__inner">
-        <Link href="/" className="article-brand-banner__logo" aria-label="Sports Rivalry home">
-          <span className="article-brand-banner__mark">SR</span>
-          <span className="article-brand-banner__name">Sports Rivalry</span>
+        <Link href="/" className="article-brand-banner__logo" aria-label={`${SITE_NAME} home`}>
+          <BrandLogoImage variant="banner" />
+          <span className="article-brand-banner__name">{SITE_NAME}</span>
         </Link>
         <p className="article-brand-banner__tagline">{SITE_TAGLINE}</p>
         <div className="article-brand-banner__socials">
@@ -28,7 +29,7 @@ export function ArticleBrandBanner() {
           ))}
         </div>
         <p className="article-brand-banner__copy">
-          Sports Rivalry Media, Inc. &copy; {year} | All Rights Reserved
+          {SITE_NAME} Media, Inc. &copy; {year} | All Rights Reserved
         </p>
       </div>
     </div>

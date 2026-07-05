@@ -74,21 +74,13 @@ export function TeamHero({
               onTeamChange={onTeamChange}
               onPositionChange={onPositionChange}
             />
-            <div className="tr-hero__brand" aria-hidden="true">
-              <span className="tr-hero__brand-mark">SR</span>
-              <span className="tr-hero__brand-text">Players</span>
-            </div>
           </div>
         </div>
 
         <div className="tr-hero__content">
+          <h1 className="sr-only">{team.name}</h1>
           <div className="tr-hero__logo" style={logoStyle} aria-hidden="true">
             <span>{team.shortName}</span>
-          </div>
-          <div className="tr-hero__brandblock">
-            <p className="tr-hero__eyebrow">{team.league} League · {team.division} Division</p>
-            <h1 className="tr-hero__title">{team.name}</h1>
-            <p className="tr-hero__stadium">🏟 {team.stadium} · {team.city}</p>
           </div>
         </div>
       </div>

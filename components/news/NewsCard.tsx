@@ -35,7 +35,7 @@ export function NewsCard({ article, priority = false }: NewsCardProps) {
           <NewsImage
             src={article.image}
             alt={article.title}
-            sizes="(max-width: 720px) 100vw, (max-width: 1080px) 40vw, 320px"
+            sizes="(max-width: 720px) 100vw, 148px"
             priority={priority}
           />
         </div>

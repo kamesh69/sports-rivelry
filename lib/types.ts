@@ -237,7 +237,7 @@ export interface SportLeagueTab {
 }
 
 export interface SportNavConfig {
-  /** Brand mark monogram shown in the league sub-nav (e.g. "SR"). */
+  /** Brand mark monogram shown in the league sub-nav (e.g. "TSR"). */
   mark: string;
   /** Wordmark shown next to the mark (e.g. "Hoop Report"). */
   wordmark: string;
@@ -531,7 +531,7 @@ export interface SportPageData {
   scoreboardLabel: string;
   teamHub?: {
     tabs: string[];
-    teams: Array<{ team: TeamIdentity; meta: string; form?: ("W" | "L" | "D")[] }>;
+    teams: Array<{ team: TeamIdentity; meta: string; form?: ("W" | "L" | "D")[]; slug?: string }>;
   };
   matchupsLabel: string;
   matchups: Matchup[];

@@ -1,6 +1,6 @@
-# Sports Rivalry
+# The Sports Rivalry
 
-Sports Rivalry is a headless sports publishing starter built with Next.js App Router on the frontend and WordPress as the editorial CMS. The codebase is shaped for an India-first, editorial-first launch modeled on the rhythm of EssentiallySports, with clear room for ESPN-style utility layers later.
+The Sports Rivalry is a headless sports publishing starter built with Next.js App Router on the frontend and WordPress as the editorial CMS. The codebase is shaped for an India-first, editorial-first launch modeled on the rhythm of EssentiallySports, with clear room for ESPN-style utility layers later.
 
 ## What is included
 

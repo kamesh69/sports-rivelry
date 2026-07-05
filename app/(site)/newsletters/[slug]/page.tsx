@@ -24,7 +24,7 @@ export async function generateMetadata({
 
   if (!issue) {
     return buildMetadata({
-      title: "Not found | Sports Rivalry",
+      title: "Not found | The Sports Rivalry",
       description: "The requested page could not be found.",
       canonicalPath: `/newsletters/${slug}`,
       noIndex: true,

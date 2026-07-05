@@ -96,7 +96,7 @@ export function buildOrganizationJsonLd() {
     url: SITE_DOMAIN,
     description: SITE_DESCRIPTION,
     slogan: SITE_TAGLINE,
-    logo: absoluteUrl("/images/brand/brand-mark.svg"),
+    logo: absoluteUrl("/images/brand/tsr-logo-circle.png"),
   };
 }
 
@@ -151,7 +151,7 @@ export function buildArticleJsonLd(article: Article) {
       name: SITE_NAME,
       logo: {
         "@type": "ImageObject",
-        url: absoluteUrl("/images/brand/brand-mark.svg"),
+        url: absoluteUrl("/images/brand/tsr-logo-circle.png"),
       },
     },
   };

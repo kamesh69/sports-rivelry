@@ -65,7 +65,7 @@ export async function generateMetadata({
 
   if (primary === "mlb" && secondary === "stats") {
     return buildMetadata({
-      title: "MLB Player Stats 2026 — Batting, Pitching & Fielding | Sports Rivalry",
+      title: "MLB Player Stats 2026 — Batting, Pitching & Fielding | The Sports Rivalry",
       description: "Full MLB player statistics for the 2026 season including batting averages, ERA, pitching records, and fielding metrics for every player.",
       canonicalPath: "/mlb/stats",
     });
@@ -73,7 +73,7 @@ export async function generateMetadata({
 
   if (primary === "mlb" && secondary === "teams") {
     return buildMetadata({
-      title: "MLB Teams Directory — All 30 Franchises | Sports Rivalry",
+      title: "MLB Teams Directory — All 30 Franchises | The Sports Rivalry",
       description: "Browse every Major League Baseball franchise. Discover team histories, championships, stadiums, divisions, and organizational information from one beautifully organized directory.",
       canonicalPath: "/mlb/teams",
     });
@@ -81,7 +81,7 @@ export async function generateMetadata({
 
   if (primary === "mlb" && secondary === "news") {
     return buildMetadata({
-      title: "More On Baseball — MLB News | Sports Rivalry",
+      title: "More On Baseball — MLB News | The Sports Rivalry",
       description: "The latest MLB headlines: trades, injuries, interviews, analysis, and more from around the league.",
       canonicalPath: MLB_NEWS_PATH,
     });
@@ -91,7 +91,7 @@ export async function generateMetadata({
 
   if (!resolved) {
     return buildMetadata({
-      title: "Not found | Sports Rivalry",
+      title: "Not found | The Sports Rivalry",
       description: "The requested page could not be found.",
       canonicalPath: `/${primary}/${secondary}`,
       noIndex: true,
@@ -106,7 +106,7 @@ export async function generateMetadata({
 
   if (!article) {
     return buildMetadata({
-      title: "Not found | Sports Rivalry",
+      title: "Not found | The Sports Rivalry",
       description: "The requested page could not be found.",
       canonicalPath: `/${primary}/${secondary}`,
       noIndex: true,

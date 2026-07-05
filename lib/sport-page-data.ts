@@ -1,4 +1,5 @@
 import type { SportPageData, TeamIdentity } from "@/lib/types";
+import { SITE_NAME } from "@/lib/site-config";
 
 function team(
   name: string,
@@ -49,8 +50,8 @@ function opinion(id: string, title: string, author: string, category: string) {
 
 const basketball: SportPageData = {
   navConfig: {
-    mark: "SR",
-    wordmark: "Sports Rivalry",
+    mark: "TSR",
+    wordmark: SITE_NAME,
     tabs: [
       { label: "NBA", href: "/basketball", active: true },
       { label: "NCAA", href: "/basketball" },
@@ -256,8 +257,8 @@ const basketball: SportPageData = {
 
 const mlb: SportPageData = {
   navConfig: {
-    mark: "SR",
-    wordmark: "Sports Rivalry",
+    mark: "TSR",
+    wordmark: SITE_NAME,
     tabs: [
       { label: "MLB", href: "/mlb", active: true },
       { label: "AL", href: "/mlb" },
@@ -315,12 +316,12 @@ const mlb: SportPageData = {
   teamHub: {
     tabs: ["AL East", "AL Central", "AL West", "NL East"],
     teams: [
-      { team: team("Boston Red Sox", "BOS", "#bd3039", "#0c2340"), meta: "58-39 · 1st AL East", form: ["W", "W", "L", "W", "W"] },
-      { team: team("New York Yankees", "NYY", "#132448", "#e5e7eb"), meta: "56-41 · 2nd AL East", form: ["L", "W", "W", "L", "W"] },
-      { team: team("Los Angeles Dodgers", "LAD", "#005a9c", "#ffffff"), meta: "61-36 · 1st NL West", form: ["W", "W", "W", "L", "W"] },
-      { team: team("Atlanta Braves", "ATL", "#13274f", "#ce1141"), meta: "57-40 · 1st NL East", form: ["W", "L", "W", "W", "L"] },
-      { team: team("Houston Astros", "HOU", "#002d62", "#eb6e1f"), meta: "55-42 · 1st AL West", form: ["W", "W", "L", "W", "L"] },
-      { team: team("Baltimore Orioles", "BAL", "#df4601", "#000000"), meta: "54-43 · 3rd AL East", form: ["L", "W", "L", "W", "W"] },
+      { team: team("Boston Red Sox", "BOS", "#bd3039", "#0c2340"), slug: "boston-red-sox", meta: "58-39 · 1st AL East", form: ["W", "W", "L", "W", "W"] },
+      { team: team("New York Yankees", "NYY", "#132448", "#e5e7eb"), slug: "new-york-yankees", meta: "56-41 · 2nd AL East", form: ["L", "W", "W", "L", "W"] },
+      { team: team("Los Angeles Dodgers", "LAD", "#005a9c", "#ffffff"), slug: "los-angeles-dodgers", meta: "61-36 · 1st NL West", form: ["W", "W", "W", "L", "W"] },
+      { team: team("Atlanta Braves", "ATL", "#13274f", "#ce1141"), slug: "atlanta-braves", meta: "57-40 · 1st NL East", form: ["W", "L", "W", "W", "L"] },
+      { team: team("Houston Astros", "HOU", "#002d62", "#eb6e1f"), slug: "houston-astros", meta: "55-42 · 1st AL West", form: ["W", "W", "L", "W", "L"] },
+      { team: team("Baltimore Orioles", "BAL", "#df4601", "#000000"), slug: "baltimore-orioles", meta: "54-43 · 3rd AL East", form: ["L", "W", "L", "W", "W"] },
     ],
   },
   matchupsLabel: "Featured Matchups",
@@ -411,8 +412,8 @@ const mlb: SportPageData = {
 
 const golf: SportPageData = {
   navConfig: {
-    mark: "SR",
-    wordmark: "Sports Rivalry",
+    mark: "TSR",
+    wordmark: SITE_NAME,
     tabs: [
       { label: "PGA Tour", href: "/golf", active: true },
       { label: "LPGA", href: "/golf" },
@@ -561,8 +562,8 @@ const golf: SportPageData = {
 
 const nascar: SportPageData = {
   navConfig: {
-    mark: "SR",
-    wordmark: "Sports Rivalry",
+    mark: "TSR",
+    wordmark: SITE_NAME,
     tabs: [
       { label: "Cup Series", href: "/nascar", active: true },
       { label: "Xfinity", href: "/nascar" },
@@ -711,8 +712,8 @@ const nascar: SportPageData = {
 
 const football: SportPageData = {
   navConfig: {
-    mark: "SR",
-    wordmark: "Sports Rivalry",
+    mark: "TSR",
+    wordmark: SITE_NAME,
     tabs: [
       { label: "Premier League", href: "/football", active: true },
       { label: "ISL", href: "/football" },

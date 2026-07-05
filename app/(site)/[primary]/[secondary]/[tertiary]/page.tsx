@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: TertiaryPageProps): Promise<M
 
     if (!team) {
       return buildMetadata({
-        title: "Team not found | Sports Rivalry",
+        title: "Team not found | The Sports Rivalry",
         description: "",
         canonicalPath: "/mlb/teams",
         noIndex: true,
@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: TertiaryPageProps): Promise<M
     }
 
     return buildMetadata({
-      title: `${team.name} Roster ${new Date().getFullYear()} — Players, Positions & Stats | Sports Rivalry`,
+      title: `${team.name} Roster ${new Date().getFullYear()} — Players, Positions & Stats | The Sports Rivalry`,
       description: `Full ${team.name} roster: pitchers, catchers, infielders and outfielders with jersey numbers, bats/throws, age, height, weight and birthplace.`,
       canonicalPath: `/mlb/teams/${team.slug}`,
     });
@@ -72,7 +72,7 @@ export async function generateMetadata({ params }: TertiaryPageProps): Promise<M
 
     if (!article) {
       return buildMetadata({
-        title: "Article not found | Sports Rivalry",
+        title: "Article not found | The Sports Rivalry",
         description: "",
         canonicalPath: "/mlb/news",
         noIndex: true,
@@ -80,7 +80,7 @@ export async function generateMetadata({ params }: TertiaryPageProps): Promise<M
     }
 
     return buildMetadata({
-      title: `${article.title} | Sports Rivalry`,
+      title: `${article.title} | The Sports Rivalry`,
       description: article.summary,
       canonicalPath: `/mlb/news/${article.slug}`,
     });
@@ -88,7 +88,7 @@ export async function generateMetadata({ params }: TertiaryPageProps): Promise<M
 
   if (secondary !== "player") {
     return buildMetadata({
-      title: "Not found | Sports Rivalry",
+      title: "Not found | The Sports Rivalry",
       description: "",
       canonicalPath: "/",
       noIndex: true,
@@ -99,7 +99,7 @@ export async function generateMetadata({ params }: TertiaryPageProps): Promise<M
 
   if (!player) {
     return buildMetadata({
-      title: "Player not found | Sports Rivalry",
+      title: "Player not found | The Sports Rivalry",
       description: "",
       canonicalPath: "/",
       noIndex: true,
@@ -107,7 +107,7 @@ export async function generateMetadata({ params }: TertiaryPageProps): Promise<M
   }
 
   return buildMetadata({
-    title: `${player.name} #${player.number} — ${player.team} | Sports Rivalry`,
+    title: `${player.name} #${player.number} — ${player.team} | The Sports Rivalry`,
     description: `${player.name} career statistics, awards, bio and more. ${player.position} for the ${player.team}.`,
     canonicalPath: `/${player.sport === "basketball" ? "basketball" : "mlb"}/player/${player.slug}`,
   });

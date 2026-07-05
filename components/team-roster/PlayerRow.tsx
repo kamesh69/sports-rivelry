@@ -11,7 +11,7 @@ function PlayerRowImpl({ player }: PlayerRowProps) {
     <tr className="tr-table__row">
       <td className="tr-table__cell tr-table__cell--name" data-label="Name">
         <div className="tr-table__player">
-          <PlayerAvatar src={player.image} name={player.name} size={38} />
+          <PlayerAvatar src={player.image} name={player.name} size={32} />
           <span className="tr-table__player-name">{player.name}</span>
         </div>
       </td>

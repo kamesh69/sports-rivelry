@@ -30,7 +30,7 @@ export async function generateMetadata({
 
   if (!author) {
     return buildMetadata({
-      title: "Not found | Sports Rivalry",
+      title: "Not found | The Sports Rivalry",
       description: "The requested page could not be found.",
       canonicalPath: `/authors/${slug}`,
       noIndex: true,

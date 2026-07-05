@@ -1,5 +1,6 @@
 import type { Player } from "@/lib/player-types";
 import { PlayerRow } from "@/components/team-roster/PlayerRow";
+import { RosterTableColgroup } from "@/components/team-roster/RosterTableColgroup";
 
 interface RosterTableProps {
   players: Player[];
@@ -12,6 +13,7 @@ export function RosterTable({ players, groupLabel }: RosterTableProps) {
     <div className="tr-table-wrap">
       <div className="tr-table-scroll">
         <table className="tr-table" aria-label={`${groupLabel} roster table`}>
+          <RosterTableColgroup />
           <thead>
             <tr>
               <th className="tr-table__th tr-table__th--name" scope="col">

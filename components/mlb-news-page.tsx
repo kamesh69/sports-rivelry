@@ -1,15 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
-import type { NewsArticle, NewsCategory, NewsQueryResult, NewsSortOption } from "@/lib/news-types";
-import { getCategories, getNews } from "@/services/news.service";
+import type { NewsArticle, NewsQueryResult } from "@/lib/news-types";
+import { getNews } from "@/services/news.service";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { NewsHeader } from "@/components/news/NewsHeader";
-import { NewsFilters } from "@/components/news/NewsFilters";
 import { NewsList } from "@/components/news/NewsList";
 import { NewsPagination } from "@/components/news/NewsPagination";
 import { NewsErrorState } from "@/components/news/NewsErrorState";
+import { BrandStrip } from "@/components/brand-strip";
 import type { BreadcrumbItem } from "@/lib/seo";
 
 const PAGE_SIZE = 8;
@@ -21,7 +20,6 @@ const BREADCRUMB_ITEMS: BreadcrumbItem[] = [
 
 interface MlbNewsPageProps {
   initialResult: NewsQueryResult;
-  initialCategories: NewsCategory[];
 }
 
 /**
@@ -31,14 +29,10 @@ interface MlbNewsPageProps {
  * component owns UI/state only — swapping the mock service for a real API
  * later requires no changes here.
  */
-export function MlbNewsPage({ initialResult, initialCategories }: MlbNewsPageProps) {
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("all");
-  const [sortBy, setSortBy] = useState<NewsSortOption>("latest");
+export function MlbNewsPage({ initialResult }: MlbNewsPageProps) {
   const [page, setPage] = useState(1);
 
   const [result, setResult] = useState<NewsQueryResult>(initialResult);
-  const [categories] = useState<NewsCategory[]>(initialCategories);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -51,7 +45,7 @@ export function MlbNewsPage({ initialResult, initialCategories }: MlbNewsPagePro
     setError(null);
 
     try {
-      const response = await getNews({ page, pageSize: PAGE_SIZE, search, category, sortBy });
+      const response = await getNews({ page, pageSize: PAGE_SIZE });
       if (currentRequest === requestId.current) {
         setResult(response);
       }
@@ -64,7 +58,7 @@ export function MlbNewsPage({ initialResult, initialCategories }: MlbNewsPagePro
         setLoading(false);
       }
     }
-  }, [page, search, category, sortBy]);
+  }, [page]);
 
   useEffect(() => {
     if (isFirstRun.current) {
@@ -73,21 +67,6 @@ export function MlbNewsPage({ initialResult, initialCategories }: MlbNewsPagePro
     }
     loadNews();
   }, [loadNews]);
-
-  const handleSearchChange = useCallback((value: string) => {
-    setSearch(value);
-    setPage(1);
-  }, []);
-
-  const handleCategoryChange = useCallback((value: string) => {
-    setCategory(value);
-    setPage(1);
-  }, []);
-
-  const handleSortChange = useCallback((value: NewsSortOption) => {
-    setSortBy(value);
-    setPage(1);
-  }, []);
 
   const handlePageChange = useCallback(
     (nextPage: number) => {
@@ -108,17 +87,6 @@ export function MlbNewsPage({ initialResult, initialCategories }: MlbNewsPagePro
 
         <NewsHeader title="More On Baseball" />
 
-        <NewsFilters
-          search={search}
-          onSearchChange={handleSearchChange}
-          categories={categories}
-          category={category}
-          onCategoryChange={handleCategoryChange}
-          sortBy={sortBy}
-          onSortChange={handleSortChange}
-          resultCount={result.total}
-        />
-
         {error ? (
           <NewsErrorState message={error} onRetry={loadNews} />
         ) : (
@@ -131,26 +99,19 @@ export function MlbNewsPage({ initialResult, initialCategories }: MlbNewsPagePro
             />
           </>
         )}
-
-        <p className="mn-back">
-          <Link href="/mlb" className="mn-back__link">
-            ← Back to MLB
-          </Link>
-        </p>
       </div>
+
+      <BrandStrip />
     </div>
   );
 }
 
 /* ── Server-side data loader wrapper ─────────────────────────
    Fetches the first page on the server (fast first paint, SEO-friendly),
-   then hands off to the client component for interactive filtering.
+   then hands off to the client component for pagination.
 ──────────────────────────────────────────────────────────── */
 export async function MlbNewsPageLoader() {
-  const [initialResult, initialCategories] = await Promise.all([
-    getNews({ page: 1, pageSize: PAGE_SIZE }),
-    getCategories(),
-  ]);
+  const initialResult = await getNews({ page: 1, pageSize: PAGE_SIZE });
 
-  return <MlbNewsPage initialResult={initialResult} initialCategories={initialCategories} />;
+  return <MlbNewsPage initialResult={initialResult} />;
 }

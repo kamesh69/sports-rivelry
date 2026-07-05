@@ -28,8 +28,6 @@ export function HeroBanner({ searchQuery, onSearchChange }: HeroBannerProps) {
       />
 
       <div className="td-hero__content">
-        <span className="td-hero__eyebrow">⚾ Major League Baseball</span>
-
         <h1 className="td-hero__title">MLB Teams Directory</h1>
 
         <p className="td-hero__desc">

@@ -1,4 +1,5 @@
 import type { TeamCategory } from "@/lib/mlb-team-types";
+import { CategoryIcon } from "@/components/mlb-teams/CategoryIcons";
 
 interface CategoryGridProps {
   categories: TeamCategory[];
@@ -29,7 +30,7 @@ export function CategoryGrid({
             aria-label={`Filter by ${cat.label}`}
           >
             <span className="td-cat-card__icon" aria-hidden="true">
-              {cat.icon}
+              <CategoryIcon id={cat.id} />
             </span>
             <span className="td-cat-card__title">{cat.label}</span>
             <span className="td-cat-card__sub">{cat.subtitle}</span>

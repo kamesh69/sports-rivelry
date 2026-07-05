@@ -3,5 +3,5 @@
   <circle cx="256" cy="256" r="168" fill="#7F1016"/>
   <path d="M180 176H292C341.706 176 382 216.294 382 266C382 315.706 341.706 356 292 356H180V176Z" fill="#F8F2E8"/>
   <path d="M148 156H244C274.928 156 300 181.072 300 212C300 242.928 274.928 268 244 268H204V324H148V156Z" fill="#FFFDF8"/>
-  <text x="256" y="446" text-anchor="middle" font-family="Arial, sans-serif" font-size="40" font-weight="700" fill="#F8F2E8">Sports Rivalry</text>
+  <text x="256" y="446" text-anchor="middle" font-family="Arial, sans-serif" font-size="40" font-weight="700" fill="#F8F2E8">The Sports Rivalry</text>
 </svg>

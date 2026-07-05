@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import type { SportPageData } from "@/lib/types";
 import { TeamBadge } from "@/components/sport-page/atoms";
+import { getTeamRosterPath } from "@/lib/navigation";
 
 export function TeamHub({
   teamHub,
@@ -46,25 +47,46 @@ export function TeamHub({
 
       <div className="sp-teamhub__wrap">
         <div ref={trackRef} className="sp-teamhub__track">
-          {teamHub.teams.map((entry) => (
-            <div key={entry.team.name} className="sp-teamcard">
-              <TeamBadge team={entry.team} size="xl" />
-              <span className="sp-teamcard__name">{entry.team.name}</span>
-              <span className="sp-teamcard__meta">{entry.meta}</span>
-              {entry.form?.length ? (
-                <div className="sp-teamcard__form" aria-label="Recent form">
-                  {entry.form.map((result, index) => (
-                    <span
-                      key={`${entry.team.name}-${index}`}
-                      className={`sp-form-letter sp-form-letter--${result.toLowerCase()}`}
-                    >
-                      {result}
-                    </span>
-                  ))}
-                </div>
-              ) : null}
-            </div>
-          ))}
+          {teamHub.teams.map((entry) => {
+            const card = (
+              <>
+                <TeamBadge team={entry.team} size="xl" />
+                <span className="sp-teamcard__name">{entry.team.name}</span>
+                <span className="sp-teamcard__meta">{entry.meta}</span>
+                {entry.form?.length ? (
+                  <div className="sp-teamcard__form" aria-label="Recent form">
+                    {entry.form.map((result, index) => (
+                      <span
+                        key={`${entry.team.name}-${index}`}
+                        className={`sp-form-letter sp-form-letter--${result.toLowerCase()}`}
+                      >
+                        {result}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+              </>
+            );
+
+            if (entry.slug) {
+              return (
+                <Link
+                  key={entry.team.name}
+                  href={getTeamRosterPath(entry.slug)}
+                  className="sp-teamcard sp-teamcard--link"
+                  aria-label={`View ${entry.team.name}`}
+                >
+                  {card}
+                </Link>
+              );
+            }
+
+            return (
+              <div key={entry.team.name} className="sp-teamcard">
+                {card}
+              </div>
+            );
+          })}
         </div>
         <button
           type="button"

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useRef } from "react";
+import { BrandLogoImage } from "@/components/brand-logo-image";
 import type { Article } from "@/lib/types";
 
 interface RecommendedReadsProps {
@@ -50,7 +51,9 @@ export function RecommendedReads({ articles }: RecommendedReadsProps) {
                   sizes="(max-width: 720px) 42vw, 220px"
                 />
                 <div className="reel-card__overlay" />
-                <span className="reel-card__brand">SR</span>
+                <span className="reel-card__brand">
+                  <BrandLogoImage variant="card" />
+                </span>
                 <p className="reel-card__title">{article.title}</p>
               </Link>
             ))}

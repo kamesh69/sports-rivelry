@@ -28,10 +28,10 @@ export function ManagerSection({ team }: ManagerSectionProps) {
       <span className="tr-manager__avatar" style={avatarStyle} aria-hidden="true">
         {initialsOf(manager)}
       </span>
-      <div>
-        <p className="tr-manager__label">Manager</p>
-        <p className="tr-manager__name">{manager}</p>
-      </div>
+      <p className="tr-manager__line">
+        <span className="tr-manager__label">Manager</span>
+        <span className="tr-manager__name">{manager}</span>
+      </p>
     </section>
   );
 }

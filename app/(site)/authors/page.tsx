@@ -1,6 +1,7 @@
 import { authors } from "@/lib/mock-data";
 import { AuthorSpotlight } from "@/components/author-spotlight";
 import { SectionHeading } from "@/components/section-heading";
+import { SITE_NAME } from "@/lib/site-config";
 
 export const revalidate = 60;
 
@@ -9,7 +10,7 @@ export default function AuthorsIndexPage() {
     <div className="page-shell page-shell--detail">
       <section className="hub-hero">
         <span className="eyebrow">Authors</span>
-        <h1>Meet the Sports Rivalry newsroom</h1>
+        <h1>Meet {SITE_NAME} newsroom</h1>
         <p>
           Author pages are a core SEO and trust signal, giving Google and readers clear
           expertise context.

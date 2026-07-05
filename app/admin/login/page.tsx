@@ -3,7 +3,7 @@ import { LoginForm } from "./login-form";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 
 export const metadata: Metadata = {
-  title: "Admin Login | Sports Rivalry",
+  title: "Admin Login | The Sports Rivalry",
   robots: { index: false, follow: false },
 };
 
@@ -17,7 +17,7 @@ export default async function AdminLoginPage({
   return (
     <div className="admin-auth">
       <div className="admin-auth__card">
-        <p className="admin-auth__brand">Sports Rivalry</p>
+        <p className="admin-auth__brand">The Sports Rivalry</p>
         <h1>Admin sign in</h1>
         <p className="admin-auth__hint">
           Manage the Fan Zone, polls, media library, and homepage modules.

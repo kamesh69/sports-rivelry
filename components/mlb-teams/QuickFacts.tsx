@@ -6,12 +6,12 @@ interface QuickFactsProps {
 
 export function QuickFacts({ facts }: QuickFactsProps) {
   return (
-    <section className="td-section" aria-label="MLB quick facts">
+    <section className="td-facts-section" aria-label="MLB quick facts">
       <div className="td-section-head">
         <h2 className="td-section-title">MLB Quick Facts</h2>
       </div>
 
-      <div className="td-facts__grid" role="list">
+      <div className="td-facts__row" role="list">
         {facts.map((fact) => (
           <div
             key={fact.label}

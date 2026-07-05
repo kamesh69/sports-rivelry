@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: Sports Rivalry Headless Core
- * Description: Registers Sports Rivalry content models, exposes them to WPGraphQL, and notifies the Next.js frontend to revalidate pages after editorial changes.
- * Author: Sports Rivalry
+ * Plugin Name: The Sports Rivalry Headless Core
+ * Description: Registers The Sports Rivalry content models, exposes them to WPGraphQL, and notifies the Next.js frontend to revalidate pages after editorial changes.
+ * Author: The Sports Rivalry
  * Version: 0.1.0
  */
 
@@ -131,7 +131,7 @@ function sr_register_acf_option_pages() {
     }
 
     acf_add_options_page([
-        'page_title' => 'Sports Rivalry Layout Settings',
+        'page_title' => 'The Sports Rivalry Layout Settings',
         'menu_title' => 'SR Layout',
         'menu_slug' => 'sports-rivalry-layout',
         'capability' => 'edit_posts',

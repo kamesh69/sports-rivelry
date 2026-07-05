@@ -16,10 +16,13 @@ interface TeamDirectoryProps {
   division: DivisionFilter;
   currentPage: number;
   pageSize: number;
+  showAllTeams: boolean;
+  totalTeamCount: number;
   onViewModeChange: (mode: ViewMode) => void;
   onLeagueChange: (league: LeagueFilter) => void;
   onDivisionChange: (division: DivisionFilter) => void;
   onPageChange: (page: number) => void;
+  onShowAllTeams: () => void;
 }
 
 function SkeletonCard() {
@@ -42,19 +45,23 @@ export function TeamDirectory({
   division,
   currentPage,
   pageSize,
+  showAllTeams,
+  totalTeamCount,
   onViewModeChange,
   onLeagueChange,
   onDivisionChange,
   onPageChange,
+  onShowAllTeams,
 }: TeamDirectoryProps) {
-  const totalPages = Math.ceil(filteredTeams.length / pageSize);
   const pageStart = (currentPage - 1) * pageSize;
-  const pageTeams = filteredTeams.slice(pageStart, pageStart + pageSize);
-
-  const pageNumbers: number[] = [];
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i);
-  }
+  const visibleTeams = showAllTeams
+    ? filteredTeams
+    : filteredTeams.slice(pageStart, pageStart + pageSize);
+  const canShowAll =
+    !showAllTeams &&
+    filteredTeams.length > pageSize &&
+    league === "All" &&
+    division === "All";
 
   return (
     <section className="td-section" aria-label="Teams directory">
@@ -136,8 +143,8 @@ export function TeamDirectory({
           <p className="td-empty__desc">Try changing your filters or search keyword.</p>
         </div>
       ) : viewMode === "grid" ? (
-        <div className="td-dir__grid" role="list" aria-label="Teams grid">
-          {pageTeams.map((team) => (
+        <div className="td-dir__grid td-dir__grid--compact" role="list" aria-label="Teams grid">
+          {visibleTeams.map((team) => (
             <div key={team.id} role="listitem">
               <TeamCard team={team} />
             </div>
@@ -145,7 +152,7 @@ export function TeamDirectory({
         </div>
       ) : (
         <div className="td-dir__list" role="list" aria-label="Teams list">
-          {pageTeams.map((team) => (
+          {visibleTeams.map((team) => (
             <div key={team.id} role="listitem">
               <TeamListItem team={team} />
             </div>
@@ -153,41 +160,16 @@ export function TeamDirectory({
         </div>
       )}
 
-      {totalPages > 1 && (
-        <nav className="td-pagination" aria-label="Teams pagination">
+      {canShowAll && (
+        <div className="td-dir__view-all-wrap">
           <button
             type="button"
-            className="td-page-btn"
-            onClick={() => onPageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            aria-label="Previous page"
+            className="td-dir__view-all"
+            onClick={onShowAllTeams}
           >
-            ‹
+            View All {totalTeamCount} Teams
           </button>
-
-          {pageNumbers.map((n) => (
-            <button
-              key={n}
-              type="button"
-              className={`td-page-btn${n === currentPage ? " td-page-btn--active" : ""}`}
-              onClick={() => onPageChange(n)}
-              aria-label={`Page ${n}`}
-              aria-current={n === currentPage ? "page" : undefined}
-            >
-              {n}
-            </button>
-          ))}
-
-          <button
-            type="button"
-            className="td-page-btn"
-            onClick={() => onPageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            aria-label="Next page"
-          >
-            ›
-          </button>
-        </nav>
+        </div>
       )}
     </section>
   );

@@ -24,7 +24,8 @@ type ViewMode = "grid" | "list";
 type LeagueFilter = "All" | "American" | "National";
 type DivisionFilter = "All" | "East" | "Central" | "West";
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 9;
+const ALL_TEAMS_COUNT = 30;
 
 interface MlbTeamsPageProps {
   initialTeams: MLBTeam[];
@@ -48,6 +49,7 @@ export function MlbTeamsPage({
   const [activeCategory, setActiveCategory] = useState("all");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [currentPage, setCurrentPage] = useState(1);
+  const [showAllTeams, setShowAllTeams] = useState(false);
 
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [debouncedQuery, setDebouncedQuery] = useState("");
@@ -80,6 +82,7 @@ export function MlbTeamsPage({
     setLeague("All");
     setDivision("All");
     setCurrentPage(1);
+    setShowAllTeams(false);
   }, []);
 
   /* ── League filter from overview cards ───────────────── */
@@ -122,22 +125,23 @@ export function MlbTeamsPage({
             division={division}
             currentPage={currentPage}
             pageSize={PAGE_SIZE}
+            showAllTeams={showAllTeams}
+            totalTeamCount={ALL_TEAMS_COUNT}
             onViewModeChange={setViewMode}
-            onLeagueChange={(l) => { setLeague(l); setCurrentPage(1); }}
-            onDivisionChange={(d) => { setDivision(d); setCurrentPage(1); }}
+            onLeagueChange={(l) => { setLeague(l); setCurrentPage(1); setShowAllTeams(false); }}
+            onDivisionChange={(d) => { setDivision(d); setCurrentPage(1); setShowAllTeams(false); }}
             onPageChange={setCurrentPage}
+            onShowAllTeams={() => setShowAllTeams(true)}
           />
         </div>
       </div>
 
-      {/* ── Historical Timeline (full bleed bg) ── */}
-      <HistoricalTimeline events={initialTimeline} />
-
-      {/* ── Quick Facts ── */}
-      <div className="td-shell">
-        <QuickFacts facts={initialFacts} />
-        {/* bottom spacing */}
-        <div style={{ paddingBottom: "1rem" }} />
+      {/* ── Historical Timeline + Quick Facts (shared bg) ── */}
+      <div className="td-info-band">
+        <div className="td-shell">
+          <HistoricalTimeline events={initialTimeline} />
+          <QuickFacts facts={initialFacts} />
+        </div>
       </div>
 
       {/* ── Newsletter (full bleed bg) ── */}

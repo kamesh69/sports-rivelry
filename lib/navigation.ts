@@ -22,3 +22,26 @@ export const MLB_NEWS_PATH = "/mlb/news";
 export function getNewsArticlePath(slug: string): string {
   return `${MLB_NEWS_PATH}/${slug}`;
 }
+
+/**
+ * NCAA module navigation. Mirrors the MLB helpers above — every card and
+ * "View All" link in the NCAA module builds its URL from these helpers
+ * instead of hardcoding path strings.
+ */
+export const NCAA_PATH = "/ncaa";
+
+export function getNcaaNewsPath(slug: string): string {
+  return `${NCAA_PATH}/news/${slug}`;
+}
+
+export function getNcaaCollegePath(slug: string): string {
+  return `${NCAA_PATH}/college/${slug}`;
+}
+
+export function getNcaaConferencePath(slug: string): string {
+  return `${NCAA_PATH}/conference/${slug}`;
+}
+
+export function getNcaaVideoPath(slug: string): string {
+  return `${NCAA_PATH}/videos/${slug}`;
+}

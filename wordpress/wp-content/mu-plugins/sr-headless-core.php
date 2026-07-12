@@ -27,6 +27,7 @@ require_once __DIR__ . '/sr-content-graphql.php';
 require_once __DIR__ . '/sr-editorial-workflow.php';
 require_once __DIR__ . '/sr-seed-mlb.php';
 require_once __DIR__ . '/sr-seed-sports.php';
+require_once __DIR__ . '/sr-seed-homepage.php';
 
 const SR_EDITORIAL_POST_TYPES = ['article', 'live_blog', 'video', 'newsletter_issue', 'landing_page'];
 const SR_EDITORIAL_TAXONOMIES = ['sport', 'league', 'team', 'tournament', 'topic'];

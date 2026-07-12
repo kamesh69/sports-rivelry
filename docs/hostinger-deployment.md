@@ -47,7 +47,13 @@ to:
 domains/cms.thesportsrivalry.com/public_html/wp-content/mu-plugins/
 ```
 
-On Hostinger, FTP often lands in account-level `public_html/` — that is **not** the live CMS path. Always use the domain-specific path above.
+FTP login lands in account `/public_html/`. The **live CMS** WordPress root is:
+
+```
+../domains/cms.thesportsrivalry.com/public_html/
+```
+
+Do **not** upload only to `public_html/domains/...` — that is a duplicate path and is not served.
 
 **CI deploy:** pushes to `main` that touch `wordpress/wp-content/mu-plugins/` auto-deploy via GitHub Actions.
 

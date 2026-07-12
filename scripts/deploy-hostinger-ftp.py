@@ -17,9 +17,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MU_LOCAL = ROOT / "wordpress/wp-content/mu-plugins"
-# Hostinger FTP lands in /public_html, but the live CMS site is under:
-# domains/cms.thesportsrivalry.com/public_html/
-REMOTE_ROOT = "domains/cms.thesportsrivalry.com/public_html"
+# Hostinger FTP login lands in /public_html; the live CMS is one level up:
+# /domains/cms.thesportsrivalry.com/public_html/
+REMOTE_ROOT = "../domains/cms.thesportsrivalry.com/public_html"
 REMOTE_MU = f"{REMOTE_ROOT}/wp-content/mu-plugins"
 REMOTE_PLUGINS = f"{REMOTE_ROOT}/wp-content/plugins"
 WP_CONFIG = f"{REMOTE_ROOT}/wp-config.php"

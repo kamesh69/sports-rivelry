@@ -22,6 +22,30 @@ function sr_get_mlb_teams_page_settings() {
     return is_array($stored) ? $stored : [];
 }
 
+function sr_save_mlb_stats_settings(array $settings) {
+    update_option(SR_MLB_STATS_OPTION, $settings, false);
+}
+
+function sr_save_mlb_teams_page_settings(array $settings) {
+    update_option(SR_MLB_TEAMS_OPTION, $settings, false);
+}
+
+function sr_revalidate_mlb_stats_after_save() {
+    if (!function_exists('sr_send_revalidation_request')) {
+        return;
+    }
+
+    sr_send_revalidation_request(['/mlb/stats'], ['wordpress', 'mlb', 'mlb-stats']);
+}
+
+function sr_revalidate_mlb_teams_page_after_save() {
+    if (!function_exists('sr_send_revalidation_request')) {
+        return;
+    }
+
+    sr_send_revalidation_request(['/mlb/teams'], ['wordpress', 'mlb', 'mlb-teams']);
+}
+
 add_action('graphql_register_types', 'sr_register_mlb_data_graphql', 27);
 
 function sr_register_mlb_data_graphql() {

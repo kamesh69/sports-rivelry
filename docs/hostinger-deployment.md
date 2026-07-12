@@ -59,6 +59,17 @@ On Hostinger, FTP often lands in account-level `public_html/` — that is **not*
 
 Manual deploy: `FTP_USER=... FTP_PASS=... python3 scripts/deploy-hostinger-ftp.py --mu-only`
 
+### MLB stats & teams curation
+
+In wp-admin **SR Layout**:
+
+| Screen | Curates |
+|--------|---------|
+| **MLB Stats** | Batting / pitching / fielding leaderboards on `/mlb/stats` |
+| **MLB Teams Page** | Featured carousel IDs, timeline, quick facts on `/mlb/teams` |
+
+Leave JSON tables empty (`[]`) to keep the Next.js default data for that section.
+
 ### 4. Install plugins
 
 In wp-admin **Plugins → Add New**, install and activate:

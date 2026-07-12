@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import io
 import os
 import re
@@ -115,7 +116,27 @@ def install_wp_graphql(ftp: FTP) -> None:
         upload_tree(ftp, plugin_dir, f"{REMOTE_PLUGINS}/wp-graphql")
 
 
+def deploy_mu_plugins(ftp: FTP) -> int:
+    print("=== Upload mu-plugins ===")
+    ensure_dir(ftp, REMOTE_MU)
+    mu_count = 0
+    for path in sorted(MU_LOCAL.glob("*.php")):
+        upload_file(ftp, path, f"{REMOTE_MU}/{path.name}")
+        print(f"  {path.name}")
+        mu_count += 1
+    print(f"Uploaded {mu_count} mu-plugin files")
+    return mu_count
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser(description="Deploy TSR WordPress files to Hostinger")
+    parser.add_argument(
+        "--mu-only",
+        action="store_true",
+        help="Upload mu-plugins only (for CI on push)",
+    )
+    args = parser.parse_args()
+
     host = os.environ.get("FTP_HOST", "82.112.239.215")
     user = os.environ["FTP_USER"]
     password = os.environ["FTP_PASS"]
@@ -130,14 +151,12 @@ def main() -> int:
     ftp.login(user, password)
     ftp.set_pasv(True)
 
-    print("=== Upload mu-plugins ===")
-    ensure_dir(ftp, REMOTE_MU)
-    mu_count = 0
-    for path in sorted(MU_LOCAL.glob("*.php")):
-        upload_file(ftp, path, f"{REMOTE_MU}/{path.name}")
-        print(f"  {path.name}")
-        mu_count += 1
-    print(f"Uploaded {mu_count} mu-plugin files")
+    deploy_mu_plugins(ftp)
+
+    if args.mu_only:
+        ftp.quit()
+        print("\nMu-plugins deploy complete.")
+        return 0
 
     install_wp_graphql(ftp)
 

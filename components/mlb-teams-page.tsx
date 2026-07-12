@@ -4,12 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { MLBTeam, TeamCategory, TimelineEvent, QuickFact } from "@/lib/mlb-team-types";
 import {
   searchTeams,
-  getFeaturedTeams,
-  getCategories,
-  getTimeline,
-  getQuickFacts,
-  getTeams,
-  FEATURED_TEAM_IDS,
 } from "@/lib/team-service";
 import { HeroBanner } from "@/components/mlb-teams/HeroBanner";
 import { CategoryGrid } from "@/components/mlb-teams/CategoryGrid";
@@ -147,30 +141,5 @@ export function MlbTeamsPage({
       {/* ── Newsletter (full bleed bg) ── */}
       <NewsletterSection />
     </div>
-  );
-}
-
-/* ── Server-side data loader wrapper ─────────────────────────
-   This async component fetches all data and passes it to the
-   client component, keeping the service layer separate.
-──────────────────────────────────────────────────────────── */
-export async function MlbTeamsPageLoader() {
-  const [teams, categories, timeline, facts] = await Promise.all([
-    getTeams(),
-    getCategories(),
-    getTimeline(),
-    getQuickFacts(),
-  ]);
-
-  const featured = teams.filter((t) => FEATURED_TEAM_IDS.includes(t.id));
-
-  return (
-    <MlbTeamsPage
-      initialTeams={teams}
-      initialFeatured={featured}
-      initialCategories={categories}
-      initialTimeline={timeline}
-      initialFacts={facts}
-    />
   );
 }

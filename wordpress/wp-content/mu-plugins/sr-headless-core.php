@@ -20,6 +20,8 @@ require_once __DIR__ . '/sr-plan-c-graphql.php';
 require_once __DIR__ . '/sr-sport-hub-graphql.php';
 require_once __DIR__ . '/sr-author-profiles.php';
 require_once __DIR__ . '/sr-topic-hub.php';
+require_once __DIR__ . '/sr-league-hub.php';
+require_once __DIR__ . '/sr-mlb-data.php';
 require_once __DIR__ . '/sr-content-graphql.php';
 require_once __DIR__ . '/sr-editorial-workflow.php';
 require_once __DIR__ . '/sr-seed-mlb.php';

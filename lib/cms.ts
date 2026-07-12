@@ -1016,11 +1016,192 @@ export async function getSportHub(slug: string): Promise<SportHub | null> {
   };
 }
 
+function mapLeagueHubNode(node: {
+  slug: string;
+  name: string;
+  sportSlug: string;
+  seasonLabel?: string;
+  description?: string;
+  articleSlugs?: string[];
+  seoTitle?: string;
+  seoDescription?: string;
+}): LeagueHub | null {
+  const sport = sports.find((entry) => entry.slug === node.sportSlug);
+
+  if (!sport) {
+    return null;
+  }
+
+  return {
+    slug: node.slug,
+    name: node.name,
+    sport,
+    seasonLabel: node.seasonLabel || "2026 Season",
+    description: node.description || "",
+    articleSlugs: node.articleSlugs || [],
+    seo: {
+      title: node.seoTitle || `${node.name} ${node.seasonLabel || ""} | The Sports Rivalry`.trim(),
+      description: node.seoDescription || node.description || "",
+      canonicalPath: `/${sport.slug}/${node.slug}`,
+    },
+  };
+}
+
 export async function getLeagueHub(
   sportSlug: string,
   leagueSlug: string,
 ): Promise<LeagueHub | null> {
+  const data = await wpFetch<{ leagueHub?: Parameters<typeof mapLeagueHubNode>[0] | null }>(
+    `
+      query LeagueHub($sport: String!, $slug: String!) {
+        leagueHub(sport: $sport, slug: $slug) {
+          slug name sportSlug seasonLabel description articleSlugs seoTitle seoDescription
+        }
+      }
+    `,
+    { sport: sportSlug, slug: leagueSlug },
+    ["league", sportSlug, leagueSlug],
+  );
+
+  if (data?.leagueHub) {
+    return mapLeagueHubNode(data.leagueHub);
+  }
+
   return getLeagueHubBySportAndSlug(sportSlug, leagueSlug);
+}
+
+export async function getAllLeagueHubs(): Promise<LeagueHub[]> {
+  const data = await wpFetch<{ leagueHubs?: Array<Parameters<typeof mapLeagueHubNode>[0]> }>(
+    `
+      query LeagueHubs {
+        leagueHubs {
+          slug name sportSlug seasonLabel description articleSlugs seoTitle seoDescription
+        }
+      }
+    `,
+    {},
+    ["leagues"],
+  );
+
+  const wpLeagues = (data?.leagueHubs || [])
+    .map(mapLeagueHubNode)
+    .filter((league): league is LeagueHub => Boolean(league));
+  const wpKeys = new Set(wpLeagues.map((league) => `${league.sport.slug}/${league.slug}`));
+  const mockLeagues = leagueHubs.filter(
+    (league) => !wpKeys.has(`${league.sport.slug}/${league.slug}`),
+  );
+
+  return wpLeagues.length > 0 ? [...wpLeagues, ...mockLeagues] : leagueHubs;
+}
+
+export async function getMlbStatsTables(): Promise<{
+  seasonLabel: string;
+  batting: unknown[];
+  pitching: unknown[];
+  fielding: unknown[];
+}> {
+  const data = await wpFetch<{
+    mlbStatsSettings?: {
+      seasonLabel?: string | null;
+      battingJson?: string | null;
+      pitchingJson?: string | null;
+      fieldingJson?: string | null;
+    } | null;
+  }>(
+    `
+      query MlbStatsSettings {
+        mlbStatsSettings {
+          seasonLabel
+          battingJson
+          pitchingJson
+          fieldingJson
+        }
+      }
+    `,
+    {},
+    ["mlb", "mlb-stats"],
+  );
+
+  const settings = data?.mlbStatsSettings;
+
+  if (!settings) {
+    return { seasonLabel: "2026", batting: [], pitching: [], fielding: [] };
+  }
+
+  const parseRows = (value?: string | null) => {
+    if (!value) {
+      return [];
+    }
+
+    try {
+      const parsed = JSON.parse(value);
+
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  };
+
+  return {
+    seasonLabel: settings.seasonLabel || "2026",
+    batting: parseRows(settings.battingJson),
+    pitching: parseRows(settings.pitchingJson),
+    fielding: parseRows(settings.fieldingJson),
+  };
+}
+
+export async function getMlbTeamsPageSettings(): Promise<{
+  featuredTeamIds: string[];
+  timeline: Array<{ year: string; title: string; description: string }>;
+  quickFacts: Array<{ icon: string; value: string; label: string }>;
+  heroTitle: string;
+  heroDescription: string;
+} | null> {
+  const data = await wpFetch<{
+    mlbTeamsPageSettings?: {
+      featuredTeamIds?: string[] | null;
+      timeline?: Array<{ year?: string; title?: string; description?: string }> | null;
+      quickFacts?: Array<{ icon?: string; value?: string; label?: string }> | null;
+      heroTitle?: string | null;
+      heroDescription?: string | null;
+    } | null;
+  }>(
+    `
+      query MlbTeamsPageSettings {
+        mlbTeamsPageSettings {
+          featuredTeamIds
+          timeline { year title description }
+          quickFacts { icon value label }
+          heroTitle
+          heroDescription
+        }
+      }
+    `,
+    {},
+    ["mlb", "mlb-teams-page"],
+  );
+
+  const settings = data?.mlbTeamsPageSettings;
+
+  if (!settings) {
+    return null;
+  }
+
+  return {
+    featuredTeamIds: settings.featuredTeamIds || [],
+    timeline: (settings.timeline || []).map((event) => ({
+      year: event.year || "",
+      title: event.title || "",
+      description: event.description || "",
+    })),
+    quickFacts: (settings.quickFacts || []).map((fact) => ({
+      icon: fact.icon || "",
+      value: fact.value || "",
+      label: fact.label || "",
+    })),
+    heroTitle: settings.heroTitle || "",
+    heroDescription: settings.heroDescription || "",
+  };
 }
 
 export async function getArticle(
@@ -1147,7 +1328,7 @@ export async function resolveSportDetail(
   | { type: "article"; article: Article }
   | null
 > {
-  const league = getLeagueHubBySportAndSlug(sportSlug, secondarySlug);
+  const league = await getLeagueHub(sportSlug, secondarySlug);
 
   if (league) {
     return { type: "league", league };
@@ -1441,7 +1622,17 @@ export async function getAllSportPaths() {
 }
 
 export async function getAllLeaguePaths() {
-  return leagueHubs.map((league) => `/${league.sport.slug}/${league.slug}`);
+  const data = await wpFetch<{ leagueHubs?: Array<{ sportSlug: string; slug: string }> }>(
+    `query { leagueHubs { sportSlug slug } }`,
+    {},
+    ["leagues"],
+  );
+  const wpPaths =
+    data?.leagueHubs?.map((league) => `/${league.sportSlug}/${league.slug}`) || [];
+
+  return Array.from(
+    new Set([...wpPaths, ...leagueHubs.map((league) => `/${league.sport.slug}/${league.slug}`)]),
+  );
 }
 
 export async function getAllTopicPaths() {

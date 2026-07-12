@@ -1,10 +1,11 @@
 import {
   getArticlesForCollection,
   getArticle,
+  getAllLeaguePaths,
   getRelatedStories,
   resolveSportDetail,
 } from "@/lib/cms";
-import { articles, leagueHubs } from "@/lib/mock-data";
+import { articles } from "@/lib/mock-data";
 import {
   buildArticleJsonLd,
   buildArticleMetadata,
@@ -26,8 +27,8 @@ import { ArticleTopics } from "@/components/article-topics";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { JsonLd } from "@/components/json-ld";
 import { SectionHeading } from "@/components/section-heading";
-import { MlbStatsPage } from "@/components/mlb-stats-page";
-import { MlbTeamsPageLoader } from "@/components/mlb-teams-page";
+import { MlbStatsPageLoader } from "@/components/mlb-stats-page-loader";
+import { MlbTeamsPageLoader } from "@/components/mlb-teams-page-loader";
 import { MlbNewsPageLoader } from "@/components/mlb-news-page";
 import { MLB_NEWS_PATH } from "@/lib/navigation";
 import type { Metadata } from "next";
@@ -46,6 +47,8 @@ interface SportDetailPageProps {
 }
 
 export async function generateStaticParams() {
+  const leaguePaths = await getAllLeaguePaths();
+
   return [
     { primary: "mlb", secondary: "stats" },
     { primary: "mlb", secondary: "teams" },
@@ -54,10 +57,11 @@ export async function generateStaticParams() {
       primary: article.sport.slug,
       secondary: article.slug,
     })),
-    ...leagueHubs.map((league) => ({
-      primary: league.sport.slug,
-      secondary: league.slug,
-    })),
+    ...leaguePaths.map((path) => {
+      const [, primary, secondary] = path.split("/");
+
+      return { primary, secondary };
+    }),
   ];
 }
 
@@ -137,7 +141,7 @@ export default async function SportDetailPage({
     return (
       <>
         <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
-        <MlbStatsPage />
+        <MlbStatsPageLoader />
       </>
     );
   }

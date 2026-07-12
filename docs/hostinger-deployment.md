@@ -49,6 +49,16 @@ domains/cms.thesportsrivalry.com/public_html/wp-content/mu-plugins/
 
 On Hostinger, FTP often lands in account-level `public_html/` — that is **not** the live CMS path. Always use the domain-specific path above.
 
+**CI deploy:** pushes to `main` that touch `wordpress/wp-content/mu-plugins/` auto-deploy via GitHub Actions. Add these repository secrets:
+
+| Secret | Value |
+|--------|-------|
+| `FTP_HOST` | `82.112.239.215` |
+| `FTP_USER` | Hostinger FTP username |
+| `FTP_PASS` | Hostinger FTP password |
+
+Manual deploy: `FTP_USER=... FTP_PASS=... python3 scripts/deploy-hostinger-ftp.py --mu-only`
+
 ### 4. Install plugins
 
 In wp-admin **Plugins → Add New**, install and activate:

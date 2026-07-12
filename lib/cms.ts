@@ -135,7 +135,15 @@ function synthesizeWordPressAuthor(authorNode: {
   firstName?: string;
   lastName?: string;
 }): AuthorProfile | null {
-  const slug = String(authorNode.slug || "").trim();
+  const slug =
+    String(authorNode.slug || "").trim() ||
+    String(authorNode.name || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-") ||
+    "staff";
 
   if (!slug) {
     return null;
@@ -250,6 +258,42 @@ function normalizeWordPressArticle(node: any, fallbackSportSlug?: string): Artic
   };
 }
 
+async function wpPreviewRestFetch(path: string) {
+  if (!wordpressBaseUrl) {
+    return null;
+  }
+
+  const previewSecret = process.env.WORDPRESS_PREVIEW_SECRET;
+
+  if (!previewSecret) {
+    return null;
+  }
+
+  try {
+    const response = await fetch(`${wordpressBaseUrl}/wp-json/sr/v1/${path}`, {
+      headers: {
+        "X-Preview-Secret": previewSecret,
+      },
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return (await response.json()) as Record<string, unknown>;
+  } catch (error) {
+    const signature = getWordPressFallbackErrorSignature(error);
+
+    if (!loggedWordPressFallbackErrors.has(signature)) {
+      loggedWordPressFallbackErrors.add(signature);
+      console.error("The Sports Rivalry preview REST fallback failed", error);
+    }
+
+    return null;
+  }
+}
+
 const getWordPressArticleBySlug = cache(async (slug: string, status = "PUBLISH", fallbackSportSlug?: string) => {
   if (status === "DRAFT") {
     let previewDatabaseId: number | null = null;
@@ -262,6 +306,22 @@ const getWordPressArticleBySlug = cache(async (slug: string, status = "PUBLISH",
       }
     } catch {
       previewDatabaseId = null;
+    }
+
+    if (previewDatabaseId) {
+      const restNode = await wpPreviewRestFetch(`preview-article/${previewDatabaseId}`);
+      const normalizedRestNode = normalizeWordPressArticle(restNode, fallbackSportSlug);
+
+      if (normalizedRestNode) {
+        return normalizedRestNode;
+      }
+    }
+
+    const restNodeBySlug = await wpPreviewRestFetch(`preview-article/by-slug/${encodeURIComponent(slug)}`);
+    const normalizedRestNodeBySlug = normalizeWordPressArticle(restNodeBySlug, fallbackSportSlug);
+
+    if (normalizedRestNodeBySlug) {
+      return normalizedRestNodeBySlug;
     }
 
     const draftData = await wpFetch<{ previewArticle?: any }>(

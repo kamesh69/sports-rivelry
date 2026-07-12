@@ -120,7 +120,7 @@ def deploy_mu_plugins(ftp: FTP) -> int:
     print("=== Upload mu-plugins ===")
     ensure_dir(ftp, REMOTE_MU)
     mu_count = 0
-    for path in sorted(MU_LOCAL.glob("*.php")):
+    for path in sorted(list(MU_LOCAL.glob("*.php")) + list(MU_LOCAL.glob("*.js"))):
         upload_file(ftp, path, f"{REMOTE_MU}/{path.name}")
         print(f"  {path.name}")
         mu_count += 1

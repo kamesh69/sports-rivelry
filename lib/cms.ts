@@ -80,17 +80,27 @@ async function wpFetch<TData>(
     return null;
   }
 
+  const isDraftPreview = (await getWordPressArticleStatus()) === "DRAFT";
+  const previewSecret = process.env.WORDPRESS_PREVIEW_SECRET;
+
   try {
     const response = await fetch(wordpressGraphQLEndpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        ...(isDraftPreview && previewSecret
+          ? { "X-Preview-Secret": previewSecret }
+          : {}),
       },
       body: JSON.stringify({ query, variables }),
-      next: {
-        revalidate: DEFAULT_REVALIDATE_SECONDS,
-        tags: ["wordpress", ...tags],
-      },
+      ...(isDraftPreview
+        ? { cache: "no-store" as const }
+        : {
+            next: {
+              revalidate: DEFAULT_REVALIDATE_SECONDS,
+              tags: ["wordpress", ...tags],
+            },
+          }),
     });
 
     if (!response.ok) {

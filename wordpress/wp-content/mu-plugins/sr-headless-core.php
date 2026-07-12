@@ -36,7 +36,6 @@ add_action('init', 'sr_register_content_types');
 add_action('init', 'sr_register_taxonomies');
 add_action('save_post', 'sr_trigger_frontend_revalidation', 20, 3);
 add_action('graphql_register_types', 'sr_register_graphql_types');
-add_filter('preview_post_link', 'sr_filter_preview_post_link', 10, 2);
 
 function sr_register_content_types() {
     $post_types = [
@@ -149,30 +148,6 @@ function sr_register_taxonomies() {
             'rewrite' => ['slug' => $slug],
         ]);
     }
-}
-
-function sr_filter_preview_post_link($preview_link, $post) {
-    if (!in_array($post->post_type, SR_EDITORIAL_POST_TYPES, true)) {
-        return $preview_link;
-    }
-
-    $frontend_url = defined('SR_FRONTEND_URL') ? untrailingslashit(SR_FRONTEND_URL) : '';
-    $preview_secret = defined('SR_PREVIEW_SECRET') ? SR_PREVIEW_SECRET : '';
-
-    if (!$frontend_url || !$preview_secret) {
-        return $preview_link;
-    }
-
-    $path = sr_frontend_path_for_post($post->ID);
-
-    if (!$path) {
-        return $preview_link;
-    }
-
-    return add_query_arg([
-        'secret' => $preview_secret,
-        'slug' => $path,
-    ], $frontend_url . '/api/preview');
 }
 
 function sr_trigger_frontend_revalidation($post_id, $post, $update) {
@@ -823,3 +798,6 @@ function sr_get_mlb_hub_settings_payload() {
 
     return [];
 }
+
+require_once __DIR__ . '/sr-frontend-links.php';
+require_once __DIR__ . '/sr-preview-graphql.php';

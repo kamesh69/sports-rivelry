@@ -3,12 +3,15 @@ import { getActivePoll, getFanZoneContent } from "@/lib/supabase/data";
 import { dedupeByKey } from "@/lib/utils";
 import type { Article } from "@/lib/types";
 import { ArticleCard } from "@/components/article-card";
+import { AuthorSpotlight } from "@/components/author-spotlight";
+import { CategoryStrip } from "@/components/category-strip";
 import { FanZoneCta } from "@/components/fan-zone-cta";
 import { HomeFeatureGrid } from "@/components/home-feature-grid";
 import { HomeHero } from "@/components/home-hero";
 import { HomeHeroFeature } from "@/components/home-hero-feature";
 import { LatestNewsRail } from "@/components/latest-news-rail";
 import { NewsletterSignup } from "@/components/newsletter-signup";
+import { QuickHits } from "@/components/quick-hits";
 import { RecommendedReads } from "@/components/recommended-reads";
 import { SectionHeading } from "@/components/section-heading";
 import { SportSpotlightRail } from "@/components/sport-spotlight-rail";
@@ -58,6 +61,8 @@ export default async function HomePage() {
           secondary={homeData.heroSecondary}
         />
 
+        <CategoryStrip items={homeData.categoryStrip} />
+
         <LatestNewsRail articles={latestArticles} />
 
         {secondaryFeature ? (
@@ -79,6 +84,12 @@ export default async function HomePage() {
             <SportSpotlightRail sport={rail.sport} articles={rail.articles} />
           </div>
         ))}
+
+        {homeData.quickHits ? (
+          <div className="module-block">
+            <QuickHits block={homeData.quickHits} />
+          </div>
+        ) : null}
       </div>
 
       <div className="home-module-bleed">
@@ -98,9 +109,26 @@ export default async function HomePage() {
 
       <RecommendedReads articles={recommendedArticles} />
 
+      {homeData.featuredAuthors.length > 0 ? (
+        <div className="page-shell page-shell--home">
+          <section className="module-block">
+            <SectionHeading title="Featured writers" href="/authors" />
+            <div className="author-grid">
+              {homeData.featuredAuthors.map((author) => (
+                <AuthorSpotlight key={author.id} author={author} />
+              ))}
+            </div>
+          </section>
+        </div>
+      ) : null}
+
       <div className="page-shell page-shell--home">
         <div className="module-block">
-          <NewsletterSignup />
+          <NewsletterSignup
+            heading={homeData.newsletter.title}
+            description={homeData.newsletter.heroCopy || homeData.newsletter.description}
+            source="homepage"
+          />
         </div>
       </div>
     </>

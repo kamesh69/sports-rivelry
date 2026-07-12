@@ -1,9 +1,11 @@
 import Link from "next/link";
-import { newsletters } from "@/lib/mock-data";
+import { getAllNewsletterIssues } from "@/lib/cms";
 
 export const revalidate = 60;
 
-export default function NewslettersIndexPage() {
+export default async function NewslettersIndexPage() {
+  const newsletters = await getAllNewsletterIssues();
+
   return (
     <div className="page-shell page-shell--detail">
       <section className="hub-hero">

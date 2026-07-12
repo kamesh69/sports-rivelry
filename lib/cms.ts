@@ -38,11 +38,11 @@ import type {
   MlbHubSettings,
   NewsletterIssue,
   SearchResult,
+  TopicHub,
   SportHubPageData,
   SportHubSettings,
   SportPageData,
   SportHub,
-  TopicHub,
 } from "@/lib/types";
 
 const wordpressBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_URL?.replace(/\/$/, "") || "";
@@ -578,6 +578,83 @@ function applyMlbHubSettingsToSportPageData(
   };
 }
 
+function mapAuthorProfileNode(node: {
+  slug: string;
+  name: string;
+  role?: string;
+  beat?: string;
+  bio?: string;
+  expertise?: string;
+  avatarUrl?: string;
+  socials?: Array<{ platform?: string; label?: string; url?: string }>;
+}): AuthorProfile {
+  return {
+    id: node.slug,
+    slug: node.slug,
+    name: node.name,
+    role: node.role || "Contributor",
+    beat: node.beat || "Sports",
+    bio: node.bio || "",
+    expertise: node.expertise || "",
+    avatar: {
+      src: node.avatarUrl || "/images/authors/riya.svg",
+      alt: `Portrait of ${node.name}`,
+      width: 720,
+      height: 720,
+    },
+    socials: (node.socials || []).map((social) => ({
+      platform: social.platform || "",
+      label: social.label || social.platform || "Link",
+      url: social.url || "",
+    })),
+    seo: {
+      title: `${node.name} | The Sports Rivalry`,
+      description: node.bio || `${node.name} at The Sports Rivalry.`,
+      canonicalPath: `/authors/${node.slug}`,
+    },
+  };
+}
+
+function mapTopicHubNode(node: {
+  slug: string;
+  title: string;
+  description?: string;
+  seoTitle?: string;
+  articleSlugs?: string[];
+}): TopicHub {
+  return {
+    slug: node.slug,
+    title: node.title,
+    description: node.description || "",
+    articleSlugs: node.articleSlugs || [],
+    seo: {
+      title: node.seoTitle || `${node.title} | The Sports Rivalry`,
+      description: node.description || "",
+      canonicalPath: `/topics/${node.slug}`,
+    },
+  };
+}
+
+function buildQuickHitsFromPool(pool: Article[]): HomePageData["quickHits"] {
+  const sorted = sortByPublishedAt(pool);
+
+  if (sorted.length < 2) {
+    return null;
+  }
+
+  return {
+    config: {
+      enabled: true,
+      title: "Quick Hits",
+      selectionMode: "sport_date",
+      sportSlug: sorted[0].sport.slug,
+      secondaryCount: 2,
+    },
+    featured: sorted[0],
+    secondary: sorted.slice(1, 3),
+  };
+}
+
 function assembleHomePageData(pool: Article[], homepageSettings: any = null): HomePageData {
   const sorted = sortByPublishedAt(pool);
   const trendingArticles = [...sorted]
@@ -631,7 +708,7 @@ function assembleHomePageData(pool: Article[], homepageSettings: any = null): Ho
     heroSecondary,
     latestArticles: sorted.slice(0, 12),
     categoryStrip,
-    quickHits: homepageSettings?.quickHits || null,
+    quickHits: homepageSettings?.quickHits || buildQuickHitsFromPool(pool),
     sportRails,
     trendingArticles,
     editorsPicks: homepageSettings?.editorsPickSlugs?.length
@@ -1099,19 +1176,7 @@ export async function getTopicHub(slug: string): Promise<TopicHub | null> {
   );
 
   if (data?.topicHub) {
-    const node = data.topicHub;
-
-    return {
-      slug: node.slug,
-      title: node.title,
-      description: node.description || "",
-      articleSlugs: node.articleSlugs || [],
-      seo: {
-        title: node.seoTitle || `${node.title} | The Sports Rivalry`,
-        description: node.description || "",
-        canonicalPath: `/topics/${node.slug}`,
-      },
-    };
+    return mapTopicHubNode(data.topicHub);
   }
 
   return getTopicBySlug(slug);
@@ -1132,32 +1197,91 @@ export async function getAuthorProfile(slug: string): Promise<AuthorProfile | nu
   );
 
   if (data?.authorProfile) {
-    const node = data.authorProfile;
-
-    return {
-      id: node.slug,
-      slug: node.slug,
-      name: node.name,
-      role: node.role || "Contributor",
-      beat: node.beat || "Sports",
-      bio: node.bio || "",
-      expertise: node.expertise || "",
-      avatar: {
-        src: node.avatarUrl || "/images/authors/riya.svg",
-        alt: `Portrait of ${node.name}`,
-        width: 720,
-        height: 720,
-      },
-      socials: node.socials || [],
-      seo: {
-        title: `${node.name} | The Sports Rivalry`,
-        description: node.bio || `${node.name} at The Sports Rivalry.`,
-        canonicalPath: `/authors/${node.slug}`,
-      },
-    };
+    return mapAuthorProfileNode(data.authorProfile);
   }
 
   return getAuthorBySlug(slug);
+}
+
+export async function getAllAuthors(): Promise<AuthorProfile[]> {
+  const data = await wpFetch<{ authorProfiles?: Array<Parameters<typeof mapAuthorProfileNode>[0]> }>(
+    `
+      query AuthorProfiles {
+        authorProfiles {
+          slug name role beat bio expertise avatarUrl
+          socials { platform label url }
+        }
+      }
+    `,
+    {},
+    ["authors"],
+  );
+
+  const wpAuthors = (data?.authorProfiles || []).map(mapAuthorProfileNode);
+  const wpSlugs = new Set(wpAuthors.map((author) => author.slug));
+  const mockAuthors = authors.filter((author) => !wpSlugs.has(author.slug));
+
+  return wpAuthors.length > 0 ? [...wpAuthors, ...mockAuthors] : authors;
+}
+
+export async function getAllTopicHubs(): Promise<TopicHub[]> {
+  const data = await wpFetch<{
+    topicHubs?: Array<Parameters<typeof mapTopicHubNode>[0]>;
+  }>(
+    `
+      query TopicHubs {
+        topicHubs {
+          slug title description seoTitle articleSlugs
+        }
+      }
+    `,
+    {},
+    ["topics"],
+  );
+
+  const wpTopics = (data?.topicHubs || []).map(mapTopicHubNode);
+  const wpSlugs = new Set(wpTopics.map((topic) => topic.slug));
+  const mockTopics = topicHubs.filter((topic) => !wpSlugs.has(topic.slug));
+
+  return wpTopics.length > 0 ? [...wpTopics, ...mockTopics] : topicHubs;
+}
+
+export async function getAllNewsletterIssues(): Promise<NewsletterIssue[]> {
+  const data = await wpFetch<{
+    newsletterIssues?: { nodes?: Array<{ slug?: string; title?: string; excerpt?: string }> };
+  }>(
+    `
+      query NewsletterIssues {
+        newsletterIssues(first: 100) {
+          nodes { slug title excerpt }
+        }
+      }
+    `,
+    {},
+    ["newsletters"],
+  );
+
+  const wpIssues = (data?.newsletterIssues?.nodes || [])
+    .filter((issue) => issue.slug)
+    .map((issue) => ({
+      slug: issue.slug!,
+      title: issue.title || issue.slug!,
+      description: stripHtml(issue.excerpt || ""),
+      heroCopy: stripHtml(issue.excerpt || ""),
+      schedule: "",
+      ctaLabel: "Subscribe",
+      highlightedArticleSlugs: [] as string[],
+      seo: {
+        title: `${issue.title || issue.slug} | The Sports Rivalry`,
+        description: stripHtml(issue.excerpt || ""),
+        canonicalPath: `/newsletters/${issue.slug}`,
+      },
+    }));
+
+  const wpSlugs = new Set(wpIssues.map((issue) => issue.slug));
+  const mockIssues = newsletters.filter((issue) => !wpSlugs.has(issue.slug));
+
+  return wpIssues.length > 0 ? [...wpIssues, ...mockIssues] : newsletters;
 }
 
 export async function getNewsletterIssue(slug: string): Promise<NewsletterIssue | null> {

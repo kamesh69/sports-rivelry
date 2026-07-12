@@ -1,11 +1,13 @@
-import { authors } from "@/lib/mock-data";
+import { getAllAuthors } from "@/lib/cms";
 import { AuthorSpotlight } from "@/components/author-spotlight";
 import { SectionHeading } from "@/components/section-heading";
 import { SITE_NAME } from "@/lib/site-config";
 
 export const revalidate = 60;
 
-export default function AuthorsIndexPage() {
+export default async function AuthorsIndexPage() {
+  const authors = await getAllAuthors();
+
   return (
     <div className="page-shell page-shell--detail">
       <section className="hub-hero">

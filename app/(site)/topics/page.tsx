@@ -1,9 +1,11 @@
 import Link from "next/link";
-import { topicHubs } from "@/lib/mock-data";
+import { getAllTopicHubs } from "@/lib/cms";
 
 export const revalidate = 60;
 
-export default function TopicsIndexPage() {
+export default async function TopicsIndexPage() {
+  const topicHubs = await getAllTopicHubs();
+
   return (
     <div className="page-shell page-shell--detail">
       <section className="hub-hero">

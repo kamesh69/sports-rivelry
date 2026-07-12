@@ -14,7 +14,7 @@ In **Project → Settings → Environment Variables**, add these for **Productio
 | Variable | Example value | Notes |
 |----------|---------------|--------|
 | `NEXT_PUBLIC_SITE_URL` | `https://thesportsrivalry.com` | Your Vercel/custom domain |
-| `NEXT_PUBLIC_WORDPRESS_URL` | `https://cms.thesportsrivalry.com` | Optional until CMS is live |
+| `NEXT_PUBLIC_WORDPRESS_URL` | `https://cms.thesportsrivalry.com` | Leave empty until CMS is live; set after WordPress is deployed |
 | `REVALIDATE_SECRET` | *(openssl rand -base64 32)* | Must match WordPress `SR_REVALIDATE_SECRET` |
 | `WORDPRESS_PREVIEW_SECRET` | *(openssl rand -base64 32)* | Must match WordPress `SR_PREVIEW_SECRET` |
 

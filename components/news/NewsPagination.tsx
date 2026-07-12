@@ -1,9 +1,9 @@
-"use client";
+import Link from "next/link";
 
 interface NewsPaginationProps {
   currentPage: number;
   totalPages: number;
-  onPageChange: (page: number) => void;
+  buildHref: (page: number) => string;
 }
 
 const ELLIPSIS = "…" as const;
@@ -38,8 +38,12 @@ function buildPageItems(current: number, total: number, siblingCount = 2): PageI
   return items;
 }
 
-/** Reusable numbered pagination — Previous / 1 2 3 … N / Next, first/last disabled at the boundaries. */
-export function NewsPagination({ currentPage, totalPages, onPageChange }: NewsPaginationProps) {
+/** Reusable numbered pagination — Previous / 1 2 3 … N / Next. */
+export function NewsPagination({
+  currentPage,
+  totalPages,
+  buildHref,
+}: NewsPaginationProps) {
   if (totalPages <= 1) {
     return null;
   }
@@ -48,15 +52,22 @@ export function NewsPagination({ currentPage, totalPages, onPageChange }: NewsPa
 
   return (
     <nav className="mn-pagination" aria-label="News pagination">
-      <button
-        type="button"
-        className="mn-pagination__btn mn-pagination__btn--word"
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        aria-label="Previous page"
-      >
-        Previous
-      </button>
+      {currentPage === 1 ? (
+        <span
+          className="mn-pagination__btn mn-pagination__btn--word"
+          aria-disabled="true"
+        >
+          Previous
+        </span>
+      ) : (
+        <Link
+          href={buildHref(currentPage - 1)}
+          className="mn-pagination__btn mn-pagination__btn--word"
+          aria-label="Previous page"
+        >
+          Previous
+        </Link>
+      )}
 
       <div className="mn-pagination__numbers">
         {pageItems.map((item, index) =>
@@ -65,29 +76,35 @@ export function NewsPagination({ currentPage, totalPages, onPageChange }: NewsPa
               {ELLIPSIS}
             </span>
           ) : (
-            <button
+            <Link
               key={item}
-              type="button"
+              href={buildHref(item)}
               className={`mn-pagination__btn${item === currentPage ? " mn-pagination__btn--active" : ""}`}
-              onClick={() => onPageChange(item)}
               aria-label={`Page ${item}`}
               aria-current={item === currentPage ? "page" : undefined}
             >
               {item}
-            </button>
+            </Link>
           ),
         )}
       </div>
 
-      <button
-        type="button"
-        className="mn-pagination__btn mn-pagination__btn--word"
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-        aria-label="Next page"
-      >
-        Next
-      </button>
+      {currentPage === totalPages ? (
+        <span
+          className="mn-pagination__btn mn-pagination__btn--word"
+          aria-disabled="true"
+        >
+          Next
+        </span>
+      ) : (
+        <Link
+          href={buildHref(currentPage + 1)}
+          className="mn-pagination__btn mn-pagination__btn--word"
+          aria-label="Next page"
+        >
+          Next
+        </Link>
+      )}
     </nav>
   );
 }

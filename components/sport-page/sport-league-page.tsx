@@ -15,20 +15,37 @@ interface SportLeaguePageProps {
   data: SportPageData;
   articles: Article[];
   trending: Article[];
+  featuredStories?: Article[];
+  headlines?: Article[];
+  latestStories?: Article[];
+  trendingStories?: Article[];
 }
 
-export function SportLeaguePage({ hub, data, articles, trending }: SportLeaguePageProps) {
+export function SportLeaguePage({
+  hub,
+  data,
+  articles,
+  trending,
+  featuredStories,
+  headlines,
+  latestStories,
+  trendingStories,
+}: SportLeaguePageProps) {
   const pool = dedupeByKey(articles, (article) => article.id);
-  const featuredLead = pool[0];
-  const featuredGrid = pool.slice(1, 4);
-  const headlines = pool.slice(0, 10);
-  const trendingPool = dedupeByKey([...pool, ...trending], (article) => article.id).slice(0, 5);
-  const latestNews = pool.slice(0, 5);
+  const curatedFeatured = dedupeByKey(featuredStories || pool, (article) => article.id);
+  const curatedHeadlines = dedupeByKey(headlines || pool, (article) => article.id).slice(0, 10);
+  const curatedTrending = dedupeByKey(
+    trendingStories || [...pool, ...trending],
+    (article) => article.id,
+  ).slice(0, 5);
+  const curatedLatest = dedupeByKey(latestStories || pool, (article) => article.id).slice(0, 5);
+  const featuredLead = curatedFeatured[0];
+  const featuredGrid = curatedFeatured.slice(1, 4);
 
   const sportHref = `/${hub.slug}`;
   const statsHref = hub.slug === "mlb" ? `/${hub.slug}/stats` : sportHref;
   const teamsHref = hub.slug === "mlb" ? `/${hub.slug}/teams` : sportHref;
-  const featuredStoriesHref = hub.slug === "mlb" ? MLB_NEWS_PATH : sportHref;
+  const newsHref = hub.slug === "mlb" ? MLB_NEWS_PATH : sportHref;
 
   return (
     <div className="sport-theme">
@@ -53,12 +70,12 @@ export function SportLeaguePage({ hub, data, articles, trending }: SportLeaguePa
           <FeaturedStories
             lead={featuredLead}
             grid={featuredGrid}
-            headlines={headlines}
-            viewAllHref={featuredStoriesHref}
+            headlines={curatedHeadlines}
+            viewAllHref={newsHref}
           />
         ) : null}
 
-        <TrendingToday articles={trendingPool} viewAllHref={sportHref} />
+        <TrendingToday articles={curatedTrending} viewAllHref={newsHref} />
 
         {data.teamHub ? <TeamHub teamHub={data.teamHub} viewAllHref={teamsHref} /> : null}
 
@@ -82,8 +99,8 @@ export function SportLeaguePage({ hub, data, articles, trending }: SportLeaguePa
         <MediaRow
           videos={data.videoHighlights}
           opinions={data.opinions}
-          latest={latestNews}
-          viewAllHref={sportHref}
+          latest={curatedLatest}
+          viewAllHref={newsHref}
         />
       </div>
 

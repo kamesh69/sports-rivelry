@@ -4,6 +4,7 @@ import {
   getArticlesForCollection,
   getLandingPage,
   getSportHub,
+  getSportHubPageData,
   getSportPageData,
   getLatestNews,
   getTrendingNews,
@@ -18,6 +19,8 @@ import { SportHubShowcase } from "@/components/sport-hub-showcase";
 import { SportLeaguePage } from "@/components/sport-page/sport-league-page";
 
 export const revalidate = 60;
+
+const FULL_SPORT_HUB_SLUGS = new Set(["mlb", "basketball", "golf", "nascar", "football"]);
 
 interface PrimaryPageProps {
   params: Promise<{
@@ -61,6 +64,32 @@ export default async function PrimaryPage({ params }: PrimaryPageProps) {
   const sportHub = await getSportHub(primary);
 
   if (sportHub) {
+    if (FULL_SPORT_HUB_SLUGS.has(sportHub.slug)) {
+      const hubPageData = await getSportHubPageData(sportHub.slug);
+      const breadcrumbs: BreadcrumbItem[] = [
+        { name: "Home", href: "/" },
+        { name: sportHub.name, href: `/${sportHub.slug}` },
+      ];
+
+      if (hubPageData) {
+        return (
+          <>
+            <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
+            <SportLeaguePage
+              hub={sportHub}
+              data={hubPageData.sportPageData}
+              articles={hubPageData.featuredStories}
+              trending={hubPageData.trendingStories}
+              featuredStories={hubPageData.featuredStories}
+              headlines={hubPageData.headlines}
+              latestStories={hubPageData.latestStories}
+              trendingStories={hubPageData.trendingStories}
+            />
+          </>
+        );
+      }
+    }
+
     const sportPageData = await getSportPageData(sportHub.slug);
     const breadcrumbs: BreadcrumbItem[] = [
       { name: "Home", href: "/" },
@@ -68,16 +97,10 @@ export default async function PrimaryPage({ params }: PrimaryPageProps) {
     ];
 
     if (sportPageData) {
-      const [latestStories, trendingAll] = await Promise.all([
-        getLatestNews(80),
-        getTrendingNews(40),
+      const [latestStories, trendingArticles] = await Promise.all([
+        getLatestNews(sportHub.slug, 80),
+        getTrendingNews(sportHub.slug, 40),
       ]);
-      const sportArticles = latestStories.filter(
-        (article) => article.sport.slug === sportHub.slug,
-      );
-      const trendingArticles = trendingAll.filter(
-        (article) => article.sport.slug === sportHub.slug,
-      );
 
       return (
         <>
@@ -85,7 +108,7 @@ export default async function PrimaryPage({ params }: PrimaryPageProps) {
           <SportLeaguePage
             hub={sportHub}
             data={sportPageData}
-            articles={sportArticles}
+            articles={latestStories}
             trending={trendingArticles}
           />
         </>
@@ -94,9 +117,7 @@ export default async function PrimaryPage({ params }: PrimaryPageProps) {
 
     const heroStories = await getArticlesForCollection(sportHub.featuredArticleSlugs);
     const editorsPicks = await getArticlesForCollection(sportHub.editorsPickSlugs);
-    const latestStories = (await getLatestNews(80)).filter(
-      (article) => article.sport.slug === sportHub.slug,
-    );
+    const latestStories = await getLatestNews(sportHub.slug, 80);
 
     return (
       <div className="page-shell page-shell--detail">

@@ -1,0 +1,4 @@
+wp-graphql
+co-authors-plus
+classic-editor
+tinymce-advanced

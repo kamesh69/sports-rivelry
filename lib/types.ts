@@ -98,6 +98,8 @@ export interface Article {
   isBreaking?: boolean;
   isEditorsPick?: boolean;
   essentials?: string[];
+  sourceArticleLink?: string;
+  sentiment?: string;
 }
 
 export interface TopicHub {
@@ -547,3 +549,58 @@ export interface SportPageData {
     subheading: string;
   };
 }
+
+export interface MlbHubSeoSettings {
+  title?: string;
+  description?: string;
+}
+
+export interface MlbHubHeroSettings {
+  articleSlug?: string;
+  pillPrimary?: string;
+  pillSecondary?: string;
+  headline?: string;
+  deck?: string;
+  author?: string;
+  date?: string;
+  readTime?: number;
+  image?: MediaAsset;
+}
+
+export interface MlbHubSettings {
+  seo?: MlbHubSeoSettings;
+  hero?: MlbHubHeroSettings;
+  featuredStorySlugs: string[];
+  headlineSlugs: string[];
+  trendingSlugs: string[];
+  liveGame?: LiveGame;
+  scoreboardLabel?: string;
+  scoreboard?: ScoreboardGame[];
+  playerSpotlight?: PlayerStatLine;
+  teamHub?: SportPageData["teamHub"];
+  matchupsLabel?: string;
+  matchups?: Matchup[];
+  rankingsLabel?: string;
+  rankingsColumns?: [string, string];
+  rankings?: TeamStanding[];
+  analyticsLabel?: string;
+  statLeaders?: StatLeader[];
+  videoHighlights?: VideoHighlight[];
+  opinions?: OpinionItem[];
+  newsletter?: {
+    heading?: string;
+    subheading?: string;
+  };
+}
+
+export interface MlbHubPageData {
+  seo?: MlbHubSeoSettings;
+  sportPageData: SportPageData;
+  featuredStories: Article[];
+  headlines: Article[];
+  trendingStories: Article[];
+  latestStories: Article[];
+}
+
+export type SportHubSettings = MlbHubSettings;
+export type SportHubPageData = MlbHubPageData;

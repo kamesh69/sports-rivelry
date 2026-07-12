@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { NewsArticle } from "@/lib/news-types";
-import { getCategoryLabel } from "@/lib/news-data";
 import { getNewsArticlePath } from "@/lib/navigation";
 import { formatDate } from "@/lib/utils";
 import { NewsImage } from "@/components/news/NewsImage";
@@ -18,7 +17,7 @@ export function NewsCard({ article, priority = false }: NewsCardProps) {
     <article className="nc-row">
       <Link href={href} className="nc-row__link" aria-label={article.title}>
         <div className="nc-row__body">
-          <span className="nc-row__category">{getCategoryLabel(article.category)}</span>
+          <span className="nc-row__category">{article.category}</span>
           <h3 className="nc-row__title">{article.title}</h3>
           <p className="nc-row__summary">{article.summary}</p>
           <div className="nc-row__meta">

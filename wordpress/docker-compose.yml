@@ -1,0 +1,60 @@
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  wordpress:
+    image: wordpress:6.8-php8.2-apache
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_CONFIG_EXTRA: |
+        define('SR_FRONTEND_URL', getenv('SR_FRONTEND_URL') ?: 'http://localhost:3000');
+        define('SR_PREVIEW_SECRET', getenv('SR_PREVIEW_SECRET') ?: 'local-preview-secret');
+        define('SR_REVALIDATE_ENDPOINT', getenv('SR_REVALIDATE_ENDPOINT') ?: 'http://host.docker.internal:3000/api/revalidate');
+        define('SR_REVALIDATE_SECRET', getenv('SR_REVALIDATE_SECRET') ?: 'local-revalidate-secret');
+    volumes:
+      - wp_data:/var/www/html
+      - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins
+
+  wpcli:
+    image: wordpress:cli-php8.2
+    profiles: ["tools"]
+    depends_on:
+      - wordpress
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wp_data:/var/www/html
+      - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins
+      - ./plugins.txt:/plugins.txt:ro
+      - ./bootstrap.sh:/bootstrap.sh:ro
+    user: "33:33"
+    entrypoint: ["sh", "/bootstrap.sh"]
+
+volumes:
+  db_data:
+  wp_data:

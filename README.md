@@ -27,6 +27,8 @@ Upload featured images at **1600×900 (16:9)**. See [docs/image-upload-standards
 
 See [docs/vercel-deployment.md](docs/vercel-deployment.md) for environment variables and domain setup.
 
+Generate shared CMS secrets: `bash scripts/vercel-env-setup.sh`
+
 ## Core environment variables
 
 - `NEXT_PUBLIC_SITE_URL`: canonical public origin, for example `https://thesportsrivalry.com`
@@ -35,18 +37,15 @@ See [docs/vercel-deployment.md](docs/vercel-deployment.md) for environment varia
 - `REVALIDATE_SECRET`: shared secret used by the revalidate webhook
 - `WORDPRESS_REVALIDATE_ENDPOINT`: frontend webhook URL stored on the WordPress side
 
-## WordPress stack
+## WordPress stack (Plan C)
 
-Recommended plugin stack:
+No ACF Pro required. See [wordpress/README.md](wordpress/README.md) and [docs/wordpress-setup.md](docs/wordpress-setup.md).
 
-- ACF Pro
-- WPGraphQL
-- WPGraphQL for ACF
-- Yoast SEO
-- Co-Authors Plus
-- PublishPress or Edit Flow
+Required plugins: **WPGraphQL**, **Co-Authors Plus** (optional Yoast SEO).
 
-The mu-plugin starter lives at [wordpress/wp-content/mu-plugins/sr-headless-core.php](/Users/kameshkhatri/Desktop/sports%20website/wordpress/wp-content/mu-plugins/sr-headless-core.php).
+Upload all mu-plugins from [wordpress/wp-content/mu-plugins/](wordpress/wp-content/mu-plugins/).
+
+For the MLB hub rollout, editors should publish from a separate WordPress admin such as `https://cms.<frontend-domain>/wp-admin`, manage landing-page modules in `SR Layout -> MLB Hub`, and use canonical article URLs at `/mlb/:slug`.
 
 ## Architecture notes
 
@@ -60,5 +59,6 @@ Additional implementation notes live in:
 - [docs/vercel-deployment.md](/Users/kameshkhatri/Desktop/sports%20website/docs/vercel-deployment.md)
 - [docs/hostinger-deployment.md](/Users/kameshkhatri/Desktop/sports%20website/docs/hostinger-deployment.md)
 - [docs/quick-hits-config.md](/Users/kameshkhatri/Desktop/sports%20website/docs/quick-hits-config.md)
+- [docs/mlb-wordpress-hub-fields.md](/Users/kameshkhatri/Desktop/sports%20website/docs/mlb-wordpress-hub-fields.md)
 - [docs/wordpress-setup.md](/Users/kameshkhatri/Desktop/sports%20website/docs/wordpress-setup.md)
 - [docs/seo-launch-checklist.md](/Users/kameshkhatri/Desktop/sports%20website/docs/seo-launch-checklist.md)

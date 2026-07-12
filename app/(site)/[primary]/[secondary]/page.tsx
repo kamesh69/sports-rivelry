@@ -40,6 +40,9 @@ interface SportDetailPageProps {
     primary: string;
     secondary: string;
   }>;
+  searchParams?: Promise<{
+    page?: string;
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -116,8 +119,13 @@ export async function generateMetadata({
   return buildArticleMetadata(article);
 }
 
-export default async function SportDetailPage({ params }: SportDetailPageProps) {
+export default async function SportDetailPage({
+  params,
+  searchParams,
+}: SportDetailPageProps) {
   const { primary, secondary } = await params;
+  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const archivePage = Math.max(1, Number(resolvedSearchParams.page || "1") || 1);
 
   /* ── MLB stats page ─────────────────────────────── */
   if (primary === "mlb" && secondary === "stats") {
@@ -159,7 +167,7 @@ export default async function SportDetailPage({ params }: SportDetailPageProps) 
     return (
       <>
         <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
-        <MlbNewsPageLoader />
+        <MlbNewsPageLoader page={archivePage} />
       </>
     );
   }

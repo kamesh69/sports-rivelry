@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { NewsArticle } from "@/lib/news-types";
-import { getCategoryLabel } from "@/lib/news-data";
 import { MLB_NEWS_PATH } from "@/lib/navigation";
 import { formatArticleDate } from "@/lib/utils";
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -13,7 +12,7 @@ interface NewsArticleDetailProps {
   related: NewsArticle[];
 }
 
-/** MLB News article detail page — reached from any News card at `/mlb/news/:slug`. */
+/** Legacy MLB article detail layout retained for editorial/news reuse if needed. */
 export function NewsArticleDetail({ article, related }: NewsArticleDetailProps) {
   const breadcrumbs: BreadcrumbItem[] = [
     { name: "Home", href: "/" },
@@ -29,7 +28,7 @@ export function NewsArticleDetail({ article, related }: NewsArticleDetailProps) 
         <Breadcrumbs items={breadcrumbs} />
 
         <article className="mn-article">
-          <span className="mn-article__category">{getCategoryLabel(article.category)}</span>
+          <span className="mn-article__category">{article.category}</span>
           <h1 className="mn-article__title">{article.title}</h1>
           <div className="mn-article__meta">
             <span className="mn-article__author">{article.author}</span>

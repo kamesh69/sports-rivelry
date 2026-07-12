@@ -2,14 +2,12 @@ import { getPlayerBySlug, PLAYERS } from "@/lib/player-data";
 import { PlayerStatsPage } from "@/components/player-stats-page";
 import { TeamRosterPage } from "@/components/team-roster/TeamRosterPage";
 import { buildBreadcrumbJsonLd, buildMetadata, type BreadcrumbItem } from "@/lib/seo";
+import { getArticle } from "@/lib/cms";
 import { getTeams, getTeamBySlug } from "@/services/team.service";
 import { getGroupedRosterForTeam } from "@/services/player.service";
-import { getNewsBySlug, getRelatedNews } from "@/services/news.service";
-import { NEWS_ARTICLES } from "@/lib/news-data";
-import { NewsArticleDetail } from "@/components/news/NewsArticleDetail";
 import { JsonLd } from "@/components/json-ld";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 
 export const revalidate = 60;
 
@@ -34,11 +32,6 @@ export async function generateStaticParams() {
       primary: "mlb",
       secondary: "teams",
       tertiary: team.slug,
-    })),
-    ...NEWS_ARTICLES.map((article) => ({
-      primary: "mlb",
-      secondary: "news",
-      tertiary: article.slug,
     })),
   ];
 }
@@ -68,7 +61,7 @@ export async function generateMetadata({ params }: TertiaryPageProps): Promise<M
 
   /* ── MLB news article ─────────────────────────────── */
   if (primary === "mlb" && secondary === "news") {
-    const article = await getNewsBySlug(tertiary);
+    const article = await getArticle("mlb", tertiary);
 
     if (!article) {
       return buildMetadata({
@@ -80,9 +73,10 @@ export async function generateMetadata({ params }: TertiaryPageProps): Promise<M
     }
 
     return buildMetadata({
-      title: `${article.title} | The Sports Rivalry`,
-      description: article.summary,
-      canonicalPath: `/mlb/news/${article.slug}`,
+      title: article.seo.title,
+      description: article.seo.description,
+      canonicalPath: article.seo.canonicalPath,
+      noIndex: true,
     });
   }
 
@@ -143,27 +137,13 @@ export default async function TertiaryPage({ params }: TertiaryPageProps) {
 
   /* ── MLB news article ─────────────────────────────── */
   if (primary === "mlb" && secondary === "news") {
-    const article = await getNewsBySlug(tertiary);
+    const article = await getArticle("mlb", tertiary);
 
     if (!article) {
       notFound();
     }
 
-    const related = await getRelatedNews(article);
-
-    const breadcrumbs: BreadcrumbItem[] = [
-      { name: "Home", href: "/" },
-      { name: "Baseball", href: "/mlb" },
-      { name: "News", href: "/mlb/news" },
-      { name: article.title, href: `/mlb/news/${article.slug}` },
-    ];
-
-    return (
-      <>
-        <JsonLd data={buildBreadcrumbJsonLd(breadcrumbs)} />
-        <NewsArticleDetail article={article} related={related} />
-      </>
-    );
+    permanentRedirect(article.seo.canonicalPath);
   }
 
   if (secondary !== "player") {

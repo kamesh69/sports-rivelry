@@ -32,6 +32,14 @@ export function ArticleHeader({ article }: ArticleHeaderProps) {
           <span>{article.readTime} min read</span>
         </div>
       </div>
+      {article.sourceArticleLink ? (
+        <p className="article-header__source">
+          Source:{" "}
+          <a href={article.sourceArticleLink} rel="noopener noreferrer" target="_blank">
+            {article.sourceArticleLink}
+          </a>
+        </p>
+      ) : null}
     </header>
   );
 }

@@ -58,6 +58,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/fact-checking-policy",
     "/corrections",
     "/search",
+    "/mlb/news",
+    "/mlb/stats",
+    "/mlb/teams",
     ...pathGroups.flat(),
     ...ncaaPaths,
   ].map((path) => ({

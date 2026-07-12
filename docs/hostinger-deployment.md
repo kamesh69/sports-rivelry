@@ -1,79 +1,148 @@
-# Hostinger Deployment
+# Hostinger CMS Deployment
 
-This project is prepared for the following production setup:
+Production setup:
 
-- Frontend: `https://thesportsrivalry.com`
-- WordPress CMS: `https://cms.thesportsrivalry.com`
+| Service | URL | Host |
+|---------|-----|------|
+| Next.js frontend | `https://www.thesportsrivalry.com` | Vercel |
+| WordPress CMS | `https://cms.thesportsrivalry.com` | Hostinger |
 
-## 1. Deploy the Next.js frontend
+The frontend on Vercel fetches content from WordPress via WPGraphQL. **Use Hostinger (or any normal PHP host)** — free hosts that block server-side API calls (e.g. InfinityFree) will not work with a headless setup.
 
-Use a Hostinger hosting plan that supports Node.js apps.
+---
 
-In hPanel:
+## Phase 1 — Hostinger WordPress
 
-1. Go to `Websites`.
-2. Click `Add website`.
-3. Choose `Node.js`.
-4. Choose `Import Git Repository`.
-5. Connect the GitHub repo:
-   - `https://github.com/kamesh69/sports-rivalry`
-6. Use Node `22.x` if Hostinger offers that version.
-7. Add these environment variables:
+### 1. Get hosting
 
-```env
-NEXT_PUBLIC_SITE_URL=https://thesportsrivalry.com
-NEXT_PUBLIC_WORDPRESS_URL=https://cms.thesportsrivalry.com
-REVALIDATE_SECRET=replace-with-a-strong-random-string
-WORDPRESS_PREVIEW_SECRET=replace-with-a-strong-random-string
-WORDPRESS_REVALIDATE_ENDPOINT=https://thesportsrivalry.com/api/revalidate
+In Hostinger hPanel:
+
+1. **Websites → Add Website → WordPress**
+2. Use subdomain **`cms.thesportsrivalry.com`**
+3. Complete the WordPress install and note admin credentials
+
+### 2. DNS
+
+**Domains → thesportsrivalry.com → DNS**
+
+| Type | Name | Value |
+|------|------|-------|
+| A or CNAME | `cms` | Hostinger target (shown in hPanel after adding the site) |
+
+Remove any old `cms` record pointing to InfinityFree (`185.27.134.215`).
+
+SSL is issued automatically once DNS propagates (usually minutes on Hostinger).
+
+### 3. Upload mu-plugins
+
+In hPanel **File Manager** (or SFTP), upload everything from:
+
+```
+wordpress/wp-content/mu-plugins/
 ```
 
-8. Deploy first on a temporary Hostinger domain if hPanel asks for one.
-9. After the app builds, click `Connect domain` and attach `thesportsrivalry.com`.
-10. Point `www.thesportsrivalry.com` to the same frontend if desired.
+to:
 
-## 2. Create the WordPress CMS
+```
+domains/cms.thesportsrivalry.com/public_html/wp-content/mu-plugins/
+```
 
-In hPanel:
+On Hostinger, FTP often lands in account-level `public_html/` — that is **not** the live CMS path. Always use the domain-specific path above.
 
-1. Go to `Websites`.
-2. Click `Add website`.
-3. Choose `WordPress`.
-4. Set the site address to `cms.thesportsrivalry.com`.
-5. Install:
-   - ACF Pro
-   - WPGraphQL
-   - WPGraphQL for ACF
-   - Yoast SEO
-   - Co-Authors Plus
-   - PublishPress or Edit Flow
+### 4. Install plugins
 
-Upload the MU plugin from:
+In wp-admin **Plugins → Add New**, install and activate:
 
-- [wordpress/wp-content/mu-plugins/sr-headless-core.php](/Users/kameshkhatri/Desktop/sports website/wordpress/wp-content/mu-plugins/sr-headless-core.php)
+| Plugin | Required |
+|--------|----------|
+| WPGraphQL | Yes |
+| Co-Authors Plus | Recommended |
+| Classic Editor | Recommended |
+| Advanced Editor Tools (TinyMCE) | Recommended |
+| Yoast SEO | Optional |
 
-In `wp-config.php`, add:
+**Do not install** ACF Pro — this project uses Plan C (native post meta + custom admin screens).
+
+### 5. wp-config.php secrets
+
+Add above `/* That's all, stop editing! */` in `wp-config.php`:
 
 ```php
-define('SR_FRONTEND_URL', 'https://thesportsrivalry.com');
-define('SR_PREVIEW_SECRET', 'use-the-same-preview-secret');
-define('SR_REVALIDATE_ENDPOINT', 'https://thesportsrivalry.com/api/revalidate');
-define('SR_REVALIDATE_SECRET', 'use-the-same-revalidate-secret');
+define('SR_FRONTEND_URL', 'https://www.thesportsrivalry.com');
+define('SR_PREVIEW_SECRET', '<same as Vercel WORDPRESS_PREVIEW_SECRET>');
+define('SR_REVALIDATE_ENDPOINT', 'https://www.thesportsrivalry.com/api/revalidate');
+define('SR_REVALIDATE_SECRET', '<same as Vercel REVALIDATE_SECRET>');
 ```
 
-## 3. Verify the publish flow
+Generate secrets: `openssl rand -base64 32`
 
-Check these in order:
+### 6. Seed content
 
-1. Frontend loads on `https://thesportsrivalry.com`
-2. WordPress admin loads on `https://cms.thesportsrivalry.com/wp-admin`
-3. Preview links open the Next.js preview route
-4. Publishing an article updates the frontend within about one minute
-5. `https://thesportsrivalry.com/sitemap.xml` loads
-6. `https://thesportsrivalry.com/news-sitemap.xml` loads
+In wp-admin:
 
-## 4. Notes
+1. **SR Layout → Seed MLB Content**
+2. **SR Layout → Seed All Sports**
 
-- This repo currently uses mock content until WordPress is connected.
-- If Hostinger asks for a domain and your main domain is already attached elsewhere, deploy to a temporary domain first and connect the custom domain after the first successful build.
-- SSL should be issued automatically after the domain is connected and DNS settles.
+Or via WP-CLI: `wp sr seed-mlb` and `wp sr seed-sports`
+
+### 7. Verify WordPress
+
+```bash
+curl -X POST https://cms.thesportsrivalry.com/graphql \
+  -H "Content-Type: application/json" \
+  -d '{"query":"{ articles(first:3){ nodes { title slug } } }"}'
+```
+
+You should get JSON — not HTML or a JavaScript challenge page.
+
+---
+
+## Phase 2 — Vercel frontend
+
+In **Vercel → Project → Settings → Environment Variables** (Production):
+
+```env
+NEXT_PUBLIC_SITE_URL=https://www.thesportsrivalry.com
+NEXT_PUBLIC_WORDPRESS_URL=https://cms.thesportsrivalry.com
+REVALIDATE_SECRET=<match wp-config SR_REVALIDATE_SECRET>
+WORDPRESS_PREVIEW_SECRET=<match wp-config SR_PREVIEW_SECRET>
+```
+
+Redeploy after saving env vars.
+
+### Verify end-to-end
+
+```bash
+npm run verify:cms
+```
+
+Or open:
+
+- `https://www.thesportsrivalry.com/api/health/cms` (after redeploy)
+- `https://www.thesportsrivalry.com/mlb`
+
+Publish a test article in WordPress (**Articles → Add New**), assign the **mlb** sport, and confirm it appears on `/mlb` within about a minute.
+
+---
+
+## Phase 3 — Decommission InfinityFree
+
+1. Export anything you need from the old InfinityFree WordPress (optional — re-seed on Hostinger is easier)
+2. Remove the InfinityFree `cms` DNS record
+3. Delete or park the InfinityFree site
+
+---
+
+## Local development
+
+```bash
+cd wordpress
+docker compose up -d
+docker compose run --rm wpcli
+```
+
+```env
+NEXT_PUBLIC_WORDPRESS_URL=http://localhost:8080
+```
+
+See [wordpress/README.md](../wordpress/README.md) for details.

@@ -1,4 +1,11 @@
-import { NEWS_ARTICLES, NEWS_CATEGORIES } from "@/lib/news-data";
+import {
+  getArticle,
+  getArticlesForSport,
+  getMlbHubPageData,
+  getRelatedStories,
+} from "@/lib/cms";
+import type { Article } from "@/lib/types";
+import { stripHtml } from "@/lib/utils";
 import type {
   NewsArticle,
   NewsCategory,
@@ -7,116 +14,106 @@ import type {
   NewsSortOption,
 } from "@/lib/news-types";
 
-/**
- * News data access layer.
- *
- * This module is the single place that knows *how* MLB news is fetched.
- * Today it reads from the local mock dataset in `lib/news-data.ts`; when a
- * real CMS/API is wired up, only the bodies of these functions need to
- * change — every consumer (pages, components) keeps calling the same
- * functions with the same shapes. Mirrors the pattern already established
- * by `services/team.service.ts` and `services/player.service.ts`.
- */
-
 const DEFAULT_PAGE_SIZE = 8;
 
-/** Deterministic pseudo-popularity so "Most Popular" sorting is stable without a real metrics backend. */
-function popularityScore(article: NewsArticle): number {
-  let hash = 0;
-  for (let i = 0; i < article.id.length; i++) {
-    hash = (hash * 31 + article.id.charCodeAt(i)) >>> 0;
-  }
-  return hash % 1000;
+function toNewsArticle(article: Article, featured = false): NewsArticle {
+  return {
+    id: article.id,
+    slug: article.slug,
+    title: article.title,
+    summary: article.deck || article.excerpt,
+    content: stripHtml(article.bodyHtml),
+    author: article.authors[0]?.name || "Staff",
+    publishedAt: article.publishedAt,
+    category: article.league?.name || article.sport.name,
+    image: article.featuredImage.src,
+    featured,
+    tags: article.tags,
+  };
 }
 
-function matchesSearch(article: NewsArticle, query: string): boolean {
-  const q = query.trim().toLowerCase();
-  if (!q) return true;
-
-  return (
-    article.title.toLowerCase().includes(q) ||
-    article.summary.toLowerCase().includes(q) ||
-    article.author.toLowerCase().includes(q) ||
-    article.tags.some((tag) => tag.toLowerCase().includes(q))
-  );
+function toSortMode(sortBy: NewsSortOption): "date" | "trending" {
+  return sortBy === "popular" ? "trending" : "date";
 }
 
-function sortArticles(articles: NewsArticle[], sortBy: NewsSortOption): NewsArticle[] {
-  const sorted = [...articles];
-
-  if (sortBy === "oldest") {
-    return sorted.sort(
-      (a, b) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime(),
-    );
-  }
-
-  if (sortBy === "popular") {
-    return sorted.sort((a, b) => popularityScore(b) - popularityScore(a));
-  }
-
-  return sorted.sort(
-    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
-  );
-}
-
-/** Returns every article flagged as a featured MLB story. */
 export async function getFeaturedStories(limit = 4): Promise<NewsArticle[]> {
-  const featured = NEWS_ARTICLES.filter((article) => article.featured);
-  const pool = featured.length ? featured : NEWS_ARTICLES;
-  return sortArticles(pool, "latest").slice(0, limit);
+  const mlbHubPageData = await getMlbHubPageData();
+  const featuredStories =
+    mlbHubPageData?.featuredStories.length
+      ? mlbHubPageData.featuredStories
+      : (await getArticlesForSport("mlb", { page: 1, pageSize: limit })).articles;
+
+  return featuredStories.slice(0, limit).map((article) => toNewsArticle(article, true));
 }
 
-/** Returns a paginated, filtered, sorted slice of MLB news for the listing page. */
 export async function getNews(params: NewsQueryParams = {}): Promise<NewsQueryResult> {
   const {
     page = 1,
     pageSize = DEFAULT_PAGE_SIZE,
-    search = "",
-    category = "all",
     sortBy = "latest",
   } = params;
-
-  const filtered = NEWS_ARTICLES.filter(
-    (article) =>
-      (category === "all" || article.category === category) && matchesSearch(article, search),
-  );
-
-  const sorted = sortArticles(filtered, sortBy);
-  const total = sorted.length;
-  const totalPages = Math.max(1, Math.ceil(total / pageSize));
-  const safePage = Math.min(Math.max(1, page), totalPages);
-  const start = (safePage - 1) * pageSize;
+  const response = await getArticlesForSport("mlb", {
+    page,
+    pageSize,
+    orderBy: toSortMode(sortBy),
+  });
 
   return {
-    articles: sorted.slice(start, start + pageSize),
-    total,
-    page: safePage,
-    pageSize,
-    totalPages,
+    articles: response.articles.map((article, index) =>
+      toNewsArticle(article, index < 4 && response.page === 1),
+    ),
+    total: response.total,
+    page: response.page,
+    pageSize: response.pageSize,
+    totalPages: response.totalPages,
   };
 }
 
-/** Resolves a single article by its URL slug. */
 export async function getNewsBySlug(slug: string): Promise<NewsArticle | undefined> {
-  return NEWS_ARTICLES.find((article) => article.slug === slug);
+  const article = await getArticle("mlb", slug);
+  return article ? toNewsArticle(article) : undefined;
 }
 
-/** Full-text search across title, summary, author, and tags. */
 export async function searchNews(query: string, limit = 20): Promise<NewsArticle[]> {
-  const matches = NEWS_ARTICLES.filter((article) => matchesSearch(article, query));
-  return sortArticles(matches, "latest").slice(0, limit);
+  const response = await getArticlesForSport("mlb", { page: 1, pageSize: 100 });
+  const normalizedQuery = query.trim().toLowerCase();
+
+  return response.articles
+    .filter((article) => {
+      if (!normalizedQuery) {
+        return true;
+      }
+
+      return (
+        article.title.toLowerCase().includes(normalizedQuery) ||
+        article.excerpt.toLowerCase().includes(normalizedQuery) ||
+        article.deck.toLowerCase().includes(normalizedQuery) ||
+        article.tags.some((tag) => tag.toLowerCase().includes(normalizedQuery)) ||
+        article.authors.some((author) => author.name.toLowerCase().includes(normalizedQuery))
+      );
+    })
+    .slice(0, limit)
+    .map((article) => toNewsArticle(article));
 }
 
-/** Returns the available filter categories, "All" first. */
 export async function getCategories(): Promise<NewsCategory[]> {
-  return NEWS_CATEGORIES;
+  return [
+    { id: "all", label: "All" },
+    { id: "mlb", label: "MLB" },
+  ];
 }
 
-/** Returns a handful of related stories for the article detail page. */
-export async function getRelatedNews(article: NewsArticle, limit = 4): Promise<NewsArticle[]> {
-  const sameCategory = NEWS_ARTICLES.filter(
-    (candidate) => candidate.id !== article.id && candidate.category === article.category,
-  );
-  const pool = sameCategory.length >= limit ? sameCategory : NEWS_ARTICLES.filter((c) => c.id !== article.id);
-  return sortArticles(pool, "latest").slice(0, limit);
+export async function getRelatedNews(
+  article: NewsArticle,
+  limit = 4,
+): Promise<NewsArticle[]> {
+  const sourceArticle = await getArticle("mlb", article.slug);
+
+  if (!sourceArticle) {
+    return [];
+  }
+
+  const related = await getRelatedStories(sourceArticle);
+
+  return related.slice(0, limit).map((item) => toNewsArticle(item));
 }

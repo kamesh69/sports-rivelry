@@ -13,14 +13,14 @@ export function getTeamRosterPath(teamSlug: string): string {
 export const TEAMS_DIRECTORY_PATH = "/mlb/teams";
 
 /**
- * MLB News module navigation. Mirrors `getTeamRosterPath` /
- * `TEAMS_DIRECTORY_PATH` above — every "View All" link and every news card
- * must build its URL from these helpers instead of hardcoding path strings.
+ * MLB News archive navigation. Mirrors `getTeamRosterPath` /
+ * `TEAMS_DIRECTORY_PATH` above — every "View All" link should build its URL
+ * from these helpers instead of hardcoding path strings.
  */
 export const MLB_NEWS_PATH = "/mlb/news";
 
 export function getNewsArticlePath(slug: string): string {
-  return `${MLB_NEWS_PATH}/${slug}`;
+  return `/mlb/${slug}`;
 }
 
 /**

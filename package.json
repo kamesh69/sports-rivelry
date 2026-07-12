@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "verify:cms": "node scripts/verify-cms.mjs",
+    "verify:deploy": "bash scripts/deploy-cms-checklist.sh"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.0",

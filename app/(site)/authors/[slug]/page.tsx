@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getAuthorProfile } from "@/lib/cms";
-import { articles } from "@/lib/mock-data";
+import { getArticlesByAuthorSlug, getAuthorProfile } from "@/lib/cms";
 import {
   buildBreadcrumbJsonLd,
   buildMetadata,
@@ -48,9 +47,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
     notFound();
   }
 
-  const authorStories = articles.filter((article) =>
-    article.authors.some((entry) => entry.slug === author.slug),
-  );
+  const authorStories = await getArticlesByAuthorSlug(author.slug);
   const breadcrumbs: BreadcrumbItem[] = [
     { name: "Home", href: "/" },
     { name: "Authors", href: "/authors" },

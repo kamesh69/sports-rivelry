@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-add_filter('preview_post_link', 'sr_filter_frontend_preview_post_link', 10, 2);
+add_filter('preview_post_link', 'sr_filter_frontend_preview_post_link', 100, 2);
 add_filter('post_type_link', 'sr_filter_post_type_link_to_frontend', 10, 2);
 add_filter('get_sample_permalink', 'sr_filter_sample_permalink_to_frontend', 99, 5);
 add_filter('get_sample_permalink_html', 'sr_filter_sample_permalink_html', 99, 5);
@@ -70,6 +70,8 @@ function sr_render_article_sport_selector_meta_box($post) {
 }
 
 add_action('save_post_article', 'sr_save_article_sport_selector_meta_box', 12, 2);
+add_action('save_post_article', 'sr_ensure_article_slug_on_save', 15, 2);
+add_filter('post_updated_messages', 'sr_filter_article_updated_messages', 20);
 
 function sr_save_article_sport_selector_meta_box($post_id, $post) {
     if (!isset($_POST['sr_article_sport_nonce']) || !wp_verify_nonce($_POST['sr_article_sport_nonce'], 'sr_save_article_sport')) {
@@ -92,6 +94,66 @@ function sr_save_article_sport_selector_meta_box($post_id, $post) {
     }
 
     wp_set_post_terms($post_id, [], 'sport', false);
+}
+
+function sr_ensure_article_slug_on_save($post_id, $post) {
+    if (wp_is_post_revision($post_id) || wp_is_post_autosave($post_id)) {
+        return;
+    }
+
+    if (!$post instanceof WP_Post || 'article' !== $post->post_type) {
+        return;
+    }
+
+    if ($post->post_name || !$post->post_title) {
+        return;
+    }
+
+    wp_update_post([
+        'ID' => $post_id,
+        'post_name' => sanitize_title($post->post_title),
+    ]);
+}
+
+function sr_get_article_sport_slug_for_post($post) {
+    $post = sr_resolve_editorial_post($post);
+
+    if (!$post) {
+        return '';
+    }
+
+    $sports = wp_get_post_terms($post->ID, 'sport', ['fields' => 'slugs']);
+
+    return !empty($sports[0]) ? $sports[0] : '';
+}
+
+function sr_filter_article_updated_messages($messages) {
+    if (!isset($messages['article'])) {
+        return $messages;
+    }
+
+    global $post;
+
+    $preview_url = ($post instanceof WP_Post && 'article' === $post->post_type)
+        ? sr_build_preview_url_for_post($post)
+        : '';
+
+    foreach ($messages['article'] as $index => $message) {
+        if (false !== strpos($message, 'Preview post')) {
+            $messages['article'][$index] = str_replace('Preview post', 'Preview on website', $message);
+        }
+
+        if ($preview_url && $post instanceof WP_Post && 'publish' !== $post->post_status && false !== strpos($message, 'Preview')) {
+            $messages['article'][$index] = preg_replace(
+                '/href=(["\'])[^"\']*\1/',
+                'href="' . esc_url($preview_url) . '"',
+                $messages['article'][$index],
+                1
+            );
+        }
+    }
+
+    return $messages;
 }
 
 function sr_get_frontend_base_url() {
@@ -166,7 +228,7 @@ function sr_normalize_frontend_article_path($path) {
     return '/' . implode('/', $segments);
 }
 
-function sr_build_frontend_preview_url($path) {
+function sr_build_frontend_preview_url($path, $post_id = 0) {
     $frontend_url = sr_get_frontend_base_url();
     $preview_secret = defined('SR_PREVIEW_SECRET') ? SR_PREVIEW_SECRET : '';
     $normalized_path = sr_normalize_frontend_article_path($path);
@@ -175,10 +237,16 @@ function sr_build_frontend_preview_url($path) {
         return '';
     }
 
-    return $frontend_url . '/api/preview?' . http_build_query([
+    $query = [
         'secret' => $preview_secret,
         'slug' => $normalized_path,
-    ], '', '&', PHP_QUERY_RFC3986);
+    ];
+
+    if ($post_id > 0) {
+        $query['id'] = $post_id;
+    }
+
+    return $frontend_url . '/api/preview?' . http_build_query($query, '', '&', PHP_QUERY_RFC3986);
 }
 
 function sr_build_preview_url_for_post($post, $sport_slug_override = '') {
@@ -188,9 +256,13 @@ function sr_build_preview_url_for_post($post, $sport_slug_override = '') {
         return '';
     }
 
+    if (!$sport_slug_override && 'article' === $post->post_type) {
+        $sport_slug_override = sr_get_article_sport_slug_for_post($post);
+    }
+
     $path = sr_build_frontend_path_for_post($post, $sport_slug_override);
 
-    return sr_build_frontend_preview_url($path);
+    return sr_build_frontend_preview_url($path, (int) $post->ID);
 }
 
 function sr_filter_frontend_preview_post_link($preview_link, $post) {
@@ -285,6 +357,18 @@ function sr_filter_sample_permalink_html($html, $post_id, $new_title, $new_slug,
     }
 
     $html = str_replace(__('Permalink:'), __('Website URL:'), $html);
+
+    $preview_url = sr_build_preview_url_for_post($post);
+    $live_url = sr_build_frontend_url_for_post($post);
+
+    if ('publish' !== $post->post_status && $preview_url) {
+        $html = str_replace(__('Website URL:'), __('Preview URL:'), $html);
+        $html = preg_replace('/href=(["\'])[^"\']*\1/', 'href="' . esc_url($preview_url) . '"', $html, 1);
+    } elseif ($live_url) {
+        $html = preg_replace('/href=(["\'])[^"\']*\1/', 'href="' . esc_url($live_url) . '"', $html, 1);
+    } elseif ($preview_url) {
+        $html = preg_replace('/href=(["\'])[^"\']*\1/', 'href="' . esc_url($preview_url) . '"', $html, 1);
+    }
 
     $cms_hosts = array_unique(array_filter([
         wp_parse_url(home_url(), PHP_URL_HOST),

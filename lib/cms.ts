@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { draftMode } from "next/headers";
+import { cookies, draftMode } from "next/headers";
 import { DEFAULT_REVALIDATE_SECONDS } from "@/lib/site-config";
 import { MEDIA_STANDARDS } from "@/lib/media";
 import {
@@ -252,15 +252,27 @@ function normalizeWordPressArticle(node: any, fallbackSportSlug?: string): Artic
 
 const getWordPressArticleBySlug = cache(async (slug: string, status = "PUBLISH", fallbackSportSlug?: string) => {
   if (status === "DRAFT") {
+    let previewDatabaseId: number | null = null;
+
+    try {
+      const previewId = (await cookies()).get("sr-preview-article-id")?.value;
+
+      if (previewId && /^\d+$/.test(previewId)) {
+        previewDatabaseId = Number(previewId);
+      }
+    } catch {
+      previewDatabaseId = null;
+    }
+
     const draftData = await wpFetch<{ previewArticle?: any }>(
       `
-        query ArticleDraftBySlug($slug: String!) {
-          previewArticle(slug: $slug) {
+        query ArticleDraftBySlug($slug: String!, $databaseId: Int) {
+          previewArticle(slug: $slug, databaseId: $databaseId) {
             ${HOME_ARTICLE_FIELDS}
           }
         }
       `,
-      { slug },
+      { slug, databaseId: previewDatabaseId },
       ["article", slug, "draft"],
     );
 
@@ -268,6 +280,26 @@ const getWordPressArticleBySlug = cache(async (slug: string, status = "PUBLISH",
 
     if (draftNode) {
       return normalizeWordPressArticle(draftNode, fallbackSportSlug);
+    }
+
+    if (previewDatabaseId) {
+      const draftByIdData = await wpFetch<{ previewArticle?: any }>(
+        `
+          query ArticleDraftById($databaseId: Int!) {
+            previewArticle(databaseId: $databaseId) {
+              ${HOME_ARTICLE_FIELDS}
+            }
+          }
+        `,
+        { databaseId: previewDatabaseId },
+        ["article", String(previewDatabaseId), "draft"],
+      );
+
+      const draftByIdNode = draftByIdData?.previewArticle;
+
+      if (draftByIdNode) {
+        return normalizeWordPressArticle(draftByIdNode, fallbackSportSlug);
+      }
     }
 
     const fallbackDraftData = await wpFetch<{ articles?: { nodes?: any[] } }>(

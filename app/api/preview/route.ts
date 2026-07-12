@@ -1,5 +1,5 @@
 import { timingSafeEqual } from "crypto";
-import { draftMode } from "next/headers";
+import { cookies, draftMode } from "next/headers";
 import { redirect } from "next/navigation";
 
 function previewSecretsMatch(provided: string, expected: string) {
@@ -27,6 +27,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get("secret") ?? "";
   const slug = searchParams.get("slug") ?? "";
+  const postId = searchParams.get("id") ?? "";
   const previewSecret = process.env.WORDPRESS_PREVIEW_SECRET ?? "";
 
   if (
@@ -40,5 +41,14 @@ export async function GET(request: Request) {
   }
 
   (await draftMode()).enable();
+
+  if (postId && /^\d+$/.test(postId)) {
+    (await cookies()).set("sr-preview-article-id", postId, {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+    });
+  }
+
   redirect(slug.startsWith("/") ? slug : `/${slug}`);
 }

@@ -60,6 +60,10 @@
     return slugifyTitle($("#title").val());
   }
 
+  function isPublished() {
+    return $("#original_post_status").val() === "publish";
+  }
+
   function updatePermalinkDisplay() {
     var config = getConfig();
 
@@ -74,7 +78,14 @@
 
     if ($view.length) {
       $view.text(url);
-      $view.attr("href", url);
+
+      if (isPublished()) {
+        $view.attr("href", url);
+      }
+    }
+
+    if (!isPublished()) {
+      requestPreviewUrl();
     }
   }
 
@@ -90,6 +101,29 @@
 
       if ($link.text().toLowerCase().indexOf("preview") !== -1) {
         $link.attr("href", previewUrl);
+      }
+    });
+  }
+
+  function refreshAdminPreviewLinks(previewUrl) {
+    if (!previewUrl) {
+      return;
+    }
+
+    refreshPreviewLinks(previewUrl);
+
+    $(".notice-success a, .notice-info a").each(function () {
+      var $link = $(this);
+      var href = $link.attr("href") || "";
+
+      if (
+        href.indexOf("/api/preview") !== -1 ||
+        href.indexOf("preview=true") !== -1 ||
+        href.indexOf("cms.thesportsrivalry.com") !== -1
+      ) {
+        $link.attr("href", previewUrl);
+        $link.attr("target", "_blank");
+        $link.text("Preview on website");
       }
     });
   }
@@ -116,7 +150,16 @@
       post_title: $("#title").val() || "",
     }).done(function (response) {
       if (response && response.success && response.data && response.data.url) {
-        refreshPreviewLinks(response.data.url);
+        refreshAdminPreviewLinks(response.data.url);
+
+        if ("publish" !== $("#original_post_status").val()) {
+          var previewUrl = response.data.url;
+          var $view = $("#sample-permalink a, #sample-permalink span").first();
+
+          if ($view.length) {
+            $view.attr("href", previewUrl);
+          }
+        }
       }
     });
   }
@@ -130,6 +173,37 @@
         requestPreviewUrl();
       }
     );
+  }
+
+  function bindPermalinkClick() {
+    $(document).on("click", "#sample-permalink a", function (event) {
+      if (isPublished()) {
+        return;
+      }
+
+      var href = $(this).attr("href") || "";
+
+      if (href.indexOf("/api/preview") !== -1) {
+        return;
+      }
+
+      event.preventDefault();
+
+      if (!getPostSlug() || getSelectedSportSlug() === "choose-sport") {
+        window.alert("Add a title, choose a sport, then click Save Draft before previewing.");
+        return;
+      }
+
+      requestPreviewUrl();
+
+      window.setTimeout(function () {
+        var nextHref = $("#sample-permalink a").first().attr("href") || "";
+
+        if (nextHref.indexOf("/api/preview") !== -1) {
+          window.open(nextHref, "_blank");
+        }
+      }, 250);
+    });
   }
 
   function bindPreviewButton() {
@@ -166,6 +240,7 @@
     }
 
     bindSportChange();
+    bindPermalinkClick();
     bindPreviewButton();
     updatePermalinkDisplay();
     requestPreviewUrl();

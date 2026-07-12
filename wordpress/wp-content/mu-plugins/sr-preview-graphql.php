@@ -88,21 +88,39 @@ function sr_allow_preview_graphql_public_posts($is_public, $post_id) {
 }
 
 function sr_find_preview_article_post($slug) {
+    global $wpdb;
+
     $slug = sanitize_title($slug);
 
     if (!$slug) {
         return null;
     }
 
-    $posts = get_posts([
-        'post_type' => 'article',
-        'name' => $slug,
-        'post_status' => ['publish', 'draft', 'pending', 'future', 'private'],
-        'posts_per_page' => 1,
-        'suppress_filters' => true,
-    ]);
+    $statuses = ['publish', 'draft', 'pending', 'future', 'private', 'auto-draft'];
+    $status_sql = "'" . implode("','", array_map('esc_sql', $statuses)) . "'";
+    $post_id = $wpdb->get_var(
+        $wpdb->prepare(
+            "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'article' AND post_status IN ({$status_sql}) AND post_name = %s ORDER BY ID DESC LIMIT 1",
+            $slug
+        )
+    );
 
-    return !empty($posts[0]) ? $posts[0] : null;
+    if ($post_id) {
+        return get_post((int) $post_id);
+    }
+
+    $rows = $wpdb->get_results(
+        "SELECT ID, post_title FROM {$wpdb->posts} WHERE post_type = 'article' AND post_status IN ({$status_sql}) ORDER BY ID DESC LIMIT 100",
+        ARRAY_A
+    );
+
+    foreach ($rows as $row) {
+        if (sanitize_title((string) $row['post_title']) === $slug) {
+            return get_post((int) $row['ID']);
+        }
+    }
+
+    return null;
 }
 
 function sr_register_preview_article_graphql_field() {
@@ -118,13 +136,29 @@ function sr_register_preview_article_graphql_field() {
                 'type' => 'String',
                 'description' => 'Article slug (post_name).',
             ],
+            'databaseId' => [
+                'type' => 'Int',
+                'description' => 'WordPress post ID fallback.',
+            ],
         ],
         'resolve' => function($source, $args, $context) {
             if (!sr_is_preview_graphql_request()) {
                 return null;
             }
 
-            $post = sr_find_preview_article_post($args['slug'] ?? '');
+            $post = null;
+
+            if (!empty($args['databaseId'])) {
+                $candidate = get_post((int) $args['databaseId']);
+
+                if ($candidate instanceof WP_Post && 'article' === $candidate->post_type) {
+                    $post = $candidate;
+                }
+            }
+
+            if (!$post && !empty($args['slug'])) {
+                $post = sr_find_preview_article_post($args['slug']);
+            }
 
             if (!$post) {
                 return null;

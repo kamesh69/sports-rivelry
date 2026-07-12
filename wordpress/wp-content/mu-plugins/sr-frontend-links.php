@@ -156,6 +156,31 @@ function sr_build_frontend_path_for_post($post, $sport_slug_override = '') {
     return '/' . $sport_slug . '/' . $slug;
 }
 
+function sr_normalize_frontend_article_path($path) {
+    $segments = array_values(array_filter(explode('/', trim((string) $path, '/'))));
+
+    if (count($segments) < 2 || in_array($segments[0], ['choose-sport'], true)) {
+        return '';
+    }
+
+    return '/' . implode('/', $segments);
+}
+
+function sr_build_frontend_preview_url($path) {
+    $frontend_url = sr_get_frontend_base_url();
+    $preview_secret = defined('SR_PREVIEW_SECRET') ? SR_PREVIEW_SECRET : '';
+    $normalized_path = sr_normalize_frontend_article_path($path);
+
+    if (!$frontend_url || !$preview_secret || !$normalized_path) {
+        return '';
+    }
+
+    return $frontend_url . '/api/preview?' . http_build_query([
+        'secret' => $preview_secret,
+        'slug' => $normalized_path,
+    ], '', '&', PHP_QUERY_RFC3986);
+}
+
 function sr_build_preview_url_for_post($post, $sport_slug_override = '') {
     $post = sr_resolve_editorial_post($post);
 
@@ -163,18 +188,9 @@ function sr_build_preview_url_for_post($post, $sport_slug_override = '') {
         return '';
     }
 
-    $frontend_url = sr_get_frontend_base_url();
-    $preview_secret = defined('SR_PREVIEW_SECRET') ? SR_PREVIEW_SECRET : '';
     $path = sr_build_frontend_path_for_post($post, $sport_slug_override);
 
-    if (!$frontend_url || !$preview_secret || !$path || str_contains($path, 'choose-sport')) {
-        return '';
-    }
-
-    return add_query_arg([
-        'secret' => $preview_secret,
-        'slug' => $path,
-    ], $frontend_url . '/api/preview');
+    return sr_build_frontend_preview_url($path);
 }
 
 function sr_filter_frontend_preview_post_link($preview_link, $post) {
@@ -350,6 +366,7 @@ function sr_ajax_frontend_preview_url() {
     $post_id = (int) ($_POST['post_id'] ?? 0);
     $sport_slug = sanitize_title((string) ($_POST['sport_slug'] ?? ''));
     $post_slug = sanitize_title((string) ($_POST['post_slug'] ?? ''));
+    $post_title = sanitize_text_field((string) ($_POST['post_title'] ?? ''));
     $post = get_post($post_id);
 
     if (!$post || !in_array($post->post_type, SR_EDITORIAL_POST_TYPES, true)) {
@@ -359,12 +376,18 @@ function sr_ajax_frontend_preview_url() {
     if ($post_slug && $post_slug !== $post->post_name) {
         $post = clone $post;
         $post->post_name = $post_slug;
+    } elseif (!$post->post_name && $post_title) {
+        $post = clone $post;
+        $post->post_name = sanitize_title($post_title);
+    } elseif (!$post->post_name && $post->post_title) {
+        $post = clone $post;
+        $post->post_name = sanitize_title($post->post_title);
     }
 
     $preview_url = sr_build_preview_url_for_post($post, $sport_slug);
 
     if (!$preview_url) {
-        wp_send_json_error(['message' => 'Assign a sport and save draft to preview on the website.'], 400);
+        wp_send_json_error(['message' => 'Add a title, choose a sport, then click Save Draft before previewing.'], 400);
     }
 
     wp_send_json_success(['url' => $preview_url]);

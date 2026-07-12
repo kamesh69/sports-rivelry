@@ -29,10 +29,19 @@
     return (config.sportTerms && config.sportTerms[termId]) || "choose-sport";
   }
 
+  function slugifyTitle(title) {
+    return String(title || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
+  }
+
   function getPostSlug() {
     var $editable = $("#editable-post-name-full");
 
-    if ($editable.length && $editable.text()) {
+    if ($editable.length && $editable.text() && $editable.text().indexOf("%") === -1) {
       return $editable.text().trim();
     }
 
@@ -42,7 +51,13 @@
       return String($input.val()).trim();
     }
 
-    return $("#post_name").val() || "";
+    var hiddenSlug = $("#post_name").val();
+
+    if (hiddenSlug) {
+      return String(hiddenSlug).trim();
+    }
+
+    return slugifyTitle($("#title").val());
   }
 
   function updatePermalinkDisplay() {
@@ -98,6 +113,7 @@
       post_id: postId,
       sport_slug: getSelectedSportSlug(),
       post_slug: getPostSlug(),
+      post_title: $("#title").val() || "",
     }).done(function (response) {
       if (response && response.success && response.data && response.data.url) {
         refreshPreviewLinks(response.data.url);
@@ -118,12 +134,29 @@
 
   function bindPreviewButton() {
     $("#post-preview").on("click", function (event) {
-      var href = $(this).attr("href") || "";
+      var $button = $(this);
+      var href = $button.attr("href") || "";
 
-      if (href.indexOf("/api/preview") !== -1) {
-        event.preventDefault();
-        window.open(href, "wp-preview");
+      if (href.indexOf("/api/preview") === -1) {
+        return;
       }
+
+      event.preventDefault();
+
+      if (!getPostSlug() || getSelectedSportSlug() === "choose-sport") {
+        window.alert("Add a title, choose a sport, then click Save Draft before previewing.");
+        return;
+      }
+
+      requestPreviewUrl();
+
+      window.setTimeout(function () {
+        var nextHref = $button.attr("href") || href;
+
+        if (nextHref.indexOf("/api/preview") !== -1) {
+          window.open(nextHref, "wp-preview");
+        }
+      }, 250);
     });
   }
 
@@ -136,6 +169,11 @@
     bindPreviewButton();
     updatePermalinkDisplay();
     requestPreviewUrl();
+
+    $("#title").on("input change", function () {
+      updatePermalinkDisplay();
+      requestPreviewUrl();
+    });
 
     $(document).on("click", "#edit-slug-buttons .save, #edit-slug-buttons .cancel", function () {
       window.setTimeout(function () {

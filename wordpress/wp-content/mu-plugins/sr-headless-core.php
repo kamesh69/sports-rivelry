@@ -256,7 +256,7 @@ function sr_frontend_path_for_post($post_id) {
     if ('article' === $post->post_type) {
         $sports = wp_get_post_terms($post_id, 'sport', ['fields' => 'slugs']);
 
-        if (empty($sports)) {
+        if (empty($sports) || '' === $post->post_name) {
             return '';
         }
 

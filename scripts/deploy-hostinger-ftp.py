@@ -128,6 +128,25 @@ def deploy_mu_plugins(ftp: FTP) -> int:
     return mu_count
 
 
+def require_ftp_env() -> tuple[str, str, str]:
+    missing = [name for name in ("FTP_USER", "FTP_PASS") if not os.environ.get(name)]
+
+    if missing:
+        print(
+            "Missing required FTP environment variables: "
+            + ", ".join(missing)
+            + ". Add FTP_HOST, FTP_USER, and FTP_PASS as GitHub Actions secrets.",
+            file=sys.stderr,
+        )
+        raise SystemExit(1)
+
+    host = os.environ.get("FTP_HOST", "82.112.239.215")
+    user = os.environ["FTP_USER"]
+    password = os.environ["FTP_PASS"]
+
+    return host, user, password
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Deploy TSR WordPress files to Hostinger")
     parser.add_argument(
@@ -137,9 +156,7 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    host = os.environ.get("FTP_HOST", "82.112.239.215")
-    user = os.environ["FTP_USER"]
-    password = os.environ["FTP_PASS"]
+    host, user, password = require_ftp_env()
 
     secrets_map = {
         "revalidate": os.environ.get("REVALIDATE_SECRET") or secrets.token_urlsafe(32),

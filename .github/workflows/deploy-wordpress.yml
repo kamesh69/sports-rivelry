@@ -16,6 +16,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Verify FTP secrets
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+        run: |
+          missing=0
+          if [ -z "$FTP_USER" ]; then echo "::error::Missing GitHub secret FTP_USER"; missing=1; fi
+          if [ -z "$FTP_PASS" ]; then echo "::error::Missing GitHub secret FTP_PASS"; missing=1; fi
+          if [ "$missing" -ne 0 ]; then
+            echo "Add secrets at Settings → Secrets and variables → Actions"
+            exit 1
+          fi
+          echo "FTP secrets present. Host: ${FTP_HOST:-82.112.239.215}"
+
       - name: Deploy mu-plugins to Hostinger
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}

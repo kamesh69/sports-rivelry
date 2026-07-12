@@ -800,4 +800,3 @@ function sr_get_mlb_hub_settings_payload() {
 }
 
 require_once __DIR__ . '/sr-frontend-links.php';
-require_once __DIR__ . '/sr-preview-graphql.php';

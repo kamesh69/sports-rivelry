@@ -175,12 +175,14 @@ function synthesizeWordPressAuthor(authorNode: {
   };
 }
 
-function normalizeWordPressArticle(node: any): Article | null {
-  if (!node?.slug || !node?.sports?.nodes?.[0]?.slug) {
+function normalizeWordPressArticle(node: any, fallbackSportSlug?: string): Article | null {
+  const sportSlug = node?.sports?.nodes?.[0]?.slug || fallbackSportSlug;
+
+  if (!node?.slug || !sportSlug) {
     return null;
   }
 
-  const sport = sports.find((entry) => entry.slug === node.sports.nodes[0].slug);
+  const sport = sports.find((entry) => entry.slug === sportSlug);
   const authorNodes =
     node.authors?.nodes?.length > 0
       ? node.authors.nodes
@@ -248,11 +250,29 @@ function normalizeWordPressArticle(node: any): Article | null {
   };
 }
 
-const getWordPressArticleBySlug = cache(async (slug: string, status = "PUBLISH") => {
+const getWordPressArticleBySlug = cache(async (slug: string, status = "PUBLISH", fallbackSportSlug?: string) => {
   if (status === "DRAFT") {
-    const draftData = await wpFetch<{ articles?: { nodes?: any[] } }>(
+    const draftData = await wpFetch<{ previewArticle?: any }>(
       `
         query ArticleDraftBySlug($slug: String!) {
+          previewArticle(slug: $slug) {
+            ${HOME_ARTICLE_FIELDS}
+          }
+        }
+      `,
+      { slug },
+      ["article", slug, "draft"],
+    );
+
+    const draftNode = draftData?.previewArticle;
+
+    if (draftNode) {
+      return normalizeWordPressArticle(draftNode, fallbackSportSlug);
+    }
+
+    const fallbackDraftData = await wpFetch<{ articles?: { nodes?: any[] } }>(
+      `
+        query ArticleDraftBySlugFallback($slug: String!) {
           articles(where: { name: $slug, status: DRAFT }, first: 1) {
             nodes { ${HOME_ARTICLE_FIELDS} }
           }
@@ -262,10 +282,10 @@ const getWordPressArticleBySlug = cache(async (slug: string, status = "PUBLISH")
       ["article", slug, "draft"],
     );
 
-    const draftNode = draftData?.articles?.nodes?.[0];
+    const fallbackDraftNode = fallbackDraftData?.articles?.nodes?.[0];
 
-    if (draftNode) {
-      return normalizeWordPressArticle(draftNode);
+    if (fallbackDraftNode) {
+      return normalizeWordPressArticle(fallbackDraftNode, fallbackSportSlug);
     }
   }
 
@@ -1219,7 +1239,7 @@ export async function getArticle(
   articleSlug: string,
 ): Promise<Article | null> {
   const status = await getWordPressArticleStatus();
-  const wordPressArticle = await getWordPressArticleBySlug(articleSlug, status);
+  const wordPressArticle = await getWordPressArticleBySlug(articleSlug, status, sportSlug);
 
   if (wordPressArticle?.sport.slug === sportSlug) {
     return wordPressArticle;

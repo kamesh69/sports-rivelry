@@ -12,26 +12,23 @@ export const SITE_LOGO_CIRCLE_SIZE = 818;
 export const SITE_DOMAIN =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://thesportsrivalry.com";
 
+export const VISIBLE_SPORT_SLUGS = ["mlb"] as const;
+
+export function isVisibleSport(slug: string) {
+  return (VISIBLE_SPORT_SLUGS as readonly string[]).includes(slug);
+}
+
 export const SPORTS_NAV: NavItem[] = [
   { slug: "mlb", label: "MLB", href: "/mlb" },
-  { slug: "basketball", label: "Basketball", href: "/basketball" },
-  { slug: "golf", label: "Golf", href: "/golf" },
-  { slug: "nascar", label: "NASCAR", href: "/nascar" },
-  { slug: "football", label: "Football", href: "/football" },
-  { slug: "ncaa", label: "NCAA", href: "/ncaa" },
 ];
 
-export const HOMEPAGE_SPORTS = ["mlb", "golf", "basketball", "nascar", "football"] as const;
+export const HOMEPAGE_SPORTS = ["mlb"] as const;
 
 /** One lead story plus four list items in each homepage sport rail. */
 export const SPORT_RAIL_ARTICLE_COUNT = 5;
 
 export const HOMEPAGE_CATEGORY_STRIP: NavItem[] = [
   { slug: "mlb", label: "MLB", href: "/mlb" },
-  { slug: "golf", label: "Golf", href: "/golf" },
-  { slug: "college-sports", label: "College Sports", disabled: true },
-  { slug: "nba", label: "NBA", href: "/basketball" },
-  { slug: "nascar", label: "NASCAR", href: "/nascar" },
 ];
 
 export const SOCIAL_LINKS = [

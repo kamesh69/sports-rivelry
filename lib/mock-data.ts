@@ -1522,18 +1522,15 @@ export function getHomePageData(): HomePageData {
   );
   const topHeadlines = getArticlesBySlugs([
     "yankees-red-sox-rivalry-feels-mean-again-because-both-dugouts-need-it",
-    "caitlin-clark-vs-liberty-pressure-is-turning-fever-games-into-national-events",
-    "scheffler-vs-mcilroy-is-now-a-rivalry-about-control-not-just-trophies",
-    "elliott-vs-larson-keeps-feeling-like-nascars-cleanest-modern-feud",
     "dodgers-padres-have-found-the-perfect-october-hate-cycle",
-  ]);
+    "even-before-facing-each-other-on-the-field",
+  ]).filter((article) => homepageSportSlugs.has(article.sport.slug));
   const breakingNews = homepagePool.filter((article) => article.isBreaking).slice(0, 4);
   const heroSlides = getArticlesBySlugs([
     "yankees-red-sox-rivalry-feels-mean-again-because-both-dugouts-need-it",
-    "celtics-knicks-is-becoming-the-east-rivalry-that-actually-travels",
-    "us-open-week-has-become-a-betting-war-between-discipline-and-chaos",
-    "hamlin-vs-everybody-has-become-nascars-most-bankable-energy-source",
-  ]);
+    "dodgers-padres-have-found-the-perfect-october-hate-cycle",
+    "even-before-facing-each-other-on-the-field",
+  ]).filter((article) => homepageSportSlugs.has(article.sport.slug));
   const latestArticles = homepagePool.slice(0, 12);
   const heroArticle = heroSlides[0] || homepagePool[0];
   const heroSecondary = heroSlides.slice(1, 4);

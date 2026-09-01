@@ -26,7 +26,7 @@ import {
   topicHubs,
 } from "@/lib/mock-data";
 import { getSportPageDataBySlug } from "@/lib/sport-page-data";
-import { HOMEPAGE_CATEGORY_STRIP } from "@/lib/site-config";
+import { HOMEPAGE_CATEGORY_STRIP, VISIBLE_SPORT_SLUGS, isVisibleSport } from "@/lib/site-config";
 import { dedupeByKey, formatDate, sortByPublishedAt, stripHtml } from "@/lib/utils";
 import type {
   Article,
@@ -777,8 +777,43 @@ function buildQuickHitsFromPool(pool: Article[]): HomePageData["quickHits"] {
   };
 }
 
+function categoryStripItemSportSlug(item: {
+  href?: string;
+  sportSlug?: string;
+  slug?: string;
+}): string {
+  if (item.sportSlug) {
+    return item.sportSlug;
+  }
+
+  const href = item.href || "";
+
+  if (href.startsWith("/")) {
+    return href.split("/").filter(Boolean)[0] || "";
+  }
+
+  return item.slug || "";
+}
+
+function filterVisibleCategoryStrip(
+  items: Array<{ slug: string; label: string; href: string; disabled?: boolean; sportSlug?: string }>,
+) {
+  const filtered = items.filter((item) => {
+    if (item.disabled) {
+      return false;
+    }
+
+    const sportSlug = categoryStripItemSportSlug(item);
+
+    return sportSlug ? isVisibleSport(sportSlug) : false;
+  });
+
+  return filtered.length > 0 ? filtered : HOMEPAGE_CATEGORY_STRIP;
+}
+
 function assembleHomePageData(pool: Article[], homepageSettings: any = null): HomePageData {
-  const sorted = sortByPublishedAt(pool);
+  const visiblePool = pool.filter((article) => isVisibleSport(article.sport.slug));
+  const sorted = sortByPublishedAt(visiblePool);
   const trendingArticles = [...sorted]
     .sort((left, right) => right.trendingScore - left.trendingScore)
     .slice(0, 8);
@@ -804,38 +839,51 @@ function assembleHomePageData(pool: Article[], homepageSettings: any = null): Ho
     }
   }
   const sportRails = Array.from(sportRailMap.values())
-    .filter((rail) => rail.articles.length > 0)
-    .slice(0, 5);
+    .filter((rail) => isVisibleSport(rail.sport.slug) && rail.articles.length > 0)
+    .slice(0, VISIBLE_SPORT_SLUGS.length);
 
   const recommendedReads = dedupeByKey(
     [...editorsPicks, ...trendingArticles],
     (article) => article.id,
   ).slice(0, 3);
 
-  const categoryStrip =
+  const rawCategoryStrip =
     homepageSettings?.categoryStrip?.length > 0
-      ? homepageSettings.categoryStrip.map((item: { label: string; href: string }) => ({
-          slug: item.href.replace(/^\//, ""),
-          label: item.label,
-          href: item.href,
-        }))
+      ? homepageSettings.categoryStrip.map(
+          (item: { label: string; href: string; sportSlug?: string }) => ({
+            slug: item.href.replace(/^\//, ""),
+            label: item.label,
+            href: item.href,
+            sportSlug: item.sportSlug,
+          }),
+        )
       : HOMEPAGE_CATEGORY_STRIP;
+
+  const categoryStrip = filterVisibleCategoryStrip(rawCategoryStrip);
+
+  const configuredHero = homepageSettings?.heroArticleSlug
+    ? visiblePool.find((article) => article.slug === homepageSettings.heroArticleSlug)
+    : undefined;
+
+  const configuredQuickHits =
+    homepageSettings?.quickHits?.featured &&
+    isVisibleSport(homepageSettings.quickHits.featured.sport.slug)
+      ? homepageSettings.quickHits
+      : null;
 
   return {
     breakingNews,
     topHeadlines,
-    heroArticle: homepageSettings?.heroArticleSlug
-      ? pool.find((article) => article.slug === homepageSettings.heroArticleSlug) || heroArticle
-      : heroArticle,
+    heroArticle: configuredHero || heroArticle,
     heroSecondary,
     latestArticles: sorted.slice(0, 12),
     categoryStrip,
-    quickHits: homepageSettings?.quickHits || buildQuickHitsFromPool(pool),
+    quickHits: configuredQuickHits || buildQuickHitsFromPool(visiblePool),
     sportRails,
     trendingArticles,
     editorsPicks: homepageSettings?.editorsPickSlugs?.length
       ? fillArticleSlots(
-          pool.filter((article) => homepageSettings.editorsPickSlugs.includes(article.slug)),
+          visiblePool.filter((article) => homepageSettings.editorsPickSlugs.includes(article.slug)),
           editorsPicks,
           4,
         )
